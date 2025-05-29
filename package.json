@@ -1,0 +1,28 @@
+{
+  "name": "bromine",
+  "version": "1.0.0",
+  "description": "bromine",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "start": "astro preview",
+    "bstart": "bun run build && npm run start",
+    "check": "bunx @biomejs/biome check --write * && astro check"
+  },
+  "dependencies": {
+    "@astrojs/vercel": "^8.1.4",
+    "@iconify-json/tabler": "^1.2.18",
+    "@mercuryworkshop/bare-as-module3": "^2.2.5",
+    "@mercuryworkshop/bare-mux": "^2.1.7",
+    "@mercuryworkshop/epoxy-transport": "^2.1.27",
+    "@mercuryworkshop/libcurl-transport": "^1.5.0",
+    "@playform/compress": "^0.1.9",
+    "@tailwindcss/vite": "^4.1.7",
+    "@titaniumnetwork-dev/ultraviolet": "^3.2.10",
+    "astro": "^5.8.0",
+    "astro-icon": "^1.1.5",
+    "tailwindcss": "^4.1.7",
+    "vite-plugin-static-copy": "^3.0.0",
+    "wisp-server-node": "^1.1.7"
+  }
+}

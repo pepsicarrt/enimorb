@@ -1,0 +1,94 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+<div class="p-2 flex items-center space-x-2 rounded-lg">
+  <span class="mr-auto">bromine</span>
+
+  <div class="flex items-center justify-center flex-1 space-x-2">
+    <button
+      id="omnibar-back-btn"
+      class="p-1.5 rounded-md hover:bg-gray-600"
+    >
+      <Icon name="tabler:arrow-left" class="w-5 h-5" />
+    </button>
+
+    <button
+      id="omnibar-forward-btn"
+      class="p-1.5 rounded-md hover:bg-gray-600"
+    >
+      <Icon name="tabler:arrow-right" class="w-5 h-5" />
+    </button>
+
+    <button
+      id="omnibar-reload-btn"
+      class="p-1.5 rounded-md  hover:bg-gray-600"
+    >
+      <Icon name="tabler:reload" class="w-5 h-5" />
+    </button>
+
+    <div class="flex items-center rounded-md px-3 py-1.5">
+      <Icon name="tabler:search" class="w-5 h-5 mr-2" />
+      <form id="form" class="flex-center w-md"> 
+        <input
+          spellcheck="false"
+          autofocus
+          autocomplete="off"
+          id="address"
+          type="text"
+          placeholder="Search the web freely"
+          class="bg-transparent w-full focus:outline-none"
+        />
+      </form>
+    </div>
+
+    <button
+      id="omnibar-settings-btn"
+      class="p-1.5 rounded-md hover:bg-gray-600"
+    >
+      <Icon name="tabler:settings" class="w-5 h-5"/>
+    </button>
+  </div>
+</div>
+
+<style>
+  /* Button animation */
+  button {
+    transition: transform 0.2s ease-in-out;
+  }
+
+  button:hover {
+    transform: scale(1.1) translateY(-2px);
+  }
+
+  button:active {
+    transform: scale(0.95);
+  }
+</style>
+
+<script is:inline defer async>
+  const backButton = document.getElementById('omnibar-back-btn');
+  const forwardButton = document.getElementById('omnibar-forward-btn');
+  const reloadButton = document.getElementById('omnibar-reload-btn');
+
+
+  backButton.addEventListener('click', () => {
+    const iframe = document.getElementById('frame');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.history.back();
+    }
+  });
+
+  forwardButton.addEventListener('click', () => {
+    const iframe = document.getElementById('frame');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.history.forward();
+    }
+  });
+
+  reloadButton.addEventListener('click', () => {
+    const iframe = document.getElementById('frame')
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.location.reload();
+    }
+  });
+</script>

@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap");
+@import "tailwindcss";
+
+:root {
+  /* Variables */
+  --mainbg: #191724;
+  --backbg: #1f1d2e;
+  --overlays: #26233a;
+  --muted: #6e6a86;
+  --subtle: #908caa;
+  --text: #e0def4;
+  --links: #c4a7e7;
+
+  /* Highlights */
+  --hightlight-low: #21202e;
+  --highlight-med: #403d52;
+  --highlight-high: #524f67;
+}
+
+::selection {
+  background-color: #403d52;
+}
+
+::-moz-selection {
+  background-color: #403d52;
+}
+
+html {
+  background-color: var(--mainbg);
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+}
+
+input {
+  color: var(--text);
+  background-color: var(--backbg);
+}
+
+form {
+  background-color: var(--backbg);
+}
+
+nav {
+  background: var(--backbg);
+  position: sticky;
+  z-index: 1000;
+  top: 0;
+}
+
+button {
+  background-color: var(--backbg);
+	color: var(--text);
+}
+
+span {
+  color: var(--text);
+}
+
+svg {
+  color: white;
+}
