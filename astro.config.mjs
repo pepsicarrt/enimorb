@@ -3,18 +3,14 @@ import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import icon from "astro-icon";
-// import netlify from "@astrojs/netlify";
-
 import { uvPath } from "@titaniumnetwork-dev/ultraviolet";
 import { epoxyPath } from "@mercuryworkshop/epoxy-transport";
 import { bareModulePath } from "@mercuryworkshop/bare-as-module3";
 import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
 
-import node from "@astrojs/node";
 
-import vercel from "@astrojs/vercel";
+import netlify from "@astrojs/netlify";
 
-// import cloudflare from "@astrojs/cloudflare";
 
 export default defineConfig({
   integrations: [icon(), (await import("@playform/compress")).default()],
@@ -52,9 +48,5 @@ export default defineConfig({
     ],
   },
 
-  // adapter: netlify(),
-  // adapter: cloudflare(),
-  output: "server",
-
-  adapter: vercel(),
+  adapter: netlify(),
 });

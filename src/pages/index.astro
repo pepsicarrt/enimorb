@@ -3,14 +3,12 @@ import Layout from "../Layout.astro";
 import Lethal from "@/components/Lethal.astro";
 import Omnibar from '@/components/Omnibar.astro';
 ---
-<Layout>
+<Layout title="bromine" desc="a really shitty proxy">
   <div class="flex h-screen"> 
     <Lethal/>
     <main class="flex flex-col flex-grow">
       <Omnibar class="p-2 md:p-4"/>
-      <div id="frames" class="w-full flex-grow relative"> 
-        <iframe id="frame" class="w-full h-full border-0 absolute top-0 left-0"></iframe>
-      </div>
+      <iframe title="Proxy Frame" id="frame" class="w-full h-full border-0 absolute top-0 left-0"></iframe>
     </main>
   </div>
 </Layout>

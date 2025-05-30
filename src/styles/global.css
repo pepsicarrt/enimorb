@@ -1,20 +1,23 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
-:root {
-  /* Variables */
-  --mainbg: #191724;
-  --backbg: #1f1d2e;
-  --overlays: #26233a;
-  --muted: #6e6a86;
-  --subtle: #908caa;
-  --text: #e0def4;
-  --links: #c4a7e7;
-
-  /* Highlights */
-  --hightlight-low: #21202e;
-  --highlight-med: #403d52;
-  --highlight-high: #524f67;
+@theme {
+  --font-display: "Roboto", Helvetica, sans-serif;
+  --color-rose-pine-base: hsl(249deg, 22%, 12%);
+  --color-rose-pine-surface: hsl(247deg, 23%, 15%);
+  --color-rose-pine-overlay: hsl(248deg, 25%, 18%);
+  --color-rose-pine-muted: hsl(249deg, 12%, 47%);
+  --color-rose-pine-subtle: hsl(248deg, 15%, 61%);
+  --color-rose-pine-text: hsl(245deg, 50%, 91%);
+  --color-rose-pine-love: hsl(343deg, 76%, 68%);
+  --color-rose-pine-gold: hsl(35deg, 88%, 72%);
+  --color-rose-pine-rose: hsl(2deg, 55%, 83%);
+  --color-rose-pine-pine: hsl(197deg, 49%, 38%);
+  --color-rose-pine-foam: hsl(189deg, 43%, 73%);
+  --color-rose-pine-iris: hsl(267deg, 57%, 78%);
+  --color-rose-pine-highlight-low: hsl(244deg, 18%, 15%);
+  --color-rose-pine-highlight-med: hsl(249deg, 15%, 28%);
+  --color-rose-pine-highlight-high: hsl(248deg, 13%, 36%);
 }
 
 ::selection {
@@ -25,36 +28,16 @@
   background-color: #403d52;
 }
 
-html {
-  background-color: var(--mainbg);
-  font-family: "Roboto", Arial, Helvetica, sans-serif;
+h1 {
+  @apply text-2xl;
+}
+h2 {
+  @apply text-xl;
+}
+h3 {
+  @apply text-lg;
+}
+a {
+  @apply text-blue-600 underline;
 }
 
-input {
-  color: var(--text);
-  background-color: var(--backbg);
-}
-
-form {
-  background-color: var(--backbg);
-}
-
-nav {
-  background: var(--backbg);
-  position: sticky;
-  z-index: 1000;
-  top: 0;
-}
-
-button {
-  background-color: var(--backbg);
-	color: var(--text);
-}
-
-span {
-  color: var(--text);
-}
-
-svg {
-  color: white;
-}

@@ -10,7 +10,7 @@
     "check": "bunx @biomejs/biome check --write * && astro check"
   },
   "dependencies": {
-    "@astrojs/vercel": "^8.1.4",
+    "@astrojs/netlify": "^6.3.4",
     "@iconify-json/tabler": "^1.2.18",
     "@mercuryworkshop/bare-as-module3": "^2.2.5",
     "@mercuryworkshop/bare-mux": "^2.1.7",
@@ -24,5 +24,12 @@
     "tailwindcss": "^4.1.7",
     "vite-plugin-static-copy": "^3.0.0",
     "wisp-server-node": "^1.1.7"
-  }
+  },
+  "trustedDependencies": [
+    "@tailwindcss/oxide",
+    "bufferutil",
+    "esbuild",
+    "sharp",
+    "utf-8-validate"
+  ]
 }

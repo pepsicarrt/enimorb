@@ -1,32 +1,35 @@
 ---
 import { Icon } from 'astro-icon/components';
 ---
-<div class="p-2 flex items-center space-x-2 rounded-lg">
-  <span class="mr-auto">bromine</span>
+<div class="bg-rose-pine-base p-2 flex items-center space-x-2">
+  <h1 class="mr-auto">bromine</h1>
 
   <div class="flex items-center justify-center flex-1 space-x-2">
     <button
+      aria-label="Back"
       id="omnibar-back-btn"
-      class="p-1.5 rounded-md hover:bg-gray-600"
+      class="bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
     >
       <Icon name="tabler:arrow-left" class="w-5 h-5" />
     </button>
 
     <button
+      aria-label="Forward"
       id="omnibar-forward-btn"
-      class="p-1.5 rounded-md hover:bg-gray-600"
+      class="bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
     >
       <Icon name="tabler:arrow-right" class="w-5 h-5" />
     </button>
 
     <button
+      aria-label="Reload"  
       id="omnibar-reload-btn"
-      class="p-1.5 rounded-md  hover:bg-gray-600"
+      class="bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
     >
       <Icon name="tabler:reload" class="w-5 h-5" />
     </button>
 
-    <div class="flex items-center rounded-md px-3 py-1.5">
+    <div class="bg-rose-pine-surface flex items-center rounded-md px-3 py-1.5">
       <Icon name="tabler:search" class="w-5 h-5 mr-2" />
       <form id="form" class="flex-center w-md"> 
         <input
@@ -42,13 +45,21 @@ import { Icon } from 'astro-icon/components';
     </div>
 
     <button
+      aria-label="Settings"
       id="omnibar-settings-btn"
-      class="p-1.5 rounded-md hover:bg-gray-600"
+      class="bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
     >
       <Icon name="tabler:settings" class="w-5 h-5"/>
     </button>
+
   </div>
 </div>
+  <div id="settings-popup" class="text-rose-pine-text min-h-screen flex items-center hidden justify-center bg-rose-pine-base backdrop-opacity-10" style="z-index: 10000:">
+    <div class="bg-rose-pine-surface w-[30vw] h-[40vw] rounded-md">
+      <h1>Settings</h1>
+      sadfasdfasdfasdfafdasdfsadfasdfasdfasdffas
+    </div>
+  </div>
 
 <style>
   /* Button animation */
@@ -63,12 +74,22 @@ import { Icon } from 'astro-icon/components';
   button:active {
     transform: scale(0.95);
   }
+
+  
+  /* Popup animation */
+  .popup-open {
+    transform: translateX(0);
+  }
+
+
 </style>
 
 <script is:inline defer async>
   const backButton = document.getElementById('omnibar-back-btn');
   const forwardButton = document.getElementById('omnibar-forward-btn');
   const reloadButton = document.getElementById('omnibar-reload-btn');
+  const settingsButton = document.getElementById('omnibar-settings-btn');
+  const popup = document.getElementById('settings-popup');
 
 
   backButton.addEventListener('click', () => {
@@ -91,4 +112,16 @@ import { Icon } from 'astro-icon/components';
       iframe.contentWindow.location.reload();
     }
   });
+// Settings popup toggle
+    function togglePopup() {
+      if (popup.classList.contains('hidden')) {
+        popup.classList.remove('hidden');
+        setTimeout(() => popup.classList.add('popup-open'), 10);
+      } else {
+        popup.classList.remove('popup-open');
+        setTimeout(() => popup.classList.add('hidden'), 300);
+      }
+    }
+
+    settingsButton?.addEventListener('click', togglePopup);
 </script>
