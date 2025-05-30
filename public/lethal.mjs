@@ -40,11 +40,41 @@ const scramjet = new ScramjetController({
     shared: "/scram/scramjet.shared.js",
     sync: "/scram/scramjet.sync.js",
   },
-  siteFlags: {
-    "https://worker-playground.glitch.me/.*": {
-      serviceworkers: true,
-    },
-  },
+	flags: {
+	  serviceworkers: false,
+		syncxhr: false,
+		naiiveRewriter: false,
+		strictRewrites: true,
+		rewriterLogs: false,
+		captureErrors: true,
+		cleanErrors: true,
+		scramitize: false,
+		sourcemaps: false,
+	},
+	codec: {
+		encode: (url: string) => {
+  		if (!url) return url;
+      let result = "";
+      let len = url.length;
+      for (let i = 0; i < len; i++) {
+        const char = url[i];
+        result += i % 2 ? String.fromCharCode(char.charCodeAt(0) ^ 2) : char;
+      }
+      return encodeURIComponent(result);
+		},
+		decode: (url: string) => {
+      if (!url) return url;
+      url = decodeURIComponent(url);
+      let result = "";
+      let len = url.length;
+      for (let i = 0; i < len; i++) {
+        const char = url[i];
+        result += i % 2 ? String.fromCharCode(char.charCodeAt(0) ^ 2) : char;
+      }
+  		return result;
+		},
+	},
+  prefix: "/scramjet/",
 });
 
 scramjet.init();

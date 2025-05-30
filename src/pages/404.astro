@@ -1,24 +1,9 @@
 ---
+import Layout from '../Layout.astro';
 ---
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1.0"
-    />
-    <title>Bromine</title>
-    <base href="/" />
-    <link rel="shortcut icon" content="favicon.ico" />
-    <link rel="stylesheet" href="index.css" />
-  </head>
-
-  <body>
-    <div class="logo-wrapper left-margin">
-      <h1>Bromine has skill issue</h1>
-    </div>
-    <div class="desc left-margin">
-      <p>sw was not registered. just clear site data and it should work</p>
-    </div>
-  </body>
-</html>
+<Layout title="404 - bromine" desc="bromine's shitty 404 page">
+<div class="logo-wrapper left-margin">
+      <h1>Someone has a skill issue</h1>
+      <p>either you got the wrong page or bromines stupid and will not proxy this page. if it doesnt, just clear site data and it should work</p>
+      <button onclick="history.back()">go back</button>
+</Layout>
