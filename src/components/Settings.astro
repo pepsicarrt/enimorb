@@ -1,0 +1,156 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+<div id="settings-popup" class="fixed inset-0 flex items-center justify-center bg-rose-pine-base/80 backdrop-blur-sm hidden z-[10000]">
+  <div class="bg-rose-pine-surface w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-semibold text-rose-pine-text">Settings</h1>
+      <button
+        id="close-settings-btn"
+        aria-label="Close settings"
+        class="text-rose-pine-text hover:text-rose-pine-iris transition-colors"
+      >
+        <Icon name="tabler:x" class="w-6 h-6" />
+      </button>
+    </div>
+    
+    <div class="space-y-4">
+      <section class="space-y-2">
+        <h2 class="text-lg font-medium text-rose-pine-text">General</h2>
+        <div class="flex items-center justify-between">
+          <label class="text-rose-pine-text">Dark Mode</label>
+          <input type="checkbox" id="dark-mode" class="toggle bg-rose-pine-overlay checked:bg-rose-pine-iris" />
+        </div>
+        <div class="flex items-center justify-between">
+          <label class="text-rose-pine-text">Show Bookmarks Bar</label>
+          <input type="checkbox" id="bookmarks-bar" class="toggle bg-rose-pine-overlay checked:bg-rose-pine-iris" />
+        </div>
+      </section>
+
+      <section class="space-y-2">
+        <h2 class="text-lg font-medium text-rose-pine-text">Search</h2>
+        <div class="flex items-center justify-between">
+          <label class="text-rose-pine-text">Default Search Engine</label>
+          <select id="search-engine" class="bg-rose-pine-base text-rose-pine-text rounded-md p-1">
+            <option value="https://search.brave.com/search?q=%s">Brave</option>
+            <option value="https://google.com/search?q=%s">Google</option>
+            <option>Bing</option>
+            <option>DuckDuckGo</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="space-y-2">
+        <h2 class="text-lg font-medium text-rose-pine-text">Privacy</h2>
+        <div class="flex items-center justify-between">
+          <label class="text-rose-pine-text">Block Trackers</label>
+          <input type="checkbox" id="block-trackers" class="toggle bg-rose-pine-overlay checked:bg-rose-pine-iris" />
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script is:inline defer async>
+  const closeButton = document.getElementById('close-settings-btn');
+  const popup = document.getElementById('settings-popup');
+  const darkModeToggle = document.getElementById('dark-mode');
+  const bookmarksBarToggle = document.getElementById('bookmarks-bar');
+  const searchEngineSelect = document.getElementById('search-engine');
+  const blockTrackersToggle = document.getElementById('block-trackers');
+
+  // Load settings from localStorage
+  function loadSettings() {
+    const settings = {
+      darkMode: localStorage.getItem('darkMode') === 'true',
+      bookmarksBar: localStorage.getItem('bookmarksBar') === 'true',
+      searchEngine: localStorage.getItem('searchEngine') || 'https://search.brave.com/search?q=%s',
+      blockTrackers: localStorage.getItem('blockTrackers') === 'true'
+    };
+
+    darkModeToggle.checked = settings.darkMode;
+    bookmarksBarToggle.checked = settings.bookmarksBar;
+    searchEngineSelect.value = settings.searchEngine;
+    blockTrackersToggle.checked = settings.blockTrackers;
+  }
+
+  // Save settings to localStorage
+  function saveSettings() {
+    localStorage.setItem('darkMode', darkModeToggle.checked);
+    localStorage.setItem('bookmarksBar', bookmarksBarToggle.checked);
+    localStorage.setItem('searchEngine', searchEngineSelect.value);
+    localStorage.setItem('blockTrackers', blockTrackersToggle.checked);
+  }
+
+  // Initialize settings
+  loadSettings();
+
+  // Add event listeners for settings changes
+  darkModeToggle.addEventListener('change', saveSettings);
+  bookmarksBarToggle.addEventListener('change', saveSettings);
+  searchEngineSelect.addEventListener('change', saveSettings);
+  blockTrackersToggle.addEventListener('change', saveSettings);
+
+  // Close popup
+  closeButton?.addEventListener('click', () => {
+    if (!popup.classList.contains('hidden')) {
+      popup.classList.add('hidden');
+    }
+  });
+</script>
+
+
+<style>
+  /* Popup animation */
+  #settings-popup:not(.hidden) .transform {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Toggle switch styles */
+  .toggle {
+    appearance: none;
+    width: 40px;
+    height: 20px;
+    background-color: #4B5563;
+    border-radius: 9999px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s;
+  }
+
+  .toggle:checked::after {
+    transform: translateX(20px);
+  }
+
+  /* Scrollbar styles */
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background: #6B7280;
+    border-radius: 4px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+  }
+</style>
+

@@ -38,13 +38,27 @@
 h1 {
   @apply text-2xl;
 }
+
 h2 {
   @apply text-xl;
 }
+
 h3 {
   @apply text-lg;
 }
+
 a {
   @apply text-blue-600 underline;
 }
 
+button {
+  transition: transform 0.2s ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.1) translateY(-2px);
+}
+
+button:active {
+  transform: scale(0.95);
+}

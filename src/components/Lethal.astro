@@ -3,35 +3,25 @@
 <script type="module" defer>
   import { setTransport, setWisp, setProxy, makeURL, getProxied } from './lethal.mjs';
 
-      const form = document.getElementById('form');
-      const addressInput = document.getElementById("address");
+  const form = document.getElementById('form');
+  const addressInput = document.getElementById("address");
+  const search = localStorage.getItem("search-engine") || "https://search.brave.com/search?q=%s";
 
-      if (navigator.userAgent.indexOf("Firefox") > 0) setTransport('libcurl');
-      else setTransport("epoxy");
+  if (navigator.userAgent.indexOf("Firefox") > 0) setTransport('libcurl');
+  else setTransport("epoxy");
 
-      setProxy("scram");
+  setProxy("scram");
 
-      setWisp("wss://anura.pro/")
-      // setWisp("wss://wisp.rhw.one/");
-      // setWisp('wss://wisp.mercurywork.shop/wisp/');
+  setWisp("wss://anura.pro/")
+  // setWisp('wss://wisp.mercurywork.shop/wisp/');
 
-        form.addEventListener("submit", async (event) => {
-          event.preventDefault();
-          
-          const frame = document.getElementById('frame'); // Target the static iframe
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const frame = document.getElementById('frame');
+    const urlToLoad = makeURL(addressInput.value, search);
 
-          if (!frame) {
-            console.error("Lethal.astro: Could not find iframe #frame.");
-            return;
-          }
-          if (!addressInput) { // Check if addressInput was found initially
-            console.error("Lethal.astro: Could not find address input #address.");
-            return;
-          }
 
-          const urlToLoad = addressInput.value;
-
-          addressInput.value = makeURL(urlToLoad);
-            frame.src = await getProxied(makeURL(urlToLoad)); 
-        });
-    </script>
+    addressInput.value = urlToLoad;
+    frame.src = await getProxied(urlToLoad); 
+  });
+</script>

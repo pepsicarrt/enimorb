@@ -6,10 +6,11 @@
  * Ideally, this will be registered under the scope in uv.config.js so it will not need to be modified.
  * However, if a user changes the location of uv.bundle.js/uv.config.js or sw.js is not relative to them, they will need to modify this script locally.
  */
-importScripts('https://cdn.jsdelivr.net/npm/@titaniumnetwork-dev/ultraviolet/dist/uv.bundle.js');
+importScripts('https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/uv/uv.bundle.js');
 importScripts('uv.config.js');
 importScripts(__uv$config.sw);
-importScripts("/scram/scramjet.shared.js", "/scram/scramjet.worker.js");
+importScripts("https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.shared.js", "https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.worker.js");
+importScripts("/workerware/workerware.js")
 
 const uv = new UVServiceWorker();
 const scramjet = new ScramjetServiceWorker();

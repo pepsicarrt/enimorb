@@ -1,4 +1,5 @@
 ---
+import Settings from "@/components/Settings.astro"
 import { Icon } from 'astro-icon/components';
 ---
 <div class="bg-rose-pine-base p-2 flex items-center space-x-2">
@@ -51,36 +52,12 @@ import { Icon } from 'astro-icon/components';
     >
       <Icon name="tabler:settings" class="w-5 h-5"/>
     </button>
-
   </div>
 </div>
-  <div id="settings-popup" class="text-rose-pine-text min-h-screen flex items-center hidden justify-center bg-rose-pine-base backdrop-opacity-10" style="z-index: 10000:">
-    <div class="bg-rose-pine-surface w-[30vw] h-[40vw] rounded-md">
-      <h1>Settings</h1>
-      sadfasdfasdfasdfafdasdfsadfasdfasdfasdffas
-    </div>
-  </div>
+
+<Settings id="settings-popup"/>
 
 <style>
-  /* Button animation */
-  button {
-    transition: transform 0.2s ease-in-out;
-  }
-
-  button:hover {
-    transform: scale(1.1) translateY(-2px);
-  }
-
-  button:active {
-    transform: scale(0.95);
-  }
-
-  
-  /* Popup animation */
-  .popup-open {
-    transform: translateX(0);
-  }
-
 
 </style>
 
@@ -89,8 +66,6 @@ import { Icon } from 'astro-icon/components';
   const forwardButton = document.getElementById('omnibar-forward-btn');
   const reloadButton = document.getElementById('omnibar-reload-btn');
   const settingsButton = document.getElementById('omnibar-settings-btn');
-  const popup = document.getElementById('settings-popup');
-
 
   backButton.addEventListener('click', () => {
     const iframe = document.getElementById('frame');
@@ -107,21 +82,20 @@ import { Icon } from 'astro-icon/components';
   });
 
   reloadButton.addEventListener('click', () => {
-    const iframe = document.getElementById('frame')
+    const iframe = document.getElementById('frame');
     if (iframe && iframe.contentWindow) {
       iframe.contentWindow.location.reload();
     }
   });
-// Settings popup toggle
-    function togglePopup() {
-      if (popup.classList.contains('hidden')) {
-        popup.classList.remove('hidden');
-        setTimeout(() => popup.classList.add('popup-open'), 10);
-      } else {
-        popup.classList.remove('popup-open');
-        setTimeout(() => popup.classList.add('hidden'), 300);
-      }
-    }
 
-    settingsButton?.addEventListener('click', togglePopup);
+ function togglePopup() {
+    if (popup.classList.contains('hidden')) {
+      popup.classList.remove('hidden');
+      popup.offsetHeight; // Force reflow
+    } else {
+      popup.classList.add('hidden');
+    }
+  }
+
+  settingsButton?.addEventListener('click', togglePopup);
 </script>
