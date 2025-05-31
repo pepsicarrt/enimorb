@@ -5,14 +5,16 @@
 
   const form = document.getElementById('form');
   const addressInput = document.getElementById("address");
-  const search = localStorage.getItem("search-engine") || "https://search.brave.com/search?q=%s";
+  const search = localStorage.getItem("searchEngine") || "https://search.brave.com/search?q=%s";
 
   if (navigator.userAgent.indexOf("Firefox") > 0) setTransport('libcurl');
   else setTransport("epoxy");
 
-  setProxy("scram");
+  setProxy("uv");
 
-  setWisp("wss://anura.pro/")
+setWisp("wss://wisp-proxy-worker.neealdon3-3f0.workers.dev/")
+// setWisp("wss://wisp-server-workers.r58-factories.workers.dev/")
+  // setWisp("wss://anura.pro/")
   // setWisp('wss://wisp.mercurywork.shop/wisp/');
 
   form.addEventListener("submit", async (event) => {

@@ -48,7 +48,7 @@ h3 {
 }
 
 a {
-  @apply text-blue-600 underline;
+  @apply underline;
 }
 
 button {
@@ -61,4 +61,8 @@ button:hover {
 
 button:active {
   transform: scale(0.95);
+}
+
+[data-icon] {
+  stroke-width: 3; /* Increase stroke thickness */
 }
