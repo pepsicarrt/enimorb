@@ -10,7 +10,7 @@ import { Icon } from 'astro-icon/components';
         aria-label="Close settings"
         class="text-rose-pine-text hover:text-rose-pine-iris transition-colors"
       >
-        <Icon name="tabler:x" class="w-6 h-6" />
+        <Icon name="lucide:x" class="size-6" />
       </button>
     </div>
     
@@ -51,7 +51,7 @@ import { Icon } from 'astro-icon/components';
   </div>
 </div>
 
-<script is:inline defer async>
+<script is:inline defer>
   const closeButton = document.getElementById('close-settings-btn');
   const popup = document.getElementById('settings-popup');
   const darkModeToggle = document.getElementById('dark-mode');

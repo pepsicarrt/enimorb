@@ -11,7 +11,7 @@ import { Icon } from 'astro-icon/components';
       id="omnibar-back-btn"
       class="shadow-md bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
     >
-      <Icon name="tabler:arrow-left" class="size-4.5" />
+      <Icon name="lucide:arrow-left" class="size-4.5" />
     </button>
 
     <button
@@ -19,7 +19,7 @@ import { Icon } from 'astro-icon/components';
       id="omnibar-forward-btn"
       class="shadow-md bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
     >
-      <Icon name="tabler:arrow-right" class="size-4.5" />
+      <Icon name="lucide:arrow-right" class="size-4.5" />
     </button>
 
     <button
@@ -27,11 +27,11 @@ import { Icon } from 'astro-icon/components';
       id="omnibar-reload-btn"
       class="shadow-md bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
     >
-      <Icon name="tabler:reload" class="size-4.5" />
+      <Icon name="lucide:refresh-cw" class="size-4.5" />
     </button>
 
     <div class="shadow-md bg-rose-pine-surface flex items-center rounded-md px-3 py-1.5">
-      <Icon name="tabler:search" class="size-4.5 mr-2" />
+      <Icon name="lucide:search" class="size-4.5 mr-2" />
       <form id="form" class="flex-center w-md"> 
         <input
           spellcheck="false"
@@ -50,7 +50,7 @@ import { Icon } from 'astro-icon/components';
       id="omnibar-settings-btn"
       class="shadow-md bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
     >
-      <Icon name="tabler:settings" class="size-4.5"/>
+      <Icon name="lucide:settings" class="size-4.5"/>
     </button>
   </div>
   </nav>
@@ -61,7 +61,7 @@ import { Icon } from 'astro-icon/components';
 
 </style>
 
-<script is:inline defer async>
+<script is:inline defer>
   const backButton = document.getElementById('omnibar-back-btn');
   const forwardButton = document.getElementById('omnibar-forward-btn');
   const reloadButton = document.getElementById('omnibar-reload-btn');
