@@ -2,21 +2,44 @@
 
 @theme {
   --font-display: "Roboto", Helvetica, sans-serif;
-  --color-rose-pine-base: hsl(249deg, 22%, 12%);
-  --color-rose-pine-surface: hsl(247deg, 23%, 15%);
-  --color-rose-pine-overlay: hsl(248deg, 25%, 18%);
-  --color-rose-pine-muted: hsl(249deg, 12%, 47%);
-  --color-rose-pine-subtle: hsl(248deg, 15%, 61%);
-  --color-rose-pine-text: hsl(245deg, 50%, 91%);
-  --color-rose-pine-love: hsl(343deg, 76%, 68%);
-  --color-rose-pine-gold: hsl(35deg, 88%, 72%);
-  --color-rose-pine-rose: hsl(2deg, 55%, 83%);
-  --color-rose-pine-pine: hsl(197deg, 49%, 38%);
-  --color-rose-pine-foam: hsl(189deg, 43%, 73%);
-  --color-rose-pine-iris: hsl(267deg, 57%, 78%);
-  --color-rose-pine-highlight-low: hsl(244deg, 18%, 15%);
-  --color-rose-pine-highlight-med: hsl(249deg, 15%, 28%);
-  --color-rose-pine-highlight-high: hsl(248deg, 13%, 36%);
+
+  --color-base: #191724;
+  --color-surface: #1f1d2e;
+  --color-overlay: #26233a;
+  --color-muted: #6e6a86;
+  --color-subtle: #908caa;
+  --color-text: #e0def4;
+  --color-love: #eb6f92;
+  --color-gold: #f6c177;
+  --color-rose: #ebbcba;
+  --color-pine: #31748f;
+  --color-foam: #9ccfd8;
+  --color-iris: #c4a7e7;
+  --color-highlight-low: #21202e;
+  --color-highlight-med: #403d52;
+  --color-highlight-high: #524f67;
+ 
+  /* Light Mode 
+  --color-base: #faf4ed;
+  --color-surface: #fffaf3;
+  --color-overlay: #f2e9e1;
+  --color-muted: #9893a5;
+  --color-surface: #fffaf3;
+  --color-text: #575279;
+  --color-love: #b4637a;
+  --color-gold: #ea9d34;
+  --color-rose: #d7827e;
+  --color-pine: #286983;
+  --color-foam: #56949f;
+  --color-iris: #907aa9;
+  --color-highlight-low: #f4ede8;
+  --color-highlight-med: #dfdad9;
+  --color-highlight-high: #cecacd;
+*/
+
+
+
+
 }
 
 @font-face {
@@ -49,6 +72,10 @@ h3 {
 
 a {
   @apply underline;
+}
+
+label {
+  @apply text-xs text-text font-medium;
 }
 
 button {

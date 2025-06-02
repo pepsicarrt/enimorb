@@ -2,14 +2,14 @@
 import Settings from "@/components/Settings.astro"
 import { Icon } from 'astro-icon/components';
 ---
-<nav class="sticky bg-rose-pine-base p-2 flex items-center space-x-2">
+<nav class="sticky bg-base p-2 flex items-center space-x-2">
   <h1 class="mr-auto">bromine</h1>
 
   <div class="flex items-center justify-center flex-1 space-x-2">
     <button
       aria-label="Back"
       id="omnibar-back-btn"
-      class="shadow-md bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-gray-600"
     >
       <Icon name="lucide:arrow-left" class="size-4.5" />
     </button>
@@ -17,7 +17,7 @@ import { Icon } from 'astro-icon/components';
     <button
       aria-label="Forward"
       id="omnibar-forward-btn"
-      class="shadow-md bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-gray-600"
     >
       <Icon name="lucide:arrow-right" class="size-4.5" />
     </button>
@@ -25,12 +25,12 @@ import { Icon } from 'astro-icon/components';
     <button
       aria-label="Reload"  
       id="omnibar-reload-btn"
-      class="shadow-md bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-gray-600"
     >
       <Icon name="lucide:refresh-cw" class="size-4.5" />
     </button>
 
-    <div class="shadow-md bg-rose-pine-surface flex items-center rounded-md px-3 py-1.5">
+    <div class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5">
       <Icon name="lucide:search" class="size-4.5 mr-2" />
       <form id="form" class="flex-center w-md"> 
         <input
@@ -48,7 +48,7 @@ import { Icon } from 'astro-icon/components';
     <button
       aria-label="Settings"
       id="omnibar-settings-btn"
-      class="shadow-md bg-rose-pine-surface p-1.5 rounded-md hover:bg-gray-600"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-gray-600"
     >
       <Icon name="lucide:settings" class="size-4.5"/>
     </button>

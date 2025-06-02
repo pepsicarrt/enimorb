@@ -143,7 +143,7 @@ export function getBare() {
 }
 
 export function setProxy(proxy) {
-  console.log(`lethal.js: Setting proxy backend to {proxy}`);
+  console.log(`lethal.js: Setting proxy backend to ${proxy}`);
   proxyOption = proxy;
 }
 
