@@ -12,8 +12,11 @@ import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
 import netlify from "@astrojs/netlify";
 
 
+import partytown from "@astrojs/partytown";
+
+
 export default defineConfig({
-  integrations: [icon(), (await import("@playform/compress")).default()],
+  integrations: [icon(), (await import("@playform/compress")).default(), partytown()],
 
   vite: {
     plugins: [

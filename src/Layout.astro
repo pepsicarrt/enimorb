@@ -12,7 +12,7 @@ const { title, desc } = Astro.props;
   <head>
     <meta content="IE=edge" http-equiv="X-UA-Compatible" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta content="0.1.3" name="version" />
+    <meta content="0.1.5" name="version" />
 
     <meta property="og:site_name" content="Bromine">
     <meta property="og:url" content="https://holyunblocker.net/">
@@ -24,8 +24,8 @@ const { title, desc } = Astro.props;
     <meta name="googlebot" content="index, follow, snippet" />
     <link rel="canonical" href="https://bromineproxy.netlify.app" />
 
-    <!-- <link rel="modulepreload" href="/lethal.mjs"> -->
-    <!-- <link rel="preload" as="font" crossorigin type="font/woff2" href="/roboto.woff2"> -->
+    <script defer async src="https://unpkg.com/dexie/dist/dexie.js"></script>
+    <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 
     <meta name="keywords" content="proxy, web proxy, uncensor, bypass firewall, free web proxy">
     <meta name="description" content={desc} />
@@ -42,5 +42,5 @@ const { title, desc } = Astro.props;
     <div class="flex h-screen"> 
       <slot/>
     </div>
-  </body>
+ </body>
 </html>

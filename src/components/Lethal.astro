@@ -6,21 +6,26 @@
   const form = document.getElementById('form');
   const addressInput = document.getElementById("address");
   const search = localStorage.getItem("search-engine") || "https://search.brave.com/search?q=%s";
+  const frame = document.getElementById('frame');
+
+  // frame.onload = () => {
+  //   alert("a");
+  // }
 
   if (localStorage.getItem("proxy-transport")) setTransport(localStorage.getItem("proxy-transport"));
   else if (navigator.userAgent.indexOf("Firefox") > 0) setTransport('libcurl');
   else setTransport("epoxy");
 
-  setProxy("scram");
+  setProxy(localStorage.getItem("proxy-backend") ||"scram");
 
   if(localStorage.getItem("wisp-server")) setWisp(localStorage.getItem("wisp-server") + "/");
-  else setWisp("wss://wisp-server-workers.neealdon3-3f0.workers.dev/");
-  // setWisp("wss://anura.pro/")
+  else setWisp("wss://anura.pro/"); 
+  // setWisp("wss://wisp-server-workers.neealdon3-3f0.workers.dev/");
   // setWisp('wss://wisp.mercurywork.shop/wisp/');
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const frame = document.getElementById('frame');
+
     const urlToLoad = makeURL(addressInput.value, search);
 
 
