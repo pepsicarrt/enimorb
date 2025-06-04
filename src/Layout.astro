@@ -1,5 +1,6 @@
 ---
 import "./styles/global.css";
+import Welcome from "./components/Welcome.astro";
 export interface Props {
   title: string;
   desc: string;
@@ -32,15 +33,34 @@ const { title, desc } = Astro.props;
     <meta charset="UTF-8" />
     <title>{title}</title>
   </head>
-  <body class="text-text bg-base">
+  <body class="text-text bg-base flex">
     <a href="#main"
        class="absolute left-4 top-4 z-50 dark:bg-surface px-4 py-2 rounded-md shadow-lg
               transform -translate-y-16 opacity-0 transition-all duration-300 ease-in-out
               focus:translate-y-0 focus:opacity-100 hover:bg-overlay">
         Skip to main content
     </a>
-    <div class="flex h-screen"> 
-      <slot/>
-    </div>
+    <slot/>
+
+<footer class="w-full absolute bottom-0 bg-surface bg-opacity-75 flex justify-between items-center p-4">
+  <section>
+    Made with ❤️ by <a href="https://github.com/Coding4hours" class="underline hover:text-sky-200">Coding4Hours</a>
+  </section>
+
+  <a href="https://dashboard.simpleanalytics.com/?utm_source=bromineproxy.netlify.app&utm_content=badge&affiliate=dewof-bek" referrerpolicy="origin" target="_blank">
+    <picture>
+      <source srcset="https://simpleanalyticsbadges.com/bromineproxy.netlify.app?mode=dark" media="(prefers-color-scheme: dark)" />
+      <img 
+        src="https://simpleanalyticsbadges.com/bromineproxy.netlify.app?mode=light" 
+        loading="lazy" 
+        referrerpolicy="no-referrer" 
+        crossorigin="anonymous" 
+        alt="Simple Analytics Badge"
+      />
+    </picture>
+  </a>
+</footer>
+ 
+      <!-- <Welcome/> -->
  </body>
 </html>

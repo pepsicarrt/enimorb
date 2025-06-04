@@ -5,15 +5,10 @@ import Omnibar from '@/components/Omnibar.astro';
 ---
 <Layout title="bromine" desc="a really shitty proxy">
   <Lethal/>
-  <main id="main" class="flex flex-col flex-grow"> 
+  <main id="main" class="flex flex-col flex-grow h-screen"> 
     <Omnibar class="p-2 md:p-4"/>
     <iframe title="Proxy Frame" id="frame" class="w-full h-full border-0 relative"></iframe>
   </main>
+
 </Layout>
-    <footer class="bg-sky-500 bg-opacity-75">
-      <section class="absolute bottom-0 left-0">
-        Made with ❤️ by <a href="https://github.com/Coding4hours">Coding4Hours</a>
-      </section>
-      <a class="absolute right-0 bottom-0" href="https://dashboard.simpleanalytics.com/?utm_source=bromineproxy.netlify.app&utm_content=badge&affiliate=dewof-bek" referrerpolicy="origin" target="_blank"><picture><source srcset="https://simpleanalyticsbadges.com/bromineproxy.netlify.app?mode=dark" media="(prefers-color-scheme: dark)" /><img src="https://simpleanalyticsbadges.com/bromineproxy.netlify.app?mode=light" loading="lazy" referrerpolicy="no-referrer" crossorigin="anonymous" /></picture></a>
-    </footer>
- 
+

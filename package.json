@@ -4,10 +4,9 @@
   "description": "bromine",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
-    "start": "astro preview",
-    "bstart": "bun run build && npm run start",
-    "check": "bunx @biomejs/biome check --write * && astro check"
+    "check": "bunx @biomejs/biome check --write * && astro check",
+    "deploy": "netlify deploy",
+    "pdeploy": "netlify deploy --prod"
   },
   "dependencies": {
     "@astrojs/netlify": "^6.3.4",
@@ -22,15 +21,19 @@
     "@titaniumnetwork-dev/ultraviolet": "^3.2.10",
     "astro": "^5.8.1",
     "astro-icon": "^1.1.5",
+    "netlify-cli": "^21.6.0",
     "tailwindcss": "^4.1.8",
     "vite-plugin-static-copy": "^3.0.0",
     "wisp-server-node": "^1.1.7"
   },
   "trustedDependencies": [
+    "@parcel/watcher",
     "@tailwindcss/oxide",
     "bufferutil",
     "esbuild",
+    "netlify-cli",
     "sharp",
+    "unix-dgram",
     "utf-8-validate"
   ]
 }
