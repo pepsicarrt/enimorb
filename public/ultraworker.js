@@ -9,7 +9,7 @@
 importScripts('https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/uv/uv.bundle.js');
 importScripts('uv.config.js');
 importScripts(__uv$config.sw);
-importScripts("https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.shared.js", "https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.worker.js");
+importScripts("/scram/scramjet.shared.js", "/scram/scramjet.worker.js");
 // importScripts("/workerware/workerware.js")
 
 const uv = new UVServiceWorker();

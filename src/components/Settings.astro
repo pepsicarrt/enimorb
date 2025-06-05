@@ -16,6 +16,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
     </div>
 
     <div class="space-y-6">
+      <p>These settings will not apply until you reload the page!</p>
       {settingsData.sections.map(section => (
         <section class="space-y-4 border-t border-overlay pt-4 first:pt-0 first:border-t-0">
           <h2 class="text-lg font-medium text-text">{section.title}</h2>
@@ -121,7 +122,6 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
     }
 
     // --- Tooltip Functions ---
-    // ✅ THIS IS THE UPDATED FUNCTION
     function showTooltip(button) {
       const description = button.dataset.description;
       if (!description || !tooltip) return;
@@ -133,22 +133,15 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
       const buttonRect = button.getBoundingClientRect();
       const contentRect = popupContent.getBoundingClientRect();
 
-      // HORIZONTAL: Center the tooltip within the popup content area.
       tooltip.style.left = '50%';
-      tooltip.style.transform = 'translateX(-50%)'; // This is the key for centering.
+      tooltip.style.transform = 'translateX(-50%)';
 
-      // VERTICAL: Keep the tooltip positioned above or below the button for context.
-      // Position below the button by default.
       let top = (buttonRect.top - contentRect.top) + button.offsetHeight + 8;
 
-      // Check if the tooltip would overflow the bottom of the visible area.
-      // We use clientHeight which is the visible height of the container.
       if (top + tooltip.offsetHeight > popupContent.clientHeight) {
-        // If it overflows, flip it to be above the button.
         top = (buttonRect.top - contentRect.top) - tooltip.offsetHeight - 8;
       }
 
-      // Finally, apply the calculated top position, accounting for any scrolling.
       tooltip.style.top = `${top + popupContent.scrollTop}px`;
     }
 

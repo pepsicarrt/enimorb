@@ -5,9 +5,9 @@ await import('https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/uv/uv.bundle.js');
 
 await import('./uv.config.js');
 
-await import("https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.shared.js")
-await import("https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.worker.js")
-await import("https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.controller.js")
+await import("/scram/scramjet.shared.js")
+await import("/scram/scramjet.worker.js")
+await import("/scram/scramjet.controller.js")
 
 import * as BareMux from 'https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/bare-mux/index.mjs';
 
@@ -52,11 +52,11 @@ async function registerSW() {
 
 const scramjet = new ScramjetController({
   files: {
-    wasm: "https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.wasm.wasm",
-    worker: "https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.worker.js",
-    client: "https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.client.js",
-    shared: "https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.shared.js",
-    sync: "https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/scram/scramjet.sync.js",
+    wasm: "/scram/scramjet.wasm.wasm",
+    worker: "/scram/scramjet.worker.js",
+    client: "/scram/scramjet.client.js",
+    shared: "/scram/scramjet.shared.js",
+    sync: "/scram/scramjet.sync.js",
   },
 	flags: {
 	  serviceworkers: false,

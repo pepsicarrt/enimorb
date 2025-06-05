@@ -67,7 +67,7 @@
           "label": "Proxy Transport",
           "type": "select",
           "defaultValue": "epoxy",
-          "description": "Select the transport layer for proxy communication. Epoxy is for Chromium-based browsers, Libcurl for Firefox. Bare is deprecated.",
+          "description": "Select the transport layer for proxy communication. Epoxy is best for chrome and libcurl with firefox. Bare is deprecated",
           "options": [
             {
               "value": "epoxy",
@@ -89,7 +89,7 @@
           "type": "text",
           "defaultValue": "wss://anura.pro",
           "placeholder": "wss://wisp.pro",
-          "description": "The WebSocket server used for proxy transport. If you're self-hosting, enter your own Wisp or Bare server URL here."
+          "description": "The Transport server used for proxy transport. This is usually wisp. If you don't know what this is, ignore it."
         }
       ]
     }
