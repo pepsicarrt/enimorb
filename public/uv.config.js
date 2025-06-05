@@ -1,6 +1,6 @@
 
 self.__uv$config = {
-  prefix: "/~/uv/",
+  prefix: "/uv/",
   encodeUrl: Ultraviolet.codec.xor.encode,
   decodeUrl: Ultraviolet.codec.xor.decode,
   handler: "https://cdn.jsdelivr.net/npm/@titaniumnetwork-dev/ultraviolet/dist/uv.handler.js",

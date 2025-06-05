@@ -25,8 +25,11 @@ const { title, desc } = Astro.props;
     <meta name="googlebot" content="index, follow, snippet" />
     <link rel="canonical" href="https://bromineproxy.netlify.app" />
 
+
     <script defer async src="https://unpkg.com/dexie/dist/dexie.js"></script>
     <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+
+    <script defer async src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <meta name="keywords" content="proxy, web proxy, uncensor, bypass firewall, free web proxy">
     <meta name="description" content={desc} />
@@ -40,27 +43,30 @@ const { title, desc } = Astro.props;
               focus:translate-y-0 focus:opacity-100 hover:bg-overlay">
         Skip to main content
     </a>
+
+  <main id="main" class="flex flex-col flex-grow h-screen">
     <slot/>
+  </main>
 
-<footer class="w-full absolute bottom-0 bg-surface bg-opacity-75 flex justify-between items-center p-4">
-  <section>
-    Made with ❤️ by <a href="https://github.com/Coding4hours" class="underline hover:text-sky-200">Coding4Hours</a>
-  </section>
+    <footer class="w-full absolute bottom-0 bg-surface bg-opacity-75 flex justify-between items-center p-4">
+      <section>
+        Made with ❤️ by <a href="https://github.com/Coding4hours" class="underline hover:text-sky-200">Coding4Hours</a>
+      </section>
 
-  <a href="https://dashboard.simpleanalytics.com/?utm_source=bromineproxy.netlify.app&utm_content=badge&affiliate=dewof-bek" referrerpolicy="origin" target="_blank">
-    <picture>
-      <source srcset="https://simpleanalyticsbadges.com/bromineproxy.netlify.app?mode=dark" media="(prefers-color-scheme: dark)" />
-      <img 
-        src="https://simpleanalyticsbadges.com/bromineproxy.netlify.app?mode=light" 
-        loading="lazy" 
-        referrerpolicy="no-referrer" 
-        crossorigin="anonymous" 
-        alt="Simple Analytics Badge"
-      />
-    </picture>
-  </a>
-</footer>
+      <a href="https://dashboard.simpleanalytics.com/?utm_source=bromineproxy.netlify.app&utm_content=badge&affiliate=dewof-bek" referrerpolicy="origin" target="_blank">
+        <picture>
+          <source srcset="https://simpleanalyticsbadges.com/bromineproxy.netlify.app?mode=dark" media="(prefers-color-scheme: dark)" />
+          <img 
+            src="https://simpleanalyticsbadges.com/bromineproxy.netlify.app?mode=light" 
+            loading="lazy" 
+            referrerpolicy="no-referrer" 
+            crossorigin="anonymous" 
+            alt="Simple Analytics Badge"
+          />
+        </picture>
+      </a>
+    </footer>
  
-      <!-- <Welcome/> -->
- </body>
+    <Welcome/>
+  </body>
 </html>
