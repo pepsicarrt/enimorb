@@ -1,0 +1,106 @@
+---
+// src/layouts/PopupLayout.astro
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  // --- Element IDs ---
+  triggerId: string;
+  popupId: string;
+  contentId: string;
+  closeBtnId: string;
+
+  // --- Content ---
+  title: string;
+  triggerAriaLabel: string;
+  triggerIcon: string; // Icon name e.g., 'lucide:settings'
+}
+
+const {
+  triggerId,
+  popupId,
+  contentId,
+  closeBtnId,
+  title,
+  triggerAriaLabel,
+  triggerIcon
+} = Astro.props;
+---
+<!-- 1. The Trigger Button -->
+<button
+  aria-label={triggerAriaLabel}
+  id={triggerId}
+  class="shadow-md bg-surface p-1.5 rounded-md hover:bg-gray-600"
+>
+  <Icon name={triggerIcon} class="size-4.5"/>
+</button>
+
+<!-- 2. The Popup Structure -->
+<div id={popupId} class="fixed inset-0 flex items-center justify-center bg-base/80 backdrop-blur-sm invisible pointer-events-none opacity-0 transition-opacity duration-300 ease-in-out">
+  <div id={contentId} class="relative bg-surface w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform -translate-y-full transition-transform duration-300 ease-in-out">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-semibold text-text">{title}</h1>
+      <button id={closeBtnId} aria-label={`Close ${title}`} class="text-text hover:text-iris transition-colors">
+        <Icon name="lucide:x" class="size-6" />
+      </button>
+    </div>
+
+    <!-- 3. The Unique Content Slot -->
+    <slot />
+
+  </div>
+</div>
+
+<!-- 4. The Common JavaScript -->
+<script define:vars={{ triggerId, popupId, contentId, closeBtnId }} is:inline>
+  const triggerButton = document.getElementById(triggerId);
+  const popup = document.getElementById(popupId);
+  const popupContent = document.getElementById(contentId);
+  const closeButton = document.getElementById(closeBtnId);
+
+  if (!triggerButton || !popup || !popupContent || !closeButton) {
+    console.error('One or more popup elements are missing from the DOM.');
+  } else {
+    function openPopup() {
+      popup.classList.remove('invisible', 'pointer-events-none');
+      popup.classList.add('opacity-100');
+      popupContent.classList.remove('-translate-y-full');
+      popupContent.classList.add('translate-y-0');
+      // Dispatch a custom event when the popup opens
+      document.dispatchEvent(new CustomEvent('popup-opened', { detail: { popupId } }));
+    }
+
+    function closePopup() {
+      popup.classList.remove('opacity-100');
+      popup.classList.add('invisible', 'pointer-events-none');
+      popupContent.classList.remove('translate-y-0');
+      popupContent.classList.add('-translate-y-full');
+      // Dispatch a custom event when the popup closes
+      document.dispatchEvent(new CustomEvent('popup-closed', { detail: { popupId } }));
+    }
+
+    triggerButton.addEventListener('click', openPopup);
+    closeButton.addEventListener('click', closePopup);
+
+    popup.addEventListener('click', (event) => {
+      if (event.target === popup) {
+        closePopup();
+      }
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !popup.classList.contains('invisible')) {
+        event.preventDefault();
+        closePopup();
+      }
+    });
+  }
+</script>
+
+<!-- 5. Common Styling -->
+<style is:global>
+  .overflow-y-auto::-webkit-scrollbar { width: 8px; }
+  .overflow-y-auto::-webkit-scrollbar-track { background: transparent; }
+  .overflow-y-auto::-webkit-scrollbar-thumb { background: #6B7280; border-radius: 4px; }
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+</style>

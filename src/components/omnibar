@@ -1,10 +1,8 @@
-
 ---
-import Settings from "@components/Settings.astro";
-import Bookmarks from '@components/Bookmarks.astro'; // Added import
+import Settings from "@components/Settings.astro"
 import { Icon } from 'astro-icon/components';
 ---
-<nav class="sticky bg-base p-2 flex items-center space-x-2 z-[9999]">
+<nav class="sticky bg-base p-2 flex items-center space-x-2">
   <h1 class="mr-auto">bromine</h1>
 
   <div class="flex items-center justify-center flex-1 space-x-2">
@@ -47,21 +45,27 @@ import { Icon } from 'astro-icon/components';
       </form>
     </div>
 
-
-<Bookmarks />
-
-
-<Settings/>
+    <button
+      aria-label="Settings"
+      id="omnibar-settings-btn"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-gray-600"
+    >
+      <Icon name="lucide:settings" class="size-4.5"/>
+    </button>
   </div>
   </nav>
 
+<Settings/>
 
 <script is:inline defer>
   const backButton = document.getElementById('omnibar-back-btn');
   const forwardButton = document.getElementById('omnibar-forward-btn');
   const reloadButton = document.getElementById('omnibar-reload-btn');
-
-backButton.addEventListener('click', () => {
+  const settingsButton = document.getElementById('omnibar-settings-btn');
+  const popup = document.getElementById('settings-popup');
+  const popupContent = document.getElementById('settings-popup-content');
+  
+  backButton.addEventListener('click', () => {
     const iframe = document.getElementById('frame');
     if (iframe && iframe.contentWindow) {
       iframe.contentWindow.history.back();
@@ -82,6 +86,31 @@ backButton.addEventListener('click', () => {
     }
   });
 
- 
- 
+    // --- Ping Function (Client-Side) ---
+    async function updatePing(url) {
+      const pingResultEl = document.getElementById('ping-result');
+      if (!pingResultEl) return;
+      pingResultEl.textContent = 'Pinging...';
+      const startTime = performance.now();
+      try {
+        await fetch(url, { mode: 'no-cors', cache: 'no-store' });
+        const endTime = performance.now();
+        const duration = Math.round(endTime - startTime);
+        pingResultEl.textContent = `${duration}ms`;
+      } catch (e) {
+        pingResultEl.textContent = 'Error';
+      }
+    }
+
+    function openPopup() {
+      popup.classList.remove('invisible', 'pointer-events-none');
+    popup.classList.add('opacity-100');
+      popupContent.classList.add('translate-y-0');
+
+      updatePing("https://bromineproxy.netlify.app/");
+    }
+
+
+
+settingsButton?.addEventListener('click', openPopup);
 </script>

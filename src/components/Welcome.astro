@@ -37,6 +37,11 @@ import { Icon } from 'astro-icon/components';
 </script>
 
 <style>
+  .overflow-y-auto::-webkit-scrollbar { width: 8px; }
+  .overflow-y-auto::-webkit-scrollbar-track { background: transparent; }
+  .overflow-y-auto::-webkit-scrollbar-thumb { background: #6B7280; border-radius: 4px; }
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+
   #welcome-popup.hidden .transform { /* When hidden, ensure it's off-screen/invisible */
     transform: translateY(-50px);
     opacity: 0;
@@ -44,23 +49,5 @@ import { Icon } from 'astro-icon/components';
   #welcome-popup:not(.hidden) .transform { /* When shown, animate in */
     transform: translateY(0);
     opacity: 1;
-  }
-
-  /* Scrollbar styles */
-  .overflow-y-auto::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  .overflow-y-auto::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .overflow-y-auto::-webkit-scrollbar-thumb {
-    background: #6B7280; /* text-subtle or similar */
-    border-radius: 4px;
-  }
-
-  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-    background: #9CA3AF; /* text-text or similar */
   }
 </style>
