@@ -4,10 +4,10 @@ import settingsData from '@data/settings.json';
 
 const flatSettingsConfig = settingsData.sections.flatMap(section => section.settings);
 ---
-<!-- The `invisible` and `pointer-events-none` classes keep the popup hidden but available for transitions -->
 <div id="settings-popup" class="fixed inset-0 flex items-center justify-center bg-base/80 backdrop-blur-sm z-[10000] invisible pointer-events-none opacity-0 transition-opacity duration-300 ease-in-out">
   <!-- This inner div handles the transform transition -->
-  <div id="settings-popup-content" class="relative bg-surface w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform translate-y-[-50px] transition-transform duration-300 ease-in-out">
+<div id="settings-popup-content" class="relative bg-surface w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform translate-y-[-50px] transition-transform duration-300 ease-in-out">
+  <!-- <div id="settings-popup-content" class="bg-surface w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform translate-y-[-50px] transition-transform duration-300 ease-in-out"> -->
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-semibold text-text">Settings</h1>
       <button id="close-settings-btn" aria-label="Close settings" class="text-text hover:text-iris transition-colors">
@@ -49,6 +49,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
                     placeholder={setting.placeholder || ''}
                   />
                 )}
+                <!-- Added Toggle Switch -->
                 {setting.type === 'toggle' && (
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id={setting.id} class="sr-only peer" />
@@ -82,18 +83,21 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
     function closePopup() {
       popup.classList.remove('opacity-100');
       popupContent.classList.remove('translate-y-0');
+      // Hide after transition completes
       setTimeout(() => {
         popup.classList.add('invisible', 'pointer-events-none');
-        hideTooltip();
+        hideTooltip(); // Ensure tooltip is hidden on close
       }, 300);
     }
 
+    // --- Generic Settings Functions ---
     function loadSettings() {
       settingsConfig.forEach(setting => {
         const element = document.getElementById(setting.id);
         if (!element) return;
         const storedValue = localStorage.getItem(setting.id);
         const valueToApply = storedValue !== null ? storedValue : setting.defaultValue;
+
         if (setting.type === 'toggle') {
           element.checked = valueToApply === 'true';
         } else {
@@ -106,8 +110,12 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
       const element = event.target;
       const setting = settingsConfig.find(s => s.id === element.id);
       if (!setting) return;
+
       const valueToStore = setting.type === 'toggle' ? element.checked : element.value;
       localStorage.setItem(setting.id, valueToStore.toString());
+      // No location.reload() for a better UX.
+      // You might want to dispatch a custom event here to notify other parts of the app.
+      // e.g., document.dispatchEvent(new CustomEvent('settings-updated', { detail: { key: setting.id, value: valueToStore } }));
     }
 
     function initializeSettings() {
@@ -116,12 +124,12 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
         const element = document.getElementById(setting.id);
         if (element) {
           element.addEventListener('change', saveSettings);
+          // For text inputs, 'blur' or 'input' can be used. 'change' fires on blur for text inputs anyway.
         }
       });
     }
 
     // --- Tooltip Functions ---
-    // ✅ THIS IS THE UPDATED FUNCTION
     function showTooltip(button) {
       const description = button.dataset.description;
       if (!description || !tooltip) return;
@@ -129,27 +137,22 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
       tooltip.textContent = description;
       tooltip.classList.remove('hidden');
 
-      // --- POSITIONING LOGIC ---
       const buttonRect = button.getBoundingClientRect();
       const contentRect = popupContent.getBoundingClientRect();
 
-      // HORIZONTAL: Center the tooltip within the popup content area.
-      tooltip.style.left = '50%';
-      tooltip.style.transform = 'translateX(-50%)'; // This is the key for centering.
-
-      // VERTICAL: Keep the tooltip positioned above or below the button for context.
-      // Position below the button by default.
+      // Position relative to the popup content container
       let top = (buttonRect.top - contentRect.top) + button.offsetHeight + 8;
+      let left = (buttonRect.left - contentRect.left) + (button.offsetWidth / 2);
 
-      // Check if the tooltip would overflow the bottom of the visible area.
-      // We use clientHeight which is the visible height of the container.
-      if (top + tooltip.offsetHeight > popupContent.clientHeight) {
-        // If it overflows, flip it to be above the button.
-        top = (buttonRect.top - contentRect.top) - tooltip.offsetHeight - 8;
+      tooltip.style.transform = `translateX(-50%)`;
+      
+      // Flip tooltip to be above if it overflows the bottom
+      if (top + tooltip.offsetHeight > contentRect.height) {
+          top = (buttonRect.top - contentRect.top) - tooltip.offsetHeight - 8;
       }
-
-      // Finally, apply the calculated top position, accounting for any scrolling.
-      tooltip.style.top = `${top + popupContent.scrollTop}px`;
+      
+      tooltip.style.top = `${top}px`;
+      tooltip.style.left = `${left}px`;
     }
 
     function hideTooltip() {
@@ -158,28 +161,34 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
       }
     }
 
+    // --- Event Listeners ---
     function addEventListeners() {
       closeButton?.addEventListener('click', closePopup);
+
       document.querySelectorAll('.info-btn').forEach(button => {
         button.addEventListener('mouseenter', () => showTooltip(button));
         button.addEventListener('mouseleave', hideTooltip);
         button.addEventListener('focus', () => showTooltip(button));
         button.addEventListener('blur', hideTooltip);
       });
+
       window.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && !popup.classList.contains('invisible')) {
           event.preventDefault();
           closePopup();
         }
       });
+
       popup.addEventListener('click', (event) => {
         if (event.target === popup) {
           closePopup();
         }
       });
+
       popupContent.addEventListener('scroll', hideTooltip, { passive: true });
     }
 
+    // --- Initialize ---
     initializeSettings();
     addEventListeners();
   });

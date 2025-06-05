@@ -55,7 +55,7 @@ import { Icon } from 'astro-icon/components';
   </div>
   </nav>
 
-<Settings id="settings-popup"/>
+<Settings/>
 
 <script is:inline defer>
   const backButton = document.getElementById('omnibar-back-btn');
@@ -63,7 +63,8 @@ import { Icon } from 'astro-icon/components';
   const reloadButton = document.getElementById('omnibar-reload-btn');
   const settingsButton = document.getElementById('omnibar-settings-btn');
   const popup = document.getElementById('settings-popup');
-
+  const popupContent = document.getElementById('settings-popup-content');
+  
   backButton.addEventListener('click', () => {
     const iframe = document.getElementById('frame');
     if (iframe && iframe.contentWindow) {
@@ -85,14 +86,31 @@ import { Icon } from 'astro-icon/components';
     }
   });
 
- function togglePopup() {
-    if (popup.classList.contains('hidden')) {
-      popup.classList.remove('hidden');
-      popup.offsetHeight; // Force reflow
-    } else {
-      popup.classList.add('hidden');
+    // --- Ping Function (Client-Side) ---
+    async function updatePing(url) {
+      const pingResultEl = document.getElementById('ping-result');
+      if (!pingResultEl) return;
+      pingResultEl.textContent = 'Pinging...';
+      const startTime = performance.now();
+      try {
+        await fetch(url, { mode: 'no-cors', cache: 'no-store' });
+        const endTime = performance.now();
+        const duration = Math.round(endTime - startTime);
+        pingResultEl.textContent = `${duration}ms`;
+      } catch (e) {
+        pingResultEl.textContent = 'Error';
+      }
     }
-  }
 
-  settingsButton?.addEventListener('click', togglePopup);
+    function openPopup() {
+      popup.classList.remove('invisible', 'pointer-events-none');
+    popup.classList.add('opacity-100');
+      popupContent.classList.add('translate-y-0');
+
+      updatePing("https://bromineproxy.netlify.app/");
+    }
+
+
+
+settingsButton?.addEventListener('click', openPopup);
 </script>

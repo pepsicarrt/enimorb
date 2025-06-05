@@ -10,13 +10,34 @@
           "defaultValue": "https://search.brave.com/search?q=%s",
           "description": "Choose the search engine used when you search from the address bar.",
           "options": [
-            { "value": "https://search.brave.com/search?q=%s", "label": "Brave" },
-            { "value": "https://google.com/search?q=%s", "label": "Google" },
-            { "value": "https://www.bing.com/search?q=%s", "label": "Bing" },
-            { "value": "https://duckduckgo.com/?q=%s&ia=web", "label": "DuckDuckGo" },
-            { "value": "https://search.yahoo.com/search?p=%s", "label": "Yahoo" },
-            { "value": "https://searx.si/search?q=%s", "label": "SearXNG" },
-            { "value": "https://www.qwant.com/?q=%s", "label": "Qwant" }
+            {
+              "value": "https://search.brave.com/search?q=%s",
+              "label": "Brave"
+            },
+            {
+              "value": "https://google.com/search?q=%s",
+              "label": "Google"
+            },
+            {
+              "value": "https://www.bing.com/search?q=%s",
+              "label": "Bing"
+            },
+            {
+              "value": "https://duckduckgo.com/?q=%s&ia=web",
+              "label": "DuckDuckGo"
+            },
+            {
+              "value": "https://search.yahoo.com/search?p=%s",
+              "label": "Yahoo"
+            },
+            {
+              "value": "https://searx.si/search?q=%s",
+              "label": "SearXNG"
+            },
+            {
+              "value": "https://www.qwant.com/?q=%s",
+              "label": "Qwant"
+            }
           ]
         }
       ]
@@ -31,8 +52,14 @@
           "defaultValue": "uv",
           "description": "Select the core proxy engine. Ultraviolet is recommended for the best compatibility.",
           "options": [
-            { "value": "uv", "label": "Ultraviolet" },
-            { "value": "scram", "label": "Scramjet (Beta)" }
+            {
+              "value": "uv",
+              "label": "Ultraviolet"
+            },
+            {
+              "value": "scram",
+              "label": "Scramjet (Beta)"
+            }
           ]
         },
         {
@@ -42,16 +69,25 @@
           "defaultValue": "epoxy",
           "description": "Select the transport layer for proxy communication. Epoxy is for Chromium-based browsers, Libcurl for Firefox. Bare is deprecated.",
           "options": [
-            { "value": "epoxy", "label": "Epoxy (chrome)" },
-            { "value": "libcurl", "label": "Libcurl (firefox)" },
-            { "value": "bare", "label": "Bare (deprecated)" }
+            {
+              "value": "epoxy",
+              "label": "Epoxy"
+            },
+            {
+              "value": "libcurl",
+              "label": "Libcurl"
+            },
+            {
+              "value": "bare",
+              "label": "Bare"
+            }
           ]
         },
         {
           "id": "wisp-server",
           "label": "Wisp/Bare Server",
           "type": "text",
-          "defaultValue": "",
+          "defaultValue": "wss://anura.pro",
           "placeholder": "wss://wisp.pro",
           "description": "The WebSocket server used for proxy transport. If you're self-hosting, enter your own Wisp or Bare server URL here."
         }
