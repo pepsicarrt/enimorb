@@ -1,0 +1,244 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+<div id="settings-popup" class="fixed inset-0 flex items-center justify-center bg-base/80 backdrop-blur-sm hidden z-[10000]">
+  <div class="bg-surface w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-semibold text-text">Settings</h1>
+      <button
+        id="close-settings-btn"
+        aria-label="Close settings"
+        class="text-text hover:text-iris transition-colors"
+      >
+        <Icon name="lucide:x" class="size-6" />
+      </button>
+    </div>
+
+    <div class="space-y-4">
+
+      <section class="space-y-2">
+        <h2 class="text-lg font-medium text-text">General</h2>
+        <div class="flex items-center justify-between">
+          <label class="text-text" for="search-engine">Default Search Engine</label>
+          <select id="search-engine" class="bg-base text-text rounded-md p-1">
+            <option value="https://search.brave.com/search?q=%s">Brave</option>
+            <option value="https://google.com/search?q=%s">Google</option>
+            <option value="https://www.bing.com/search?q=%s">Bing</option>
+            <option value="https://duckduckgo.com/?q=%s&ia=web">DuckDuckGo</option>
+            <option value="https://search.yahoo.com/search?p=%s">Yahoo</option>
+            <option value="https://searx.si/search?q=%s">SearXNG</option>
+            <option value="https://www.qwant.com/?q=%s">Qwant</option>
+          </select>
+        </div>
+      </section>
+
+
+      <section class="space-y-2">
+        <h2 class="text-lg font-medium text-text">Proxy</h2>
+        <div class="flex items-center justify-between">
+          <label class="text-text" for="proxy-backend">Proxy Backend</label>
+          <select id="proxy-backend" class="bg-base text-text rounded-md p-1">
+            <option value="uv">Ultraviolet</option>
+            <option value="scram">Scramjet(Beta)</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <label class="text-text" for="proxy-transport">Proxy Transport</label>
+          <select id="proxy-transport" class="bg-base text-text rounded-md p-1">
+            <option value="epoxy">Epoxy (chrome)</option>
+            <option value="libcurl">Libcurl (firefox)</option>
+            <option value="bare">Bare (deprecated)</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <label class="text-text" for="wisp-server">Wisp/Bare Server</label>
+          <input type="text" id="wisp-server" class="bg-base text-text rounded-md border p-1 border-overlay focus:border-iris" placeholder="wss://wisp.pro"/>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script is:inline defer>
+  const closeButton = document.getElementById('close-settings-btn');
+  const popup = document.getElementById('settings-popup');
+
+  // Define all your settings here
+  // 'id': Corresponds to the HTML element's ID and localStorage key.
+  // 'type': 'select', 'checkbox', or 'text' (or any other input type you might use).
+  // 'defaultValue': The value to use if nothing is found in localStorage.
+  const settingsConfig = [
+    {
+      id: 'search-engine',
+      type: 'select',
+      defaultValue: 'https://search.brave.com/search?q=%s',
+    },
+    {
+      id: 'proxy-transport',
+      type: 'select',
+      defaultValue: 'epoxy',
+    },
+    {
+      id: 'wisp-server',
+      type: 'text',
+      defaultValue: '',
+    },
+    {
+      id: 'proxy-backend',
+      type: 'select',
+      defaultValue: 'uv',
+    }
+  ];
+
+  // --- Generic Settings Functions ---
+
+  function loadSettings() {
+    settingsConfig.forEach(setting => {
+      const element = document.getElementById(setting.id);
+      if (!element) {
+        console.warn(`Settings: Element with ID '${setting.id}' not found.`);
+        return;
+      }
+
+      const storedValue = localStorage.getItem(setting.id);
+      let valueToApply;
+
+      if (storedValue !== null) {
+        if (setting.type === 'checkbox') {
+          valueToApply = storedValue === 'true';
+        } else {
+          valueToApply = storedValue;
+        }
+      } else {
+        valueToApply = setting.defaultValue;
+      }
+
+      if (setting.type === 'checkbox') {
+        element.checked = valueToApply;
+      } else if (setting.type === 'select' || setting.type === 'text') {
+        element.value = valueToApply;
+      }
+    });
+  }
+
+  function saveSettings() {
+    settingsConfig.forEach(setting => {
+      const element = document.getElementById(setting.id);
+      if (!element) {
+        console.warn(`Settings: Element with ID '${setting.id}' not found during save.`);
+        return;
+      }
+
+      let valueToStore;
+      if (setting.type === 'checkbox') {
+        valueToStore = element.checked; 
+      } else if (setting.type === 'select' || setting.type === 'text') {
+        valueToStore = element.value;
+      }
+
+      if (valueToStore !== undefined) {
+        localStorage.setItem(setting.id, valueToStore);
+      }
+    });
+    location.reload();
+  }
+
+  function initializeSettings() {
+    loadSettings();
+
+    settingsConfig.forEach(setting => {
+      const element = document.getElementById(setting.id);
+      if (element) {
+        element.addEventListener('change', saveSettings);
+        if (setting.type === 'text')
+          element.addEventListener('blur', saveSettings);
+        
+      }
+    });
+  }
+
+  // --- Initialize ---
+  initializeSettings();
+
+  // --- Clossing ---
+  closeButton?.addEventListener('click', () => {
+    const settingsPopup = document.getElementById('settings-popup');
+    if (settingsPopup && !settingsPopup.classList.contains('hidden')) {
+        settingsPopup.classList.remove('transform', 'translate-y-0', 'opacity-100');
+        settingsPopup.classList.add('translate-y-[-50px]', 'opacity-0');
+        setTimeout(() => {
+          settingsPopup.classList.add('hidden');
+        }, 300);
+    }
+  });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        if (settingsPopup && !settingsPopup.classList.contains('hidden')) {
+          event.preventDefault();
+          toggleSettingsPopup(false);
+          }
+      }
+    });
+
+</script>
+
+<style>
+  #settings-popup.hidden .transform { /* When hidden, ensure it's off-screen/invisible */
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  #settings-popup:not(.hidden) .transform { /* When shown, animate in */
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Toggle switch styles */
+  .toggle {
+    appearance: none;
+    width: 40px;
+    height: 20px;
+    border-radius: 9999px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s;
+  }
+
+  .toggle:checked::after {
+    transform: translateX(20px);
+  }
+
+  /* Scrollbar styles */
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background: #6B7280; /* text-subtle or similar */
+    border-radius: 4px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF; /* text-text or similar */
+  }
+</style>

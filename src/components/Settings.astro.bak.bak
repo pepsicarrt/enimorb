@@ -52,7 +52,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
       ))}
     </div>
 
-    <div id="info-tooltip" class="bg-overlay absolute z-10 hidden max-w-xs p-2 text-sm rounded-md shadow-lg bg-crust text-text border border-overlay">
+    <div id="info-tooltip" class="absolute z-10 hidden max-w-xs p-2 text-sm rounded-md shadow-lg bg-crust text-text border border-overlay">
     </div>
 
   </div>
@@ -62,8 +62,8 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
   const closeButton = document.getElementById('close-settings-btn');
   const popup = document.getElementById('settings-popup');
   const tooltip = document.getElementById('info-tooltip');
-
-  // --- Generic Settings Functions ---
+  
+  // --- Generic Settings Functions (Unchanged) ---
   function loadSettings() {
     settingsConfig.forEach(setting => {
       const element = document.getElementById(setting.id);
@@ -85,7 +85,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
       const valueToStore = setting.type === 'checkbox' ? element.checked : element.value;
       localStorage.setItem(setting.id, valueToStore);
     });
-    location.reload();
+    location.reload(); 
   }
 
   function initializeSettings() {
@@ -101,30 +101,30 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
     });
   }
 
-  // --- Tooltip Functions ---
+  // --- Tooltip Functions (UPDATED) ---
   function showTooltip(button) {
     const description = button.dataset.description;
     if (!description || !tooltip) return;
 
     tooltip.textContent = description;
-    tooltip.classList.remove('hidden');
+    tooltip.classList.remove('hidden'); // Show it first to calculate its size
 
     const buttonRect = button.getBoundingClientRect();
     const popupContentRect = popup.firstElementChild.getBoundingClientRect();
     const tooltipRect = tooltip.getBoundingClientRect();
 
-    // --- VERTICAL POSITIONING ---
-    let top = buttonRect.top - popupContentRect.top - tooltipRect.height - 8;
+    let top = buttonRect.top - popupContentRect.top - tooltipRect.height - 8; // Default: above button
 
+    // **IMPROVEMENT**: If there's not enough space above, show it below
     if (top < 0) {
       top = buttonRect.bottom - popupContentRect.top + 8;
     }
 
-    // --- HORIZONTAL POSITIONING ---
-    const left = (popupContentRect.width - tooltipRect.width) / 2;
-
+    const left = buttonRect.left - popupContentRect.left + (buttonRect.width / 2) - (tooltipRect.width / 2);
+    
+    // Position tooltip and clamp to stay within popup bounds
     tooltip.style.top = `${top}px`;
-    tooltip.style.left = `${left}px`;
+    tooltip.style.left = `${Math.max(0, Math.min(left, popupContentRect.width - tooltipRect.width))}px`;
   }
 
   function hideTooltip() {
@@ -139,7 +139,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
       popup.classList.remove('transform', 'translate-y-0', 'opacity-100');
       popup.classList.add('translate-y-[-50px]', 'opacity-0');
       setTimeout(() => popup.classList.add('hidden'), 300);
-      hideTooltip();
+      hideTooltip(); 
     });
 
     document.querySelectorAll('.info-btn').forEach(button => {
@@ -148,7 +148,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
       button.addEventListener('focus', () => showTooltip(button));
       button.addEventListener('blur', hideTooltip);
     });
-
+    
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
         if (popup && !popup.classList.contains('hidden')) {
@@ -157,7 +157,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
         }
       }
     });
-
+    
     popup.firstElementChild.addEventListener('scroll', hideTooltip, { passive: true });
   }
 
@@ -167,6 +167,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
 </script>
 
 <style>
+  /* Base styles from original, unchanged */
   #settings-popup.hidden .transform { transform: translateY(-50px); opacity: 0; }
   #settings-popup:not(.hidden) .transform { transform: translateY(0); opacity: 1; }
   .overflow-y-auto::-webkit-scrollbar { width: 8px; }
@@ -174,8 +175,12 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
   .overflow-y-auto::-webkit-scrollbar-thumb { background: #6B7280; border-radius: 4px; }
   .overflow-y-auto::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
 
+  /* Tooltip styling with the critical fix */
   #info-tooltip {
-    /* pointer-events: none; */
+    /* This is the magic fix! It makes the tooltip 'invisible' to the mouse cursor */
+    pointer-events: none; 
+    
+    /* Optional: add a nice fade-in animation */
     transition: opacity 0.15s ease-in-out;
   }
 </style>

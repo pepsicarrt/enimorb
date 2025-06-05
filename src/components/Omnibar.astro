@@ -1,20 +1,8 @@
 ---
 import Settings from "@components/Settings.astro"
 import { Icon } from 'astro-icon/components';
-
- export interface Props {
-   initiallyVisible?: boolean;
- }
- const { initiallyVisible = true } = Astro.props;
 ---
-<nav
-  id="bromine-main-omnibar"
-  class:list={[
-    "sticky bg-base p-2 flex items-center space-x-2",
-     !initiallyVisible && "hidden" 
-  ]}
-  aria-hidden="true"
->
+<nav class="sticky bg-base p-2 flex items-center space-x-2">
   <h1 class="mr-auto">bromine</h1>
 
   <div class="flex items-center justify-center flex-1 space-x-2">
@@ -35,7 +23,7 @@ import { Icon } from 'astro-icon/components';
     </button>
 
     <button
-      aria-label="Reload"
+      aria-label="Reload"  
       id="omnibar-reload-btn"
       class="shadow-md bg-surface p-1.5 rounded-md hover:bg-gray-600"
     >
@@ -44,7 +32,7 @@ import { Icon } from 'astro-icon/components';
 
     <div class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5">
       <Icon name="lucide:search" class="size-4.5 mr-2" />
-      <form id="form" class="flex-center w-md">
+      <form id="form" class="flex-center w-md"> 
         <input
           spellcheck="false"
           autofocus
@@ -65,126 +53,46 @@ import { Icon } from 'astro-icon/components';
       <Icon name="lucide:settings" class="size-4.5"/>
     </button>
   </div>
-</nav>
+  </nav>
 
 <Settings id="settings-popup"/>
 
 <script is:inline defer>
-  // --- Variables ---
+  const backButton = document.getElementById('omnibar-back-btn');
+  const forwardButton = document.getElementById('omnibar-forward-btn');
+  const reloadButton = document.getElementById('omnibar-reload-btn');
+  const settingsButton = document.getElementById('omnibar-settings-btn');
+  const popup = document.getElementById('settings-popup');
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.onmouseenter = Swal.stopTimer;
-    toast.onmouseleave = Swal.resumeTimer;
+  backButton.addEventListener('click', () => {
+    const iframe = document.getElementById('frame');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.history.back();
+    }
+  });
+
+  forwardButton.addEventListener('click', () => {
+    const iframe = document.getElementById('frame');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.history.forward();
+    }
+  });
+
+  reloadButton.addEventListener('click', () => {
+    const iframe = document.getElementById('frame');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.location.reload();
+    }
+  });
+
+ function togglePopup() {
+    if (popup.classList.contains('hidden')) {
+      popup.classList.remove('hidden');
+      popup.offsetHeight; // Force reflow
+    } else {
+      popup.classList.add('hidden');
+    }
   }
-});
-    const omnibarContainer = document.getElementById('bromine-main-omnibar');
-    const addressInput = document.getElementById('address');
 
-    const backButton = document.getElementById('omnibar-back-btn');
-    const forwardButton = document.getElementById('omnibar-forward-btn');
-    const reloadButton = document.getElementById('omnibar-reload-btn');
-
-    const settingsButton = document.getElementById('omnibar-settings-btn');
-    const settingsPopup = document.getElementById('settings-popup'); // The actual popup element
-
-    // --- Iframe Control Logic  ---
-    if (backButton) {
-      backButton.addEventListener('click', () => {
-        const iframe = document.getElementById('frame');
-        if (iframe && iframe.contentWindow) {
-          iframe.contentWindow.history.back();
-        }
-      });
-    }
-
-    if (forwardButton) {
-      forwardButton.addEventListener('click', () => {
-        const iframe = document.getElementById('frame');
-        if (iframe && iframe.contentWindow) {
-          iframe.contentWindow.history.forward();
-        }
-      });
-    }
-
-    if (reloadButton) {
-      reloadButton.addEventListener('click', () => {
-        const iframe = document.getElementById('frame');
-        if (iframe && iframe.contentWindow) {
-          iframe.contentWindow.location.reload();
-        }
-      });
-    }
-
-    // --- Settings Popup Toggle Logic (improved from your original script) ---
-    function toggleSettingsPopup(forceState) {
-      if (!settingsPopup) return;
-
-      const isHidden = settingsPopup.classList.contains('hidden');
-      let show;
-
-      if (typeof forceState === 'boolean') {
-        show = forceState;
-      } else {
-        show = isHidden; // Toggle if no forceState
-      }
-
-      if (show) {
-        settingsPopup.classList.remove('hidden');
-      } else {
-        settingsPopup.classList.add('hidden');
-      }
-    }
-
-    if (settingsButton) {
-      settingsButton.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent click from bubbling if needed
-        toggleSettingsPopup();
-      });
-    }
-
-    // --- Omnibar Visibility Toggle Logic (New) ---
-    let previouslyFocusedElement = null;
-
-    function setOmnibarVisibility(visible) {
-      if (!omnibarContainer) return;
-
-      if (visible) {
-        previouslyFocusedElement = document.activeElement; // Store current focus
-        omnibarContainer.classList.remove('hidden');
-        omnibarContainer.setAttribute('aria-hidden', 'false');
-        if (addressInput) {
-          addressInput.focus();
-          addressInput.select(); // Select existing text for easy replacement
-        }
-Toast.fire({
-  icon: "success",
-  title: "Omnibar opened"
-});
-      } else {
-        omnibarContainer.classList.add('hidden');
-        omnibarContainer.setAttribute('aria-hidden', 'true');
-        if (previouslyFocusedElement && typeof previouslyFocusedElement.focus === 'function') {
-          previouslyFocusedElement.focus(); // Restore focus
-        }
-        previouslyFocusedElement = null;
-Toast.fire({
-  icon: "success",
-  title: "Omnibar closed"
-});
-      }
-    }
-
-    window.addEventListener('keydown', (event) => {
-      if (event.altKey && (event.key === 'b' || event.key === 'B')) {
-        event.preventDefault(); // Prevent browser's default Alt+B action
-        const isCurrentlyHidden = omnibarContainer.classList.contains('hidden');
-        setOmnibarVisibility(isCurrentlyHidden); // Toggle
-      }
-    })  
+  settingsButton?.addEventListener('click', togglePopup);
 </script>
