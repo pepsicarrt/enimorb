@@ -152,7 +152,11 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
     }
   }
 
-
+document.addEventListener('popup-opened', (event) => {
+      if (event.detail.popupId === "settings-popup") {
+        updatePing();
+      }
+    });
     initializeSettings();
       document.querySelectorAll('.info-btn').forEach(button => {
         button.addEventListener('mouseenter', () => showTooltip(button));
