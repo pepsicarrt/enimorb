@@ -52,7 +52,7 @@ const {
 </div>
 
 <!-- 4. The Common JavaScript -->
-<script define:vars={{ triggerId, popupId, contentId, closeBtnId }} is:inline>
+<script define:vars={{ triggerId, popupId, contentId, closeBtnId }} is:inline defer async>
   const triggerButton = document.getElementById(triggerId);
   const popup = document.getElementById(popupId);
   const popupContent = document.getElementById(contentId);

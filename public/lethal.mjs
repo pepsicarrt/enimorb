@@ -153,9 +153,8 @@ export function getProxy() {
 
 export async function getProxied(input) {
   const url = makeURL(input);
+  
+  if (proxyOption == "scram") return scramjet.encodeUrl(url);
 
-  if (proxyOption != "scram")
-    return __uv$config.prefix + __uv$config.encodeUrl(url);
-
-  else return scramjet.encodeUrl(url);
+  return __uv$config.prefix + __uv$config.encodeUrl(url);
 }

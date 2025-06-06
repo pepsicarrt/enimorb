@@ -1,4 +1,4 @@
-export function checkPing(url: string) {
+export const checkPing = (url: string) => {
   const startTime = new Date().getTime();
 
   fetch(url, {
@@ -9,7 +9,7 @@ export function checkPing(url: string) {
     const endTime = new Date().getTime();
     const responseTime = endTime - startTime;
     console.log(`Server responded in ${responseTime}ms`);
-    alert(await response.text());
+    return responseTime;
   })
   .catch(error => {
     console.log('Failed to reach the server.');

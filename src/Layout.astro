@@ -1,12 +1,13 @@
 ---
 import "./styles/global.css";
-import Welcome from "./components/Welcome.astro";
+import { Image } from 'astro:assets';
+
 export interface Props {
   title: string;
   desc: string;
 }
 
-const { title, desc } = Astro.props;
+const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
 ---
 
 <html lang="en" class="dark">
@@ -16,20 +17,18 @@ const { title, desc } = Astro.props;
     <meta content="0.1.5" name="version" />
 
     <meta property="og:site_name" content="Bromine">
-    <meta property="og:url" content="https://holyunblocker.net/">
-    <meta property="og:title" content="bromine">
+    <meta property="og:url" content="https://bromineproxy.netlify.app/">
+    <meta property="og:title" content={title}>
     <meta property="og:type" content="website">
-    <meta property="og:description" content="a pretty shitty web proxy trying to uncensor the web">
+    <meta property="og:description" content={desc}>
 
 
     <meta name="googlebot" content="index, follow, snippet" />
     <link rel="canonical" href="https://bromineproxy.netlify.app" />
 
 
-    <script defer async src="https://unpkg.com/dexie/dist/dexie.js"></script>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-
-    <script defer async src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <meta name="keywords" content="proxy, web proxy, uncensor, bypass firewall, free web proxy">
     <meta name="description" content={desc} />
@@ -44,9 +43,9 @@ const { title, desc } = Astro.props;
         Skip to main content
     </a>
 
-  <main id="main" class="flex flex-col flex-grow h-screen">
-    <slot/>
-  </main>
+    <main id="main" class="flex flex-col flex-grow h-screen">
+      <slot/>
+    </main>
 
     <footer class="w-full absolute bottom-0 bg-surface bg-opacity-75 flex justify-between items-center p-4">
       <section>
@@ -54,19 +53,17 @@ const { title, desc } = Astro.props;
       </section>
 
       <a href="https://dashboard.simpleanalytics.com/?utm_source=bromineproxy.netlify.app&utm_content=badge&affiliate=dewof-bek" referrerpolicy="origin" target="_blank">
-        <picture>
-          <source srcset="https://simpleanalyticsbadges.com/bromineproxy.netlify.app?mode=dark" media="(prefers-color-scheme: dark)" />
-          <img 
-            src="https://simpleanalyticsbadges.com/bromineproxy.netlify.app?mode=light" 
-            loading="lazy" 
-            referrerpolicy="no-referrer" 
-            crossorigin="anonymous" 
-            alt="Simple Analytics Badge"
-          />
-        </picture>
+        <Image 
+          src="https://simpleanalyticsbadges.com/bromineproxy.netlify.app" 
+          referrerpolicy="no-referrer" 
+          crossorigin="anonymous"
+          height="50"
+          fetchpriority="high" 
+          loading="eager"
+          width="210"
+          alt="Simple Analytics Badge"
+        />
       </a>
     </footer>
- 
-    <!-- <Welcome/> -->
   </body>
 </html>

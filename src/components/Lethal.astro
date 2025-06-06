@@ -3,31 +3,28 @@
 <script defer type="module">
   import { setTransport, setWisp, setProxy, makeURL, getProxied } from './lethal.mjs';
 
+  // --- Form ---
   const form = document.getElementById('form');
   const addressInput = document.getElementById("address");
   const search = localStorage.getItem("search-engine") || "https://search.brave.com/search?q=%s";
   const frame = document.getElementById('frame');
 
-  // frame.onload = () => {
-  //   alert("a");
-  // }
+  // --- Proxy ---
+  const backend = localStorage.getItem("proxy-backend") || "uv";
+  const wisp = (localStorage.getItem("wisp-server") || "wss://anura.pro") + "/";
+  const transport = localStorage.getItem("proxy-transport");
 
-  if (localStorage.getItem("proxy-transport")) setTransport(localStorage.getItem("proxy-transport"));
+  if (transport) setTransport(transport);
   else if (navigator.userAgent.indexOf("Firefox") > 0) setTransport('libcurl');
   else setTransport("epoxy");
 
-  setProxy(localStorage.getItem("proxy-backend") ||"scram");
-
-  if(localStorage.getItem("wisp-server")) setWisp(localStorage.getItem("wisp-server") + "/");
-  else setWisp("wss://anura.pro/"); 
-  // setWisp("wss://wisp-server-workers.neealdon3-3f0.workers.dev/");
-  // setWisp('wss://wisp.mercurywork.shop/wisp/');
+  setProxy(backend);
+  setWisp(wisp);
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const urlToLoad = makeURL(addressInput.value, search);
-
 
     addressInput.value = urlToLoad;
     frame.src = await getProxied(urlToLoad); 

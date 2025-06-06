@@ -87,9 +87,9 @@
           "id": "wisp-server",
           "label": "Wisp/Bare Server",
           "type": "text",
-          "defaultValue": "wss://anura.pro",
-          "placeholder": "wss://wisp.pro",
-          "description": "The Transport server used for proxy transport. This is usually wisp. If you don't know what this is, ignore it."
+          "defaultValue": "",
+          "placeholder": "wss://wisp.pro/",
+          "description": "The transport server used. This requires a '/' at the end"
         }
       ]
     }
