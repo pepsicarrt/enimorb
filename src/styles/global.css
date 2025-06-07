@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Roboto", Helvetica, sans-serif;
+  --font-display: "Switzer", Helvetica, sans-serif;
 
   --color-base: #191724;
   --color-surface: #1f1d2e;
@@ -43,11 +43,11 @@
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: 'Switzer';
   font-style: normal;
   font-weight: 400;
   src: local(''), 
-       url('/roboto.woff2') format('woff2'),
+       url('/switzer.woff2') format('woff2'),
 }
 
 ::selection {
