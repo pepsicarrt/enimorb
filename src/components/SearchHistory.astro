@@ -2,9 +2,9 @@
 import Popup from "../Popup.astro";
 ---
 <Popup
-  title="History"
-  triggerAriaLabel="History"
-  triggerIcon="ph:clock-counter-clockwise-bold"
+  title="SearchHistory"
+  triggerAriaLabel="SearchHistory"
+  triggerIcon="ph:list-magnifying-glass"
   triggerId="omnibar-history-btn"
   popupId="history-popup"
   contentId="history-popup-content"
@@ -16,8 +16,13 @@ import Popup from "../Popup.astro";
 </ul>
 </Popup>
 <script defer async>
+  function handleHistoryItemClick(searchTerm) {
+    console.log("Search history item clicked:", searchTerm);
+    document.getElementById("address").value = searchTerm;
+  }
+
   // Function to render the list from localStorage
-  function renderHistoryList() {
+  function renderSearchHistoryList() {
     const history = JSON.parse(localStorage.getItem('history') || '[]');
     const list = document.getElementById('history');
     if (!list) return;
@@ -25,6 +30,7 @@ import Popup from "../Popup.astro";
     history.forEach(item => {
       const li = document.createElement('li');
       li.textContent = item;
+      li.addEventListener('click', () => handleHistoryItemClick(item));
       list.appendChild(li);
     });
   }
@@ -32,7 +38,7 @@ import Popup from "../Popup.astro";
   // Listen for storage changes from other tabs/windows
   window.addEventListener('storage', (event) => {
     if (event.key === 'history') {
-      renderHistoryList();
+      renderSearchHistoryList();
     }
   });
 
@@ -45,8 +51,8 @@ import Popup from "../Popup.astro";
     };
 
   // Listen for the custom event in this tab
-  window.addEventListener('local-history-changed', renderHistoryList);
+  window.addEventListener('local-history-changed', renderSearchHistoryList);
 
   // Initial render
-  renderHistoryList();
+  renderSearchHistoryList();
 </script>
