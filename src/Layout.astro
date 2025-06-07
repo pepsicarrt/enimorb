@@ -1,6 +1,5 @@
 ---
 import "./styles/global.css";
-import { Image } from 'astro:assets';
 
 export interface Props {
   title: string;
@@ -53,11 +52,12 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
       </section>
 
       <a href="https://dashboard.simpleanalytics.com/?utm_source=bromineproxy.netlify.app&utm_content=badge&affiliate=dewof-bek" referrerpolicy="origin" target="_blank">
-        <Image 
+        <img 
           src="https://simpleanalyticsbadges.com/bromineproxy.netlify.app" 
           referrerpolicy="no-referrer" 
           crossorigin="anonymous"
           height="50"
+          decoding="async"
           fetchpriority="high" 
           loading="eager"
           width="210"

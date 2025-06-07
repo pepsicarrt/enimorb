@@ -49,16 +49,16 @@
           "id": "proxy-backend",
           "label": "Proxy Backend",
           "type": "select",
-          "defaultValue": "uv",
-          "description": "Select the core proxy engine. Ultraviolet is recommended for the best compatibility.",
+          "defaultValue": "scram",
+          "description": "Select the core proxy engine. Ultraviolet is recommended for a stable and slow experience.",
           "options": [
-            {
-              "value": "uv",
-              "label": "Ultraviolet"
-            },
             {
               "value": "scram",
               "label": "Scramjet (Beta)"
+            },
+            {
+              "value": "uv",
+              "label": "Ultraviolet"
             }
           ]
         },

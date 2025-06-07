@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "check": "bunx @biomejs/biome check --write * && astro check",
+    "build": "astro build",
     "deploy": "netlify deploy",
     "pdeploy": "netlify deploy --prod"
   },

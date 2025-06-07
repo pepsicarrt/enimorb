@@ -9,8 +9,15 @@
   const search = localStorage.getItem("search-engine") || "https://search.brave.com/search?q=%s";
   const frame = document.getElementById('frame');
 
+
+  // Attach the event listener
+  frame.addEventListener('load', () => {
+    addressInput.value = decodeURIComponent(frame.contentWindow.location.href.split("/").pop());
+  });
+
+
   // --- Proxy ---
-  const backend = localStorage.getItem("proxy-backend") || "uv";
+  const backend = localStorage.getItem("proxy-backend") || "scram";
   const wisp = (localStorage.getItem("wisp-server") || "wss://anura.pro") + "/";
   const transport = localStorage.getItem("proxy-transport");
 

@@ -1,13 +1,9 @@
 //////////////////////////////
 ///          Init          ///
 //////////////////////////////
-await import('https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/uv/uv.bundle.js');
-
-await import('./uv.config.js');
-
 await import("/scram/scramjet.shared.js")
-await import("/scram/scramjet.worker.js")
 await import("/scram/scramjet.controller.js")
+
 
 import * as BareMux from 'https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/bare-mux/index.mjs';
 
@@ -21,12 +17,12 @@ const connection = new BareMux.BareMuxConnection("/bareworker.js");
 let bareURL = null;
 let wispURL = null;
 let transportURL = null;
-let proxyOption = null; 
+let proxyOption = null;
 
 const transportOptions = {
   "epoxy": "https://cdn.jsdelivr.net/npm/@mercuryworkshop/epoxy-transport/dist/index.mjs",
   "libcurl": "https://cdn.jsdelivr.net/npm/@mercuryworkshop/libcurl-transport/dist/index.mjs",
-  "bare": "https://cdn.jsdelivr.net/gh/Coding4Hours/bare-as-module3@dev/dist/index.mjs",
+  "bare": "https://cdn.jsdelivr.net/gh/Coding4Hours/bare-as-module3/dist/index.mjs",
 }
 
 
@@ -58,17 +54,17 @@ const scramjet = new ScramjetController({
     shared: "/scram/scramjet.shared.js",
     sync: "/scram/scramjet.sync.js",
   },
-	flags: {
-	  serviceworkers: false,
-		syncxhr: false,
-		naiiveRewriter: false,
-		strictRewrites: true,
-		rewriterLogs: false,
-		captureErrors: true,
-		cleanErrors: true,
-		scramitize: false,
-		sourcemaps: true,
-	},
+  flags: {
+    serviceworkers: false,
+    syncxhr: false,
+    naiiveRewriter: false,
+    strictRewrites: true,
+    rewriterLogs: false,
+    captureErrors: true,
+    cleanErrors: true,
+    scramitize: false,
+    sourcemaps: true,
+  },
 });
 
 scramjet.init();
@@ -83,7 +79,7 @@ console.log('lethal.js: Service Worker registered');
 export function makeURL(input, template = 'https://search.brave.com/search?q=%s') {
   try {
     return new URL(input).toString();
-  } catch (err) { }
+  } catch (err) {}
 
   const url = new URL(`http://${input}`);
   if (url.hostname.includes(".")) return url.toString();
@@ -92,12 +88,14 @@ export function makeURL(input, template = 'https://search.brave.com/search?q=%s'
 }
 
 async function updateBareMux() {
-  if(transportURL != "https://cdn.jsdelivr.net/gh/Coding4Hours/bare-as-module3@dev/dist/index.js") {
-  if (wispURL != null) {
-    console.log(`lethal.js: Setting BareMux to ${transportURL} and Wisp to ${wispURL}`);
-    await connection.setTransport(transportURL, [{ wisp: wispURL }]);
-  }
-  } else if(transportURL === "https://cdn.jsdelivr.net/gh/Coding4Hours/bare-as-module3@dev/dist/index.js") {
+  if (transportURL != "https://cdn.jsdelivr.net/gh/Coding4Hours/bare-as-module3/dist/index.js") {
+    if (wispURL != null) {
+      console.log(`lethal.js: Setting BareMux to ${transportURL} and Wisp to ${wispURL}`);
+      await connection.setTransport(transportURL, [{
+        wisp: wispURL
+      }]);
+    }
+  } else if (transportURL === "https://cdn.jsdelivr.net/gh/Coding4Hours/bare-as-module3/dist/index.js") {
     if (bareURL != null) {
       console.log(`lethal.js: Setting BareMux to ${transportURL} and Bare to ${bareURL}]`);
       await connection.settransport(transporturl, bareURL);
@@ -142,8 +140,15 @@ export function getBare() {
   return bareURL;
 }
 
-export function setProxy(proxy) {
+export async function setProxy(proxy) {
   console.log(`lethal.js: Setting proxy backend to ${proxy}`);
+  if (proxy == "uv") {
+    await import('https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/uv/uv.bundle.js');
+
+    await import('./uv.config.js');
+
+
+  } else import("/scram/scramjet.worker.js")
   proxyOption = proxy;
 }
 
@@ -153,7 +158,7 @@ export function getProxy() {
 
 export async function getProxied(input) {
   const url = makeURL(input);
-  
+
   if (proxyOption == "scram") return scramjet.encodeUrl(url);
 
   return __uv$config.prefix + __uv$config.encodeUrl(url);
