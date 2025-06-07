@@ -9,7 +9,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
 <Popup
   title="Settings"
   triggerAriaLabel="Settings"
-  triggerIcon="lucide:settings"
+  triggerIcon="ph:gear-six-bold"
   triggerId="omnibar-settings-btn"
   popupId="settings-popup"
   contentId="settings-popup-content"
@@ -30,7 +30,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(section => section.sett
                     aria-label={`More info about ${setting.label}`}
                     data-description={setting.description}
                   >
-                    <Icon name="lucide:info" class="size-4" />
+                    <Icon name="ph:info-bold" class="size-4" />
                   </button>
                 )}
               </div>

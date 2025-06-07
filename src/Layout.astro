@@ -1,5 +1,6 @@
 ---
 import "./styles/global.css";
+import Footer from "./components/Footer.astro";
 
 export interface Props {
   title: string;
@@ -46,24 +47,25 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
       <slot/>
     </main>
 
-    <footer class="w-full absolute bottom-0 bg-surface bg-opacity-75 flex justify-between items-center p-4">
-      <section>
-        Made with ❤️ by <a href="https://github.com/Coding4hours" class="underline hover:text-sky-200">Coding4Hours</a>
-      </section>
-
-      <a href="https://dashboard.simpleanalytics.com/?utm_source=bromineproxy.netlify.app&utm_content=badge&affiliate=dewof-bek" referrerpolicy="origin" target="_blank">
-        <img 
-          src="https://simpleanalyticsbadges.com/bromineproxy.netlify.app" 
-          referrerpolicy="no-referrer" 
-          crossorigin="anonymous"
-          height="50"
-          decoding="async"
-          fetchpriority="high" 
-          loading="eager"
-          width="210"
-          alt="Simple Analytics Badge"
-        />
-      </a>
-    </footer>
+    <Footer/>
+    <!-- <footer class="w-full absolute bottom-0 bg-surface bg-opacity-75 flex justify-between items-center p-4"> -->
+    <!--   <section> -->
+    <!--     Made with ❤️ by <a href="https://github.com/Coding4hours" class="underline hover:text-sky-200">Coding4Hours</a> -->
+    <!--   </section> -->
+    <!---->
+    <!--   <a href="https://dashboard.simpleanalytics.com/?utm_source=bromineproxy.netlify.app&utm_content=badge&affiliate=dewof-bek" referrerpolicy="origin" target="_blank"> -->
+    <!--     <img  -->
+    <!--       src="https://simpleanalyticsbadges.com/bromineproxy.netlify.app"  -->
+    <!--       referrerpolicy="no-referrer"  -->
+    <!--       crossorigin="anonymous" -->
+    <!--       height="50" -->
+    <!--       decoding="async" -->
+    <!--       fetchpriority="high"  -->
+    <!--       loading="eager" -->
+    <!--       width="210" -->
+    <!--       alt="Simple Analytics Badge" -->
+    <!--     /> -->
+    <!--   </a> -->
+    <!-- </footer> -->
   </body>
 </html>
