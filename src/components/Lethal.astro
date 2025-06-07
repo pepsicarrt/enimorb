@@ -1,6 +1,6 @@
 ---
 ---
-<script defer type="module">
+<script defer async type="module">
   import { setTransport, setWisp, setProxy, makeURL, getProxied } from './lethal.mjs';
 
   // --- Form ---
@@ -28,12 +28,28 @@
   setProxy(backend);
   setWisp(wisp);
 
+
+  // --- Form ---
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    try {
+       new URL(addressInput.value).toString();
+    } catch (err) {
+
+      let history = localStorage.getItem("history")
+        ? [...JSON.parse(localStorage.getItem("history")), addressInput.value]
+        : [addressInput.value];
+
+      localStorage.setItem("history", JSON.stringify(history));
+    }
+
 
     const urlToLoad = makeURL(addressInput.value, search);
 
     addressInput.value = urlToLoad;
     frame.src = await getProxied(urlToLoad); 
   });
+
+
 </script>

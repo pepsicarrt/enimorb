@@ -1,7 +1,6 @@
-
 ---
 import Settings from "@components/Settings.astro";
-import Bookmarks from '@components/Bookmarks.astro'; // Added import
+import History from '@components/History.astro'; // Added import
 import { Icon } from 'astro-icon/components';
 ---
 <nav class="sticky bg-base p-2 flex items-center space-x-2 z-[9999]">
@@ -46,21 +45,19 @@ import { Icon } from 'astro-icon/components';
       </form>
     </div>
 
+    <History />
 
-<!-- <Bookmarks /> -->
-
-
-<Settings/>
+    <Settings/>
   </div>
-  </nav>
+</nav>
 
 
-<script is:inline defer>
+<script is:inline defer async>
   const backButton = document.getElementById('omnibar-back-btn');
   const forwardButton = document.getElementById('omnibar-forward-btn');
   const reloadButton = document.getElementById('omnibar-reload-btn');
 
-backButton.addEventListener('click', () => {
+  backButton.addEventListener('click', () => {
     const iframe = document.getElementById('frame');
     if (iframe && iframe.contentWindow) {
       iframe.contentWindow.history.back();
@@ -80,7 +77,4 @@ backButton.addEventListener('click', () => {
       iframe.contentWindow.location.reload();
     }
   });
-
- 
- 
 </script>

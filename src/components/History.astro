@@ -1,0 +1,52 @@
+---
+import Popup from "../Popup.astro";
+---
+<Popup
+  title="History"
+  triggerAriaLabel="History"
+  triggerIcon="ph:clock-counter-clockwise-bold"
+  triggerId="omnibar-history-btn"
+  popupId="history-popup"
+  contentId="history-popup-content"
+  closeBtnId="history-close-btn"
+>
+  <!-- Unique bookmarks list -->
+<ul class="space-y-2" id="history">
+
+</ul>
+</Popup>
+<script defer async>
+  // Function to render the list from localStorage
+  function renderHistoryList() {
+    const history = JSON.parse(localStorage.getItem('history') || '[]');
+    const list = document.getElementById('history');
+    if (!list) return;
+    list.innerHTML = '';
+    history.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  }
+
+  // Listen for storage changes from other tabs/windows
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'history') {
+      renderHistoryList();
+    }
+  });
+
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function(key, value) {
+      originalSetItem.apply(this, arguments);
+      if (key === 'history') {
+        window.dispatchEvent(new Event('local-history-changed'));
+      }
+    };
+
+  // Listen for the custom event in this tab
+  window.addEventListener('local-history-changed', renderHistoryList);
+
+  // Initial render
+  renderHistoryList();
+</script>
