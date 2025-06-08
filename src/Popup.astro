@@ -36,9 +36,9 @@ const {
 
 <!-- 2. The Popup Structure -->
 <div id={popupId} class="fixed inset-0 flex items-center justify-center bg-base/80 backdrop-blur-sm invisible pointer-events-none opacity-0 transition-opacity duration-300 ease-in-out">
-  <div id={contentId} class="relative bg-surface w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform -translate-y-full transition-transform duration-300 ease-in-out">
+  <div id={contentId} class="relative bg-overlay w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform -translate-y-full transition-transform duration-300 ease-in-out">
     <!-- Header -->
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex justify-between items-center mb-3">
       <h1 class="text-2xl font-semibold text-text">{title}</h1>
       <button id={closeBtnId} aria-label={`Close ${title}`} class="text-text hover:text-iris transition-colors">
         <Icon name="ph:x-bold" class="size-6" />

@@ -12,7 +12,19 @@
 
   // Attach the event listener
   frame.addEventListener('load', () => {
-    addressInput.value = decodeURIComponent(frame.contentWindow.location.href.split("/").pop());
+    let url = decodeURIComponent(frame.contentWindow.location.href.split("/").pop());
+    let title = frame.contentWindow.document.title;
+
+    if(title === "Scramjet") return;
+
+    let history = localStorage.getItem("history")
+      ? [...JSON.parse(localStorage.getItem("history")), { url: url, title: title }]
+      : [{ url: url, title: title }];
+
+    localStorage.setItem("history", JSON.stringify(history));
+
+
+    addressInput.value = url;
   });
 
 
@@ -33,21 +45,7 @@
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    try {
-       new URL(addressInput.value).toString();
-    } catch (err) {
-
-      let history = localStorage.getItem("history")
-        ? [...JSON.parse(localStorage.getItem("history")), addressInput.value]
-        : [addressInput.value];
-
-      localStorage.setItem("history", JSON.stringify(history));
-    }
-
-
     const urlToLoad = makeURL(addressInput.value, search);
-
-    addressInput.value = urlToLoad;
     frame.src = await getProxied(urlToLoad); 
   });
 
