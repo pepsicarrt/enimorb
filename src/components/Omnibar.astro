@@ -1,8 +1,9 @@
 ---
 import Settings from "@components/Settings.astro";
-import History from '@components/History.astro'; // Added import
-import { Icon } from 'astro-icon/components';
+import History from "@components/History.astro"; // Added import
+import { Icon } from "astro-icon/components";
 ---
+
 <nav class="sticky bg-base p-2 flex items-center space-x-2 z-[9999]">
   <h1 class="mr-auto">bromine</h1>
 
@@ -24,16 +25,18 @@ import { Icon } from 'astro-icon/components';
     </button>
 
     <button
-      aria-label="Reload"  
+      aria-label="Reload"
       id="omnibar-reload-btn"
       class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
     >
       <Icon name="ph:arrow-clockwise-bold" class="size-4.5" />
     </button>
 
-    <div class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5">
+    <div
+      class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5"
+    >
       <Icon name="ph:magnifying-glass-bold" class="size-4.5 mr-2" />
-      <form id="form" class="flex-center w-md"> 
+      <form id="form" class="flex-center w-md">
         <input
           spellcheck="false"
           autocomplete="off"
@@ -47,32 +50,31 @@ import { Icon } from 'astro-icon/components';
 
     <History />
 
-    <Settings/>
+    <Settings />
   </div>
 </nav>
 
-
 <script is:inline defer async>
-  const backButton = document.getElementById('omnibar-back-btn');
-  const forwardButton = document.getElementById('omnibar-forward-btn');
-  const reloadButton = document.getElementById('omnibar-reload-btn');
+  const backButton = document.getElementById("omnibar-back-btn");
+  const forwardButton = document.getElementById("omnibar-forward-btn");
+  const reloadButton = document.getElementById("omnibar-reload-btn");
 
-  backButton.addEventListener('click', () => {
-    const iframe = document.getElementById('frame');
+  backButton.addEventListener("click", () => {
+    const iframe = document.getElementById("frame");
     if (iframe && iframe.contentWindow) {
       iframe.contentWindow.history.back();
     }
   });
 
-  forwardButton.addEventListener('click', () => {
-    const iframe = document.getElementById('frame');
+  forwardButton.addEventListener("click", () => {
+    const iframe = document.getElementById("frame");
     if (iframe && iframe.contentWindow) {
       iframe.contentWindow.history.forward();
     }
   });
 
-  reloadButton.addEventListener('click', () => {
-    const iframe = document.getElementById('frame');
+  reloadButton.addEventListener("click", () => {
+    const iframe = document.getElementById("frame");
     if (iframe && iframe.contentWindow) {
       iframe.contentWindow.location.reload();
     }

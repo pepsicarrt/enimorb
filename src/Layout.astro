@@ -13,40 +13,47 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
 <html lang="en" class="dark">
   <head>
     <meta content="IE=edge" http-equiv="X-UA-Compatible" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
     <meta content="0.1.5" name="version" />
 
-    <meta property="og:site_name" content="Bromine">
-    <meta property="og:url" content="https://bromineproxy.netlify.app/">
-    <meta property="og:title" content={title}>
-    <meta property="og:type" content="website">
-    <meta property="og:description" content={desc}>
-
+    <meta property="og:site_name" content="Bromine" />
+    <meta property="og:url" content="https://bromineproxy.netlify.app/" />
+    <meta property="og:title" content={title} />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content={desc} />
 
     <meta name="googlebot" content="index, follow, snippet" />
     <link rel="canonical" href="https://bromineproxy.netlify.app" />
 
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"
+    ></script>
 
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-
-    <meta name="keywords" content="proxy, web proxy, uncensor, bypass firewall, free web proxy">
+    <meta
+      name="keywords"
+      content="proxy, web proxy, uncensor, bypass firewall, free web proxy"
+    />
     <meta name="description" content={desc} />
     <meta charset="UTF-8" />
     <title>{title}</title>
   </head>
   <body class="text-text bg-base flex">
-    <a href="#main"
-       class="absolute left-4 top-4 z-50 dark:bg-surface px-4 py-2 rounded-md shadow-lg
+    <a
+      href="#main"
+      class="absolute left-4 top-4 z-50 dark:bg-surface px-4 py-2 rounded-md shadow-lg
               transform -translate-y-16 opacity-0 transition-all duration-300 ease-in-out
-              focus:translate-y-0 focus:opacity-100 hover:bg-overlay">
-        Skip to main content
+              focus:translate-y-0 focus:opacity-100 hover:bg-overlay"
+    >
+      Skip to main content
     </a>
 
     <main id="main" class="flex flex-col flex-grow h-screen">
-      <slot/>
+      <slot />
     </main>
 
-    <Footer/>
+    <Footer />
   </body>
 </html>

@@ -37,15 +37,13 @@
   --color-darkhighlight-high: #cecacd;
 }
 
-
-
-
 @font-face {
-  font-family: 'Switzer';
+  font-family: "Switzer";
   font-style: normal;
   font-weight: 400;
-  src: local(''), 
-       url('/switzer.woff2') format('woff2'),
+  src:
+    local(""),
+    url("/switzer.woff2") format("woff2");
 }
 
 ::selection {

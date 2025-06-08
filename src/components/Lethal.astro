@@ -1,32 +1,44 @@
 ---
+
 ---
+
 <script defer async type="module">
-  import { setTransport, setWisp, setProxy, makeURL, getProxied } from './lethal.mjs';
+  import {
+    setTransport,
+    setWisp,
+    setProxy,
+    makeURL,
+    getProxied,
+  } from "./lethal.mjs";
 
   // --- Form ---
-  const form = document.getElementById('form');
+  const form = document.getElementById("form");
   const addressInput = document.getElementById("address");
-  const search = localStorage.getItem("search-engine") || "https://search.brave.com/search?q=%s";
-  const frame = document.getElementById('frame');
-
+  const search =
+    localStorage.getItem("search-engine") ||
+    "https://search.brave.com/search?q=%s";
+  const frame = document.getElementById("frame");
 
   // Attach the event listener
-  frame.addEventListener('load', () => {
-    let url = decodeURIComponent(frame.contentWindow.location.href.split("/").pop());
+  frame.addEventListener("load", () => {
+    let url = decodeURIComponent(
+      frame.contentWindow.location.href.split("/").pop(),
+    );
     let title = frame.contentWindow.document.title;
 
-    if(title === "Scramjet") return;
+    if (title === "Scramjet") return;
 
     let history = localStorage.getItem("history")
-      ? [...JSON.parse(localStorage.getItem("history")), { url: url, title: title }]
+      ? [
+          ...JSON.parse(localStorage.getItem("history")),
+          { url: url, title: title },
+        ]
       : [{ url: url, title: title }];
 
     localStorage.setItem("history", JSON.stringify(history));
 
-
     addressInput.value = url;
   });
-
 
   // --- Proxy ---
   const backend = localStorage.getItem("proxy-backend") || "scram";
@@ -34,20 +46,17 @@
   const transport = localStorage.getItem("proxy-transport");
 
   if (transport) setTransport(transport);
-  else if (navigator.userAgent.indexOf("Firefox") > 0) setTransport('libcurl');
+  else if (navigator.userAgent.indexOf("Firefox") > 0) setTransport("libcurl");
   else setTransport("epoxy");
 
   setProxy(backend);
   setWisp(wisp);
-
 
   // --- Form ---
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const urlToLoad = makeURL(addressInput.value, search);
-    frame.src = await getProxied(urlToLoad); 
+    frame.src = await getProxied(urlToLoad);
   });
-
-
 </script>

@@ -1,6 +1,7 @@
 ---
 import Popup from "../Popup.astro";
 ---
+
 <Popup
   title="History"
   triggerAriaLabel="History"
@@ -10,39 +11,53 @@ import Popup from "../Popup.astro";
   contentId="history-popup-content"
   closeBtnId="history-close-btn"
 >
-    <section 
-      aria-labelledby="stats-heading" 
-      class="mb-5 rounded-lg shadow-lg"
-    >
-      <!-- A list is a great semantic choice for a collection of stats -->
-      <ul class="grid grid-cols-1 gap-8 sm:grid-cols-3">
-      
-        <!-- Stat 1: Followers -->
-        <li class="flex flex-col items-center justify-center rounded-md bg-surface p-4 dark:bg-gray-700">
-          <span class="text-4xl font-extrabold text-text">10</span>
-          <span class="mt-1 text-base font-medium text-highlight-high">Followers</span>
-        </li>
-      
-        <!-- Stat 2: Repositories -->
-        <li class="flex flex-col items-center justify-center rounded-md bg-gray-50 p-4 dark:bg-gray-700">
-          <span class="text-4xl font-extrabold text-indigo-600 dark:text-indigo-400">152</span>
-          <span class="mt-1 text-base font-medium text-gray-600 dark:text-gray-300">Repositories</span>
-        </li>
+  <section aria-labelledby="stats-heading" class="mb-5 rounded-lg shadow-lg">
+    <!-- A list is a great semantic choice for a collection of stats -->
+    <ul class="grid grid-cols-1 gap-8 sm:grid-cols-3">
+      <!-- Stat 1: Followers -->
+      <li
+        class="flex flex-col items-center justify-center rounded-md bg-surface p-4 dark:bg-gray-700"
+      >
+        <span class="text-4xl font-extrabold text-text">10</span>
+        <span class="mt-1 text-base font-medium text-highlight-high"
+          >Followers</span
+        >
+      </li>
 
-        <!-- Stat 3: Stars -->
-        <li class="flex flex-col items-center justify-center rounded-md bg-gray-50 p-4 dark:bg-gray-700">
-          <span class="text-4xl font-extrabold text-indigo-600 dark:text-indigo-400">34</span>
-          <span class="mt-1 text-base font-medium text-gray-600 dark:text-gray-300">Stars</span>
-        </li>
-      
-      </ul>
+      <!-- Stat 2: Repositories -->
+      <li
+        class="flex flex-col items-center justify-center rounded-md bg-gray-50 p-4 dark:bg-gray-700"
+      >
+        <span
+          class="text-4xl font-extrabold text-indigo-600 dark:text-indigo-400"
+          >152</span
+        >
+        <span
+          class="mt-1 text-base font-medium text-gray-600 dark:text-gray-300"
+          >Repositories</span
+        >
+      </li>
 
-    </section>
+      <!-- Stat 3: Stars -->
+      <li
+        class="flex flex-col items-center justify-center rounded-md bg-gray-50 p-4 dark:bg-gray-700"
+      >
+        <span
+          class="text-4xl font-extrabold text-indigo-600 dark:text-indigo-400"
+          >34</span
+        >
+        <span
+          class="mt-1 text-base font-medium text-gray-600 dark:text-gray-300"
+          >Stars</span
+        >
+      </li>
+    </ul>
+  </section>
 
   <ul class="space-y-2" id="history"></ul>
 </Popup>
 <script defer async type="module">
-  import { makeURL, getProxied } from './lethal.mjs';
+  import { makeURL, getProxied } from "./lethal.mjs";
 
   async function handleHistoryItemClick(url) {
     document.getElementById("frame").src = await getProxied(url);
@@ -50,35 +65,35 @@ import Popup from "../Popup.astro";
 
   // Function to render the list from localStorage
   function renderHistoryList() {
-    const history = JSON.parse(localStorage.getItem('history') || '[]');
-    const list = document.getElementById('history');
+    const history = JSON.parse(localStorage.getItem("history") || "[]");
+    const list = document.getElementById("history");
     if (!list) return;
-    list.innerHTML = '';
-    history.forEach(item => {
-      const li = document.createElement('li');
+    list.innerHTML = "";
+    history.forEach((item) => {
+      const li = document.createElement("li");
       li.innerHTML = `<a title="${item.url}" class="text-iris hover:underline">${item.title}</a>`;
-      li.addEventListener('click', () => handleHistoryItemClick(item.url));
+      li.addEventListener("click", () => handleHistoryItemClick(item.url));
       list.appendChild(li);
     });
   }
 
   // Listen for storage changes from other tabs/windows
-  window.addEventListener('storage', (event) => {
-    if (event.key === 'history') {
+  window.addEventListener("storage", (event) => {
+    if (event.key === "history") {
       renderHistoryList();
     }
   });
 
   const originalSetItem = localStorage.setItem;
-  localStorage.setItem = function(key, value) {
+  localStorage.setItem = function (key, value) {
     originalSetItem.apply(this, arguments);
-    if (key === 'history') {
-      window.dispatchEvent(new Event('local-history-changed'));
+    if (key === "history") {
+      window.dispatchEvent(new Event("local-history-changed"));
     }
   };
 
   // Listen for the custom event in this tab
-  window.addEventListener('local-history-changed', renderHistoryList);
+  window.addEventListener("local-history-changed", renderHistoryList);
 
   // Initial render
   renderHistoryList();
