@@ -11,51 +11,10 @@ import Popup from "../Popup.astro";
   contentId="history-popup-content"
   closeBtnId="history-close-btn"
 >
-  <section aria-labelledby="stats-heading" class="mb-5 rounded-lg shadow-lg">
-    <!-- A list is a great semantic choice for a collection of stats -->
-    <ul class="grid grid-cols-1 gap-8 sm:grid-cols-3">
-      <!-- Stat 1: Followers -->
-      <li
-        class="flex flex-col items-center justify-center rounded-md bg-surface p-4 dark:bg-gray-700"
-      >
-        <span class="text-4xl font-extrabold text-text">10</span>
-        <span class="mt-1 text-base font-medium text-highlight-high"
-          >Followers</span
-        >
-      </li>
-
-      <!-- Stat 2: Repositories -->
-      <li
-        class="flex flex-col items-center justify-center rounded-md bg-gray-50 p-4 dark:bg-gray-700"
-      >
-        <span
-          class="text-4xl font-extrabold text-indigo-600 dark:text-indigo-400"
-          >152</span
-        >
-        <span
-          class="mt-1 text-base font-medium text-gray-600 dark:text-gray-300"
-          >Repositories</span
-        >
-      </li>
-
-      <!-- Stat 3: Stars -->
-      <li
-        class="flex flex-col items-center justify-center rounded-md bg-gray-50 p-4 dark:bg-gray-700"
-      >
-        <span
-          class="text-4xl font-extrabold text-indigo-600 dark:text-indigo-400"
-          >34</span
-        >
-        <span
-          class="mt-1 text-base font-medium text-gray-600 dark:text-gray-300"
-          >Stars</span
-        >
-      </li>
-    </ul>
-  </section>
-
   <ul class="space-y-2" id="history"></ul>
 </Popup>
+
+
 <script defer async type="module">
   import { makeURL, getProxied } from "./lethal.mjs";
 
