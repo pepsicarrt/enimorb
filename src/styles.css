@@ -19,31 +19,25 @@
   --color-highlight-med: #403d52;
   --color-highlight-high: #524f67;
 
-  /* Light Mode */
-  --color-darkbase: #faf4ed;
-  --color-darksurface: #fffaf3;
-  --color-darkoverlay: #f2e9e1;
-  --color-darkmuted: #9893a5;
-  --color-darksurface: #fffaf3;
-  --color-darktext: #575279;
-  --color-darklove: #b4637a;
-  --color-darkgold: #ea9d34;
-  --color-darkrose: #d7827e;
-  --color-darkpine: #286983;
-  --color-darkfoam: #56949f;
-  --color-darkiris: #907aa9;
-  --color-darkhighlight-low: #f4ede8;
-  --color-darkhighlight-med: #dfdad9;
-  --color-darkhighlight-high: #cecacd;
 }
 
-@font-face {
-  font-family: "Switzer";
-  font-style: normal;
-  font-weight: 400;
-  src:
-    local(""),
-    url("/switzer.woff2") format("woff2");
+
+body[data-theme="moon"] {
+  --color-base: #232136;
+  --color-surface: #2a273f;
+  --color-overlay: #393552;
+  --color-muted: #6e6a86;
+  --color-subtle: #908caa;
+  --color-text: #e0def4;
+  --color-love: #eb6f92;
+  --color-gold: #f6c177;
+  --color-rose: #ea9a97;
+  --color-pine: #3e8fb0;
+  --color-foam: #9ccfd8;
+  --color-iris: #c4a7e7;
+  --color-highlight-low: #2a283e;
+  --color-highlight-med: #44415a;
+  --color-highlight-high: #56526e;
 }
 
 ::selection {

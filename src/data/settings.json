@@ -4,39 +4,56 @@
       "title": "General",
       "settings": [
         {
+          "id": "theme",
+          "label": "Theme",
+          "type": "select",
+          "defaultValue": "main",
+          "description": "It's simple. Make this website look different",
+          "options": [
+            {
+              "value": "main",
+              "label": "Rosé Pine"
+            },
+            {
+              "value": "moon",
+              "label": "Rosé Pine Moon"
+            }
+          ]
+        },
+        {
           "id": "search-engine",
           "label": "Default Search Engine",
           "type": "select",
           "defaultValue": "https://search.brave.com/search?q=%s",
-          "description": "Choose the search engine used when you search from the address bar.",
+          "description": "choose the search engine used when you search from the address bar.",
           "options": [
             {
               "value": "https://search.brave.com/search?q=%s",
-              "label": "Brave"
+              "label": "brave"
             },
             {
               "value": "https://google.com/search?q=%s",
-              "label": "Google"
+              "label": "google"
             },
             {
               "value": "https://www.bing.com/search?q=%s",
-              "label": "Bing"
+              "label": "bing"
             },
             {
               "value": "https://duckduckgo.com/?q=%s&ia=web",
-              "label": "DuckDuckGo"
+              "label": "duckduckgo"
             },
             {
               "value": "https://search.yahoo.com/search?p=%s",
-              "label": "Yahoo"
+              "label": "yahoo"
             },
             {
               "value": "https://searx.si/search?q=%s",
-              "label": "SearXNG"
+              "label": "searxng"
             },
             {
               "value": "https://www.qwant.com/?q=%s",
-              "label": "Qwant"
+              "label": "qwant"
             }
           ]
         }

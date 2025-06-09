@@ -1,6 +1,6 @@
 ---
-import "./styles/global.css";
-import Footer from "./components/Footer.astro";
+import "@/styles.css";
+import Footer from "@/components/Footer.astro";
 
 export interface Props {
   title: string;
@@ -10,7 +10,7 @@ export interface Props {
 const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
 ---
 
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta content="IE=edge" http-equiv="X-UA-Compatible" />
     <meta
@@ -20,17 +20,22 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
     <meta content="0.1.5" name="version" />
 
     <meta property="og:site_name" content="Bromine" />
-    <meta property="og:url" content="https://bromineproxy.netlify.app/" />
+    <meta property="og:url" content="https://bromine.pages.dev/" />
     <meta property="og:title" content={title} />
     <meta property="og:type" content="website" />
     <meta property="og:description" content={desc} />
 
     <meta name="googlebot" content="index, follow, snippet" />
-    <link rel="canonical" href="https://bromineproxy.netlify.app" />
+    <link rel="canonical" href="https://bromine.pages.dev" />
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-    <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"
-    ></script>
+    <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        document.body.dataset.theme=localStorage.getItem("theme");
+      });
+    </script>
 
     <meta
       name="keywords"
@@ -43,9 +48,9 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
   <body class="text-text bg-base flex">
     <a
       href="#main"
-      class="absolute left-4 top-4 z-50 dark:bg-surface px-4 py-2 rounded-md shadow-lg
+      class="absolute left-4 top-4 z-50 bg-surface px-4 py-2 rounded-md shadow-lg
               transform -translate-y-16 opacity-0 transition-all duration-300 ease-in-out
-              focus:translate-y-0 focus:opacity-100 hover:bg-overlay"
+              focus:translate-y-0 focus:opacity-100 hover:bg-overlay z-[10000]"
     >
       Skip to main content
     </a>
@@ -55,5 +60,6 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
     </main>
 
     <Footer />
+
   </body>
 </html>

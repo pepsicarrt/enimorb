@@ -3,9 +3,7 @@ import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import icon from "astro-icon";
 
-
-import netlify from "@astrojs/netlify";
-
+import cloudflare from "@astrojs/cloudflare";
 
 export default defineConfig({
   integrations: [icon(), (await import("@playform/compress")).default()],
@@ -16,7 +14,8 @@ export default defineConfig({
     ],
   },
 
-  adapter: netlify({
-    edgeMiddleware: true
+  output: "server",
+  adapter: cloudflare({
+    imageService: 'cloudflare',
   }),
 });
