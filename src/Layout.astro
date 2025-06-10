@@ -36,12 +36,13 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <script defer async src="/alublocker.js"></script>
 
-     <script>
-       document.addEventListener("DOMContentLoaded", () => {
-         document.body.dataset.theme=localStorage.getItem("theme");
-       });
-     </script>
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        document.body.dataset.theme=localStorage.getItem("theme");
+      });
+    </script>
 
 
     <title>{title}</title>

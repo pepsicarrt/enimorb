@@ -18,4 +18,7 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: 'cloudflare',
   }),
+  experimental: {
+    preserveScriptOrder: true,
+  },
 });
