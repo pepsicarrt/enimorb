@@ -66,3 +66,24 @@ button:active {
 [data-icon] {
   stroke-width: 3; /* Increase stroke thickness */
 }
+
+/* In your main CSS file, e.g., src/index.css or src/styles.css */
+
+.glassy-bg {
+  /* Apply the variable for the background color */
+  background-color: var(--color-surface);
+  /* Apply the backdrop blur */
+  @apply backdrop-blur-md; /* Or backdrop-blur-lg, etc. */
+  /* Optional: Add a subtle border or shadow for definition */
+  @apply border border-[var(--color-highlight-low)] shadow-lg;
+  /* Optional: Add a very subtle outline or border-radius */
+  @apply rounded-xl;
+}
+
+/* You might want a slightly more opaque variant for modals/larger overlays */
+.glassy-overlay {
+  background-color: var(--color-overlay);
+  @apply backdrop-blur-lg;
+  @apply border border-[var(--color-highlight-med)] shadow-2xl;
+  @apply rounded-xl;
+}

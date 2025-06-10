@@ -1,9 +1,6 @@
 //////////////////////////////
 ///          Init          ///
 //////////////////////////////
-await import("/scram/scramjet.shared.js")
-await import("/scram/scramjet.controller.js")
-
 
 import * as BareMux from 'https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/bare-mux/index.mjs';
 
@@ -46,28 +43,7 @@ async function registerSW() {
   await navigator.serviceWorker.register(stockSW);
 }
 
-const scramjet = new ScramjetController({
-  files: {
-    wasm: "/scram/scramjet.wasm.wasm",
-    worker: "/scram/scramjet.worker.js",
-    client: "/scram/scramjet.client.js",
-    shared: "/scram/scramjet.shared.js",
-    sync: "/scram/scramjet.sync.js",
-  },
-  flags: {
-    serviceworkers: false,
-    syncxhr: false,
-    naiiveRewriter: false,
-    strictRewrites: true,
-    rewriterLogs: false,
-    captureErrors: true,
-    cleanErrors: true,
-    scramitize: false,
-    sourcemaps: true,
-  },
-});
 
-scramjet.init();
 
 await registerSW();
 console.log('lethal.js: Service Worker registered');
@@ -148,7 +124,35 @@ export async function setProxy(proxy) {
     await import('./uv.config.js');
 
 
-  } else import("/scram/scramjet.worker.js")
+  } else {
+await import("/scram/scramjet.shared.js")
+await import("/scram/scramjet.controller.js")
+
+window.scramjet = new ScramjetController({
+  files: {
+    wasm: "/scram/scramjet.wasm.wasm",
+    worker: "/scram/scramjet.worker.js",
+    client: "/scram/scramjet.client.js",
+    shared: "/scram/scramjet.shared.js",
+    sync: "/scram/scramjet.sync.js",
+  },
+  flags: {
+    serviceworkers: false,
+    syncxhr: false,
+    naiiveRewriter: false,
+    strictRewrites: true,
+    rewriterLogs: false,
+    captureErrors: true,
+    cleanErrors: true,
+    scramitize: false,
+    sourcemaps: true,
+  },
+});
+
+scramjet.init();
+    import("/scram/scramjet.worker.js")
+
+  }
   proxyOption = proxy;
 }
 

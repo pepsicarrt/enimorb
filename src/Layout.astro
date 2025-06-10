@@ -12,6 +12,12 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
 
 <html lang="en">
   <head>
+
+    <meta name="keywords"
+      content="proxy, web proxy, uncensor, bypass firewall, free web proxy"
+    />
+    <meta name="description" content={desc} />
+    <meta charset="UTF-8" />
     <meta content="IE=edge" http-equiv="X-UA-Compatible" />
     <meta
       name="viewport"
@@ -31,21 +37,16 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        document.body.dataset.theme=localStorage.getItem("theme");
-      });
-    </script>
+     <script>
+       document.addEventListener("DOMContentLoaded", () => {
+         document.body.dataset.theme=localStorage.getItem("theme");
+       });
+     </script>
 
-    <meta
-      name="keywords"
-      content="proxy, web proxy, uncensor, bypass firewall, free web proxy"
-    />
-    <meta name="description" content={desc} />
-    <meta charset="UTF-8" />
+
     <title>{title}</title>
   </head>
-  <body class="text-text bg-base flex" >
+  <body class="text-text bg-base flex">
     <a
       href="#main"
       class="absolute left-4 top-4 z-50 bg-surface px-4 py-2 rounded-md shadow-lg
@@ -58,7 +59,7 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
     <main id="main" class="flex flex-col flex-grow h-screen">
       <slot />
     </main>
-
+ 
     <Footer />
 
   </body>
