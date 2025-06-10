@@ -35,10 +35,11 @@ const {
   <Icon name={triggerIcon} class="size-4.5" />
 </button>
 
+
 <!-- 2. The Popup Structure -->
 <div
   id={popupId}
-  class="fixed inset-0 flex items-center justify-center bg-base/80 backdrop-blur-sm invisible pointer-events-none opacity-0 transition-opacity duration-300 ease-in-out"
+  class="popup backdrop-blur-[1px] fixed inset-0 flex items-center z-[50] justify-center bg-base/80 invisible pointer-events-none opacity-0 transition-opacity duration-300 ease-in-out"
 >
   <div
     id={contentId}

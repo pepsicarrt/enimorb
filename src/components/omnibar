@@ -1,0 +1,93 @@
+---
+import Settings from "@/components/Settings.astro";
+import History from "@/components/History.astro"; // Added import
+import { Icon } from "astro-icon/components";
+---
+
+<nav class="sticky bg-base p-2 flex items-center space-x-2 z-[9999]">
+  <h1 class="mr-auto">bromine</h1>
+
+  <div class="flex items-center justify-center flex-1 space-x-2">
+    <button
+      aria-label="Back"
+      id="omnibar-back-btn"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
+    >
+      <Icon name="ph:arrow-left-bold" class="size-4.5" />
+    </button>
+
+    <button
+      aria-label="Forward"
+      id="omnibar-forward-btn"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
+    >
+      <Icon name="ph:arrow-right-bold" class="size-4.5" />
+    </button>
+
+    <button
+      aria-label="Reload"
+      id="omnibar-reload-btn"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
+    >
+      <Icon name="ph:arrow-clockwise-bold" class="size-4.5" />
+    </button>
+
+    <div
+      class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5"
+    >
+      <Icon name="ph:magnifying-glass-bold" class="size-4.5 mr-2" />
+      <form id="form" class="flex-center w-md">
+        <input
+          spellcheck="false"
+          autocomplete="off"
+          id="address"
+          type="text"
+          placeholder="Search the web freely"
+          class="bg-transparent w-full focus:outline-none"
+        />
+      </form>
+    </div>
+
+    <History />
+
+    <button
+      aria-label="Dev Tools"
+      id="omnibar-dev-btn"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
+    >
+      <Icon name="ph:code-bold" class="size-4.5" />
+    </button>
+
+    <Settings />
+  </div>
+</nav>
+
+<script is:inline defer async>
+  const backButton = document.getElementById("omnibar-back-btn");
+  const forwardButton = document.getElementById("omnibar-forward-btn");
+  const reloadButton = document.getElementById("omnibar-reload-btn");
+  const devButton = document.getElementById("omnibar-dev-btn");
+  
+  backButton.addEventListener("click", () => {
+
+  const iframe = document.getElementById("frame");
+    if (iframe && iframe.contentWindow)
+      iframe.contentWindow.history.back();
+  });
+
+  forwardButton.addEventListener("click", () => {
+
+  const iframe = document.getElementById("frame");
+    if (iframe && iframe.contentWindow)
+      iframe.contentWindow.history.forward();
+  });
+
+  reloadButton.addEventListener("click", () => {
+const iframe = document.getElementById("frame");
+
+if (iframe && iframe.contentWindow)
+      iframe.contentWindow.location.reload();
+  });
+
+
+</script>

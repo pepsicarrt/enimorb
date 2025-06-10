@@ -1,0 +1,121 @@
+body[data-theme="mocha"] {
+  --color-base: #1E1E2E; /* Catppuccin Base */
+  --color-surface: #313244; /* Catppuccin Surface0 */
+  --color-overlay: #45475A; /* Catppuccin Surface1 */
+  --color-muted: #A6ADC8; /* Catppuccin Subtext0 */
+  --color-subtle: #BAC2DE; /* Catppuccin Subtext1 */
+  --color-text: #CDD6F4; /* Catppuccin Text */
+
+  --color-love: #F38BA8; /* Catppuccin Red (good for 'love') */
+  --color-gold: #FAB387; /* Catppuccin Peach (matches 'gold' well) */
+  --color-rose: #F2CDCD; /* Catppuccin Flamingo (good for 'rose') */
+  --color-pine: #89DCEB; /* Catppuccin Sky (a cool blue-green for 'pine') */
+  --color-foam: #94E2D5; /* Catppuccin Teal (a lighter blue-green for 'foam') */
+  --color-iris: #CBA6F7; /* Catppuccin Mauve (a purple for 'iris') */
+
+  --color-highlight-low: #181825; /* Catppuccin Mantle (darker highlight) */
+  --color-highlight-med: #585B70; /* Catppuccin Surface2 (mid-tone highlight) */
+  --color-highlight-high: #6C7086; /* Catppuccin Overlay0 (lighter highlight) */
+}
+
+/* Catppuccin Macchiato */
+body[data-theme="macchiato"] {
+  --color-base: #24273A;
+  --color-surface: #363A4F;
+  --color-overlay: #494D64;
+  --color-muted: #A7C0CD; /* Subtext0 */
+  --color-subtle: #BBC0D7; /* Subtext1 */
+  --color-text: #CAD3F5;
+
+  --color-love: #ED8796; /* Red */
+  --color-gold: #F5A97F; /* Peach */
+  --color-rose: #F0C6C6; /* Flamingo */
+  --color-pine: #91D7E3; /* Sky */
+  --color-foam: #8BD5CA; /* Teal */
+  --color-iris: #C6A0F6; /* Mauve */
+
+  --color-highlight-low: #1E2030; /* Mantle */
+  --color-highlight-med: #5B6078; /* Surface2 */
+  --color-highlight-high: #6E738D; /* Overlay0 */
+}
+
+/* Catppuccin Frappe */
+body[data-theme="frappe"] {
+  --color-base: #303446;
+  --color-surface: #414559;
+  --color-overlay: #51576d;
+  --color-muted: #A6ADBB; /* Subtext0 */
+  --color-subtle: #B0B9DD; /* Subtext1 */
+  --color-text: #C6D0F5;
+
+  --color-love: #E58A8A; /* Red */
+  --color-gold: #EFAD74; /* Peach */
+  --color-rose: #EEBEBE; /* Flamingo */
+  --color-pine: #99D1DB; /* Sky */
+  --color-foam: #81C8BE; /* Teal */
+  --color-iris: #CA9EE6; /* Mauve */
+
+  --color-highlight-low: #292C3C; /* Mantle */
+  --color-highlight-med: #626880; /* Surface2 */
+  --color-highlight-high: #737994; /* Overlay0 */
+}
+
+/* Catppuccin Latte (Light Theme) */
+body[data-theme="latte"] {
+  --color-base: #EFF1F5; /* Base (lightest background) */
+  --color-surface: #E6E9EF; /* Mantle (slightly darker surface) */
+  --color-overlay: #DCE0EE; /* Crust (even darker overlay) */
+  --color-muted: #9CA0B0; /* Overlay0 */
+  --color-subtle: #6C6F85; /* Subtext0 */
+  --color-text: #4C4F69; /* Text (darkest main text) */
+
+  --color-love: #D20F39; /* Red */
+  --color-gold: #C37A3C; /* Yellow */
+  --color-rose: #DD7878; /* Flamingo */
+  --color-pine: #20B796; /* Teal */
+  --color-foam: #38B8ED; /* Sky */
+  --color-iris: #8839AD; /* Mauve */
+
+  --color-highlight-low: #CCD0DA; /* Surface0 */
+  --color-highlight-med: #BCC0CC; /* Surface1 */
+  --color-highlight-high: #ACAFBE; /* Surface2 */
+}
+
+/* Rose Pine Dawn (Light Theme) */
+body[data-theme="dawn"] {
+  --color-base: #F2FDFF;
+  --color-surface: #FFF0F0;
+  --color-overlay: #F4ECCF;
+  --color-muted: #988B81;
+  --color-subtle: #7F776B;
+  --color-text: #575279;
+
+  --color-love: #ED64A6;
+  --color-gold: #F2AF60;
+  --color-rose: #ED7D7D;
+  --color-pine: #5E77A7;
+  --color-foam: #94B5B5;
+  --color-iris: #B48ED3;
+
+  --color-highlight-low: #F4EBD7;
+  --color-highlight-med: #F6E0B5;
+  --color-highlight-high: #FDE68A;
+}
+
+body[data-theme="moon"] {
+  --color-base: #232136;
+  --color-surface: #2a273f;
+  --color-overlay: #393552;
+  --color-muted: #6e6a86;
+  --color-subtle: #908caa;
+  --color-text: #e0def4;
+  --color-love: #eb6f92;
+  --color-gold: #f6c177;
+  --color-rose: #ea9a97;
+  --color-pine: #3e8fb0;
+  --color-foam: #9ccfd8;
+  --color-iris: #c4a7e7;
+  --color-highlight-low: #2a283e;
+  --color-highlight-med: #44415a;
+  --color-highlight-high: #56526e;
+}

@@ -50,6 +50,14 @@ import { Icon } from "astro-icon/components";
 
     <History />
 
+    <button
+      aria-label="Dev Tools"
+      id="omnibar-dev-btn"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
+    >
+      <Icon name="ph:code-bold" class="size-4.5" />
+    </button>
+
     <Settings />
   </div>
 </nav>
@@ -58,25 +66,85 @@ import { Icon } from "astro-icon/components";
   const backButton = document.getElementById("omnibar-back-btn");
   const forwardButton = document.getElementById("omnibar-forward-btn");
   const reloadButton = document.getElementById("omnibar-reload-btn");
+  const devButton = document.getElementById("omnibar-dev-btn");
 
   backButton.addEventListener("click", () => {
     const iframe = document.getElementById("frame");
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.history.back();
-    }
+    if (iframe && iframe.contentWindow) iframe.contentWindow.history.back();
   });
 
   forwardButton.addEventListener("click", () => {
     const iframe = document.getElementById("frame");
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.history.forward();
-    }
+    if (iframe && iframe.contentWindow) iframe.contentWindow.history.forward();
   });
 
   reloadButton.addEventListener("click", () => {
     const iframe = document.getElementById("frame");
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.location.reload();
-    }
+    if (iframe && iframe.contentWindow) iframe.contentWindow.location.reload();
   });
+
+let isErudaVisible = false;
+
+devButton.addEventListener("click", () => {
+  const iframe = document.getElementById("frame");
+
+  // Exit early if iframe or its contentWindow are not accessible
+  if (!iframe?.contentWindow) return;
+
+  const { contentWindow: iframeWin } = iframe;
+  const iframeDoc = iframeWin.document;
+
+  if (iframeWin.eruda) {
+    // Eruda is loaded, toggle its visibility and update state
+    isErudaVisible ? iframeWin.eruda.hide() : iframeWin.eruda.show();
+    isErudaVisible = !isErudaVisible;
+  } else {
+    // Eruda is not loaded, inject the script
+    const script = iframeDoc.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/eruda";
+    script.onload = () => {
+      // Initialize and show Eruda after the script loads
+      // Assuming eruda is guaranteed to be available on iframeWin after onload
+      iframeWin.eruda.init({ tool: ["console", "elements", "sources"] });
+      iframeWin.eruda.show();
+      isErudaVisible = true; // Set initial state to true after first load
+    };
+    iframeDoc.head.appendChild(script);
+  }
+});
+
+
+//
+  // let isErudaVisible = false;
+  //
+  // devButton.addEventListener("click", () => {
+  //   const iframe = document.getElementById("frame");
+  //   if (iframe && iframe.contentWindow) {
+  //     const iframeDoc = iframe.contentWindow.document;
+  //
+  //     if (iframe.contentWindow.eruda) {
+  //       if (isErudaVisible) {
+  //         iframe.contentWindow.eruda.hide(); // Call Eruda's hide method
+  //         isErudaVisible = false; // Update our state
+  //       } else {
+  //         iframe.contentWindow.eruda.show(); 
+  //         isErudaVisible = true;
+  //       }
+  //     } else {
+  //       // If Eruda is not loaded, inject the script
+  //       const script = iframeDoc.createElement("script");
+  //       script.src = "https://cdn.jsdelivr.net/npm/eruda";
+  //       script.onload = () => {
+  //         // Ensure Eruda is initialized and shown after loading
+  //         if (iframe.contentWindow.eruda) {
+  //           iframe.contentWindow.eruda.init({ tool: ["console", "elements", "sources"] });
+  //           iframe.contentWindow.eruda.show(); // Show Eruda on first load
+  //           isErudaVisible = true; // Set initial state to true
+  //         }
+  //       };
+  //       // Append the script to the head of the iframe's document
+  //       iframeDoc.head.appendChild(script);
+  //     }
+  //   }
+  // });
 </script>

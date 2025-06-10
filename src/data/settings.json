@@ -17,6 +17,26 @@
             {
               "value": "moon",
               "label": "Rosé Pine Moon"
+            },
+            {
+              "value": "dawn",
+              "label": "Rosé Pine Dawn"
+            },
+            {
+              "value": "macchiato",
+              "label": "Catppuccin Macchiato"
+            },
+            {
+              "value": "mocha",
+              "label": "Catppuccin Mocha"
+            },
+            {
+              "value": "frappe",
+              "label": "Catppuccin Frappe"
+            },
+            {
+              "value": "latte",
+              "label": "Catppuccin Latte"
             }
           ]
         },
