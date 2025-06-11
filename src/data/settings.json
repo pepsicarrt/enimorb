@@ -86,16 +86,16 @@
           "id": "proxy-backend",
           "label": "Proxy Backend",
           "type": "select",
-          "defaultValue": "scram",
+          "defaultValue": "uv",
           "description": "Select the core proxy engine. Ultraviolet is recommended for a stable and slow experience.",
           "options": [
             {
-              "value": "scram",
-              "label": "Scramjet (Beta)"
-            },
-            {
               "value": "uv",
               "label": "Ultraviolet"
+            },
+            {
+              "value": "scram",
+              "label": "Scramjet (Beta)"
             }
           ]
         },
@@ -104,7 +104,7 @@
           "label": "Proxy Transport",
           "type": "select",
           "defaultValue": "epoxy",
-          "description": "Select the transport layer for proxy communication. Epoxy is best for chrome and libcurl with firefox. Bare is deprecated",
+          "description": "Select the transport layer for proxy communication. Epoxy is best for chrome and libcurl with firefox,",
           "options": [
             {
               "value": "epoxy",
@@ -113,16 +113,12 @@
             {
               "value": "libcurl",
               "label": "Libcurl"
-            },
-            {
-              "value": "bare",
-              "label": "Bare"
             }
           ]
         },
         {
           "id": "wisp-server",
-          "label": "Wisp/Bare Server",
+          "label": "Wisp Server",
           "type": "text",
           "defaultValue": "",
           "placeholder": "wss://wisp.pro/",
