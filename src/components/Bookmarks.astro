@@ -171,17 +171,8 @@
     }
   });
 
-  // Override localStorage.setItem to dispatch a custom event
-  const originalSetItem = localStorage.setItem;
-  localStorage.setItem = function (key, value) {
-    originalSetItem.apply(this, arguments);
-    if (key === "bookmarks") {
-      window.dispatchEvent(new Event("local-bookmarks-changed"));
-    }
-  };
-
   // Listen for the custom event in this tab for immediate re-render
-  window.addEventListener("local-bookmarks-changed", renderBookmarksList);
+  window.addEventListener("bookmarks-changed", renderBookmarksList);
 
 
 
