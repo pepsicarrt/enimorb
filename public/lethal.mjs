@@ -37,15 +37,13 @@ import * as BareMux from 'https://cdn.jsdelivr.net/gh/Coding4Hours/cdn/bare-mux/
 const connection = new BareMux.BareMuxConnection("/bareworker.js");
 
 
-let bareURL = null;
 let wispURL = null;
 let transportURL = null;
 let proxyOption = null;
 
 const transportOptions = {
   "epoxy": "https://cdn.jsdelivr.net/npm/@mercuryworkshop/epoxy-transport/dist/index.mjs",
-  "libcurl": "https://cdn.jsdelivr.net/npm/@mercuryworkshop/libcurl-transport/dist/index.mjs",
-  "bare": "https://cdn.jsdelivr.net/gh/Coding4Hours/bare-as-module3/dist/index.mjs",
+  "libcurl": "https://cdn.jsdelivr.net/npm/@mercuryworkshop/libcurl-transport/dist/index.mjs"
 }
 
 
@@ -90,21 +88,11 @@ export function makeURL(input, template = 'https://search.brave.com/search?q=%s'
 }
 
 async function updateBareMux() {
-  if (transportURL != "https://cdn.jsdelivr.net/gh/Coding4Hours/bare-as-module3/dist/index.js") {
-    if (wispURL != null) {
-      console.log(`lethal.js: Setting BareMux to ${transportURL} and Wisp to ${wispURL}`);
-      await connection.setTransport(transportURL, [{
-        wisp: wispURL
-      }]);
+    if (transportURL != null && wispURL != null) {
+        console.log(`lethal.js: Setting BareMux to ${transportURL} and Wisp to ${wispURL}`);
+        await connection.setTransport(transportURL, [{ wisp: wispURL }]);
     }
-  } else if (transportURL === "https://cdn.jsdelivr.net/gh/Coding4Hours/bare-as-module3/dist/index.js") {
-    if (bareURL != null) {
-      console.log(`lethal.js: Setting BareMux to ${transportURL} and Bare to ${bareURL}]`);
-      await connection.settransport(transporturl, bareURL);
-    }
-  }
 }
-
 
 export async function setTransport(transport) {
   console.log(`lethal.js: Setting transport to ${transport}`);
@@ -131,16 +119,6 @@ export function getWisp() {
   return wispURL;
 }
 
-export async function setBare(bare) {
-  console.log(`lethal.js: Setting Bare to ${bare}`);
-  bareURL = bare;
-
-  await updateBareMux();
-}
-
-export function getBare() {
-  return bareURL;
-}
 
 export async function setProxy(proxy) {
   console.log(`lethal.js: Setting proxy backend to ${proxy}`);
