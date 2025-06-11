@@ -43,16 +43,8 @@ import Popup from "@/Popup.astro";
     }
   });
 
-  const originalSetItem = localStorage.setItem;
-  localStorage.setItem = function (key, value) {
-    originalSetItem.apply(this, arguments);
-    if (key === "history") {
-      window.dispatchEvent(new Event("local-history-changed"));
-    }
-  };
-
   // Listen for the custom event in this tab
-  window.addEventListener("local-history-changed", renderHistoryList);
+  window.addEventListener("history-changed", renderHistoryList);
 
   // Initial render
   renderHistoryList();
