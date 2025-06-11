@@ -8,18 +8,18 @@
     setWisp,
     setProxy,
     makeURL,
-    getProxied,
+    getProxied
   } from "./lethal.mjs";
 
   // --- Form ---
   const form = document.getElementById("form");
   const addressInput = document.getElementById("address");
-  const search =
+  let search =
     localStorage.getItem("search-engine") ||
     "https://search.brave.com/search?q=%s";
   const frame = document.getElementById("frame");
 
-  // Attach the event listener
+  // --- URL Change ---
   frame.addEventListener("load", () => {
     let url = decodeURIComponent(
       frame.contentWindow.location.href.split("/").pop(),
@@ -41,16 +41,18 @@
   });
 
   // --- Proxy ---
-  const backend = localStorage.getItem("proxy-backend") || "scram";
-  const wisp = (localStorage.getItem("wisp-server") || "wss://anura.pro") + "/";
-  const transport = localStorage.getItem("proxy-transport");
+  let backend = localStorage.getItem("proxy-backend") || "uv";
+  let wisp = (localStorage.getItem("wisp-server") || "wss://anura.pro") + "/";
+  let transport = localStorage.getItem("proxy-transport");
+
+  setWisp(wisp);
+  setProxy(backend);
 
   if (transport) setTransport(transport);
   else if (navigator.userAgent.indexOf("Firefox") > 0) setTransport("libcurl");
   else setTransport("epoxy");
 
-  setProxy(backend);
-  setWisp(wisp);
+
 
   // --- Form ---
   form.addEventListener("submit", async (event) => {
@@ -58,5 +60,23 @@
 
     const urlToLoad = makeURL(addressInput.value, search);
     frame.src = await getProxied(urlToLoad);
+  });
+
+  // --- Event Listeners ---
+  window.addEventListener("search-engine-changed", () => {
+    search = localStorage.getItem("search-engine");
+  });
+  window.addEventListener("proxy-backend-changed", () => {
+    backend = localStorage.getItem("proxy-backend");
+    setProxy(localStorage.getItem("proxy-backend"));
+
+  });
+  window.addEventListener("wisp-server-changed", () => {
+    wisp = localStorage.getItem("wisp-server");
+    setWisp(localStorage.getItem("wisp-server"));
+  });
+  window.addEventListener("proxy-transport-changed", () => {
+    transport = localStorage.getItem("proxy-transport");
+    setTransport(localStorage.getItem("proxy-transport"));
   });
 </script>
