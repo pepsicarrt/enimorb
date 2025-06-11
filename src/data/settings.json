@@ -49,31 +49,31 @@
           "options": [
             {
               "value": "https://search.brave.com/search?q=%s",
-              "label": "brave"
+              "label": "Brave"
             },
             {
               "value": "https://google.com/search?q=%s",
-              "label": "google"
+              "label": "Google"
             },
             {
               "value": "https://www.bing.com/search?q=%s",
-              "label": "bing"
+              "label": "Bing"
             },
             {
               "value": "https://duckduckgo.com/?q=%s&ia=web",
-              "label": "duckduckgo"
+              "label": "Duckduckgo"
             },
             {
               "value": "https://search.yahoo.com/search?p=%s",
-              "label": "yahoo"
+              "label": "Yahoo"
             },
             {
               "value": "https://searx.si/search?q=%s",
-              "label": "searxng"
+              "label": "SearXNG"
             },
             {
               "value": "https://www.qwant.com/?q=%s",
-              "label": "qwant"
+              "label": "Qwant"
             }
           ]
         }

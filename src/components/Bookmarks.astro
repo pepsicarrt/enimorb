@@ -1,0 +1,270 @@
+---
+---
+
+<style>
+  /* Basic styling for context menu positioning */
+  #bookmark-context-menu {
+    position: fixed; /* Use fixed to ensure it's always in viewport */
+    z-index: 10000; /* Higher than nav z-index */
+  }
+</style>
+
+<nav id="bookmarks" class="sticky top-0 bg-base py-0.5 px-1 flex items-center space-x-2 z-[9999] shadow-lg">
+  <ul id="bookmarks" class="flex flex-wrap items-center gap-2 flex-grow">
+    <!-- Bookmarks will be rendered here by JavaScript -->
+  </ul>
+
+  <div
+ id="add-edit-bookmark-popup"
+ class="popup backdrop-blur-[1px] fixed inset-0 flex items-center z-[50] justify-center bg-base/80 invisible pointer-events-none opacity-0 transition-opacity duration-300 ease-in-out"
+ title="Bookmark Details"
+>
+    <form id="bookmark-form" class="flex flex-col space-y-2 p-3">
+      <input type="hidden" id="bookmark-id" /> <!-- Used to store the index of the bookmark being edited -->
+
+      <label for="bookmark-title" class="text-text font-semibold text-sm">Title:</label>
+      <input
+        type="text"
+        id="bookmark-title"
+        name="title"
+        required
+        class="bg-surface0 text-text p-1 rounded focus:outline-none focus:ring-2 focus:ring-iris text-sm"
+        placeholder="e.g., My Favorite Site"
+      />
+
+      <label for="bookmark-url" class="text-text font-semibold text-sm">URL:</label>
+      <input
+        type="url"
+        id="bookmark-url"
+        name="url"
+        required
+        class="bg-surface0 text-text p-1 rounded focus:outline-none focus:ring-2 focus:ring-iris text-sm"
+        placeholder="e.g., https://example.com"
+      />
+
+      <div class="flex space-x-2 mt-4 z-[50]">
+        <button type="submit"
+                class="bg-green text-text px-3 py-1 rounded hover:bg-opacity-80 transition-colors flex-grow text-sm">
+          Save Bookmark
+        </button>
+        <button type="button" id="delete-bookmark-in-popup-btn"
+                class="bg-red text-text px-3 py-1 rounded hover:bg-opacity-80 transition-colors flex-grow hidden text-sm">
+          Delete Bookmark
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Context Menu for Bookmarks -->
+  <div id="bookmark-context-menu"
+       class="hidden bg-surface0 text-text rounded shadow-lg py-0.5 border border-surface1">
+    <button data-action="edit" class="block w-full text-left px-3 py-1 hover:bg-surface1 text-sm">Edit</button>
+    <button data-action="delete" class="block w-full text-left px-3 py-1 hover:bg-surface1 text-sm">Delete</button>
+  </div>
+</nav>
+
+<script defer async type="module">
+  alert("toggle bookmarks bar with ctrl-shift-b")
+  import { makeURL, getProxied } from "./lethal.mjs";
+
+  // Get references to DOM elements
+  const mainNav = document.getElementById("bookmarks"); // Added ID to nav and got reference
+  const bookmarksList = document.getElementById("bookmarks");
+  const addEditBookmarkPopup = document.getElementById("add-edit-bookmark-popup"); // The Popup Astro component instance
+  const bookmarkForm = document.getElementById("bookmark-form");
+  const bookmarkIdInput = document.getElementById("bookmark-id");
+  const bookmarkTitleInput = document.getElementById("bookmark-title");
+  const bookmarkUrlInput = document.getElementById("bookmark-url");
+  const deleteBookmarkInPopupBtn = document.getElementById("delete-bookmark-in-popup-btn");
+  const contextMenu = document.getElementById("bookmark-context-menu");
+
+  let bookmarks = []; // Global array to hold bookmarks in memory
+  let activeBookmarkIndex = null; // To track which bookmark is being edited/deleted via context menu
+
+  async function handleBookmarksItemClick(url) {
+    document.getElementById("frame").src = await getProxied(url);
+  }
+
+  // --- Bookmark Management Functions ---
+
+  function saveBookmarksToLocalStorage() {
+    localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+    // The custom event handler or storage event will trigger renderBookmarksList
+  }
+
+  function addOrUpdateBookmark(title, url, index = null) {
+    if (index !== null && index >= 0 && index < bookmarks.length) {
+      // Update existing
+      bookmarks[index] = { title, url };
+    } else {
+      // Add new
+      bookmarks.push({ title, url });
+    }
+    saveBookmarksToLocalStorage();
+  }
+
+  function deleteBookmark(index) {
+    if (index >= 0 && index < bookmarks.length) {
+      bookmarks.splice(index, 1);
+      saveBookmarksToLocalStorage();
+    }
+  }
+
+  // --- Rendering Function ---
+
+  function renderBookmarksList() {
+    bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]"); // Refresh global array
+    if (!bookmarksList) return;
+
+    bookmarksList.innerHTML = ""; // Clear existing list items
+
+    bookmarks.forEach((item, index) => {
+      const li = document.createElement("li");
+      li.classList.add(
+        "bookmark-item",
+        "flex",
+        "items-center",
+        "gap-1", // Reduced from gap-1 (was gap-4 initially)
+        "cursor-pointer",
+        "group",
+        "relative",
+        "py-0.5", // Reduced from py-1
+        "px-1", // Reduced from px-2
+        "rounded",
+        "hover:bg-surface0",
+        "transition-colors"
+      );
+      li.dataset.index = index; // Store index for easy access
+
+      // Favicon
+      const favicon = document.createElement("img");
+      favicon.src = `https://s2.googleusercontent.com/s2/favicons?domain_url=${encodeURIComponent(item.url)}&size=16`;
+      favicon.classList.add("w-3", "h-3", "flex-shrink-0"); // Reduced from w-4 h-4
+      favicon.onerror = () => {
+        // Hide favicon if it fails to load
+        favicon.style.display = 'none';
+      };
+      li.appendChild(favicon);
+
+      // Bookmark Link
+      const a = document.createElement("a");
+      a.title = item.url;
+      a.classList.add("text-iris", "hover:underline", "whitespace-nowrap", "truncate", "text-sm"); // Added text-sm
+      a.textContent = item.title;
+      a.href = "#"; // Prevent default link behavior for context menu
+      a.addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent default link behavior
+        handleBookmarksItemClick(item.url);
+      });
+      li.appendChild(a);
+
+      bookmarksList.appendChild(li);
+    });
+  }
+
+  // --- Event Listeners ---
+
+  // Listen for storage changes from other tabs/windows
+  window.addEventListener("storage", (event) => {
+    if (event.key === "bookmarks") {
+      renderBookmarksList();
+    }
+  });
+
+  // Override localStorage.setItem to dispatch a custom event
+  const originalSetItem = localStorage.setItem;
+  localStorage.setItem = function (key, value) {
+    originalSetItem.apply(this, arguments);
+    if (key === "bookmarks") {
+      window.dispatchEvent(new Event("local-bookmarks-changed"));
+    }
+  };
+
+  // Listen for the custom event in this tab for immediate re-render
+  window.addEventListener("local-bookmarks-changed", renderBookmarksList);
+
+
+
+  bookmarkForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const title = bookmarkTitleInput.value.trim();
+    const url = bookmarkUrlInput.value.trim();
+    const index = bookmarkIdInput.value === "" ? null : parseInt(bookmarkIdInput.value);
+
+    if (!title || !url) {
+      alert("Please enter both title and URL.");
+      return;
+    }
+
+    addOrUpdateBookmark(title, url, index);
+    addEditBookmarkPopup.close(); // Close the popup
+  });
+
+  deleteBookmarkInPopupBtn.addEventListener("click", () => {
+    const index = parseInt(bookmarkIdInput.value);
+    if (index !== undefined && index !== null && confirm(`Are you sure you want to delete "${bookmarks[index].title}"?`)) {
+      deleteBookmark(index);
+      addEditBookmarkPopup.close();
+    }
+  });
+
+  // --- Context Menu Handling ---
+
+  // Show context menu on right-click on a bookmark item
+  bookmarksList.addEventListener("contextmenu", (e) => {
+    const bookmarkItem = e.target.closest(".bookmark-item");
+    if (bookmarkItem) {
+      e.preventDefault(); // Prevent default browser context menu
+      activeBookmarkIndex = parseInt(bookmarkItem.dataset.index);
+
+      // Position the custom context menu
+      contextMenu.style.top = `${e.clientY + 5}px`;
+      contextMenu.style.left = `${e.clientX + 5}px`;
+      contextMenu.classList.remove("hidden");
+    } else {
+      // Hide if click is not on a bookmark item
+      contextMenu.classList.add("hidden");
+    }
+  });
+
+  // Hide context menu when clicking anywhere else
+  document.addEventListener("click", (e) => {
+    if (!contextMenu.contains(e.target) && !e.target.closest(".bookmark-item")) {
+      contextMenu.classList.add("hidden");
+    }
+  });
+
+  // Handle actions from the context menu
+  contextMenu.addEventListener("click", (e) => {
+    const action = e.target.dataset.action;
+    contextMenu.classList.add("hidden"); // Hide menu after action
+
+    if (activeBookmarkIndex !== null && bookmarks[activeBookmarkIndex]) {
+      const bookmark = bookmarks[activeBookmarkIndex];
+      if (action === "edit") {
+        bookmarkIdInput.value = activeBookmarkIndex;
+        bookmarkTitleInput.value = bookmark.title;
+        bookmarkUrlInput.value = bookmark.url;
+        deleteBookmarkInPopupBtn.classList.remove("hidden"); // Show delete button when editing
+        addEditBookmarkPopup.open();
+      } else if (action === "delete") {
+        if (confirm(`Are you sure you want to delete "${bookmark.title}"?`)) {
+          deleteBookmark(activeBookmarkIndex);
+        }
+      }
+    }
+    activeBookmarkIndex = null; // Reset
+  });
+
+  // --- Keyboard Shortcut for Toggling Nav ---
+  document.addEventListener("keydown", (e) => {
+    // Check for Ctrl + Shift + B
+    if (e.ctrlKey && e.shiftKey && (e.key === 'b' || e.key === 'B')) {
+      e.preventDefault(); // Prevent default browser action (e.g., opening bookmarks bar)
+      mainNav.classList.toggle("hidden");
+    }
+  });
+
+  // Initial render when the page loads
+  renderBookmarksList();
+</script>

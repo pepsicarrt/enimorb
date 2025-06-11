@@ -183,6 +183,9 @@ const flatSettingsConfig = settingsData.sections.flatMap(
     button.addEventListener("mouseleave", hideTooltip);
     button.addEventListener("focus", () => showTooltip(button));
     button.addEventListener("blur", hideTooltip);
+    document.getElementById("omnibar-settings-btn").addEventListener("click", () => {
+      document.getElementById("bookmarks").classList.toggle("invisible");
+    })
   });
   popupContent.addEventListener("scroll", hideTooltip, { passive: true });
 </script>

@@ -2,11 +2,11 @@
 import Settings from "@/components/Settings.astro";
 import History from "@/components/History.astro"; // Added import
 import { Icon } from "astro-icon/components";
+import Bookmarks from "@/components/Bookmarks.astro";
 ---
 
-<nav class="sticky bg-base p-2 flex items-center space-x-2 z-[9999]">
+<nav class="sticky bg-base p-2 flex items-center space-x-2 z-[25]">
   <h1 class="mr-auto">bromine</h1>
-
   <div class="flex items-center justify-center flex-1 space-x-2">
     <button
       aria-label="Back"
@@ -48,7 +48,18 @@ import { Icon } from "astro-icon/components";
       </form>
     </div>
 
+    <button
+      aria-label="Bookmark"
+      id="omnibar-save-btn"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
+    >
+      <Icon name="ph:bookmark-simple-bold" class="size-4.5" />
+    </button>
+
+
     <History />
+
+
 
     <button
       aria-label="Dev Tools"
@@ -61,12 +72,16 @@ import { Icon } from "astro-icon/components";
     <Settings />
   </div>
 </nav>
+<Bookmarks/>
 
 <script is:inline defer async>
+  let isErudaVisible = false;
+
   const backButton = document.getElementById("omnibar-back-btn");
   const forwardButton = document.getElementById("omnibar-forward-btn");
   const reloadButton = document.getElementById("omnibar-reload-btn");
   const devButton = document.getElementById("omnibar-dev-btn");
+  const bookmarkButton = document.getElementById("omnibar-save-btn");
 
   backButton.addEventListener("click", () => {
     const iframe = document.getElementById("frame");
@@ -83,68 +98,46 @@ import { Icon } from "astro-icon/components";
     if (iframe && iframe.contentWindow) iframe.contentWindow.location.reload();
   });
 
-let isErudaVisible = false;
+  bookmarkButton.addEventListener("click", () => {
+    const iframe = document.getElementById("frame");
+    let url = decodeURIComponent(
+      frame.contentWindow.location.href.split("/").pop(),
+    );
+    let title = frame.contentWindow.document.title;
 
-devButton.addEventListener("click", () => {
-  const iframe = document.getElementById("frame");
+    let bookmarks = localStorage.getItem("bookmarks")
+      ? [
+          ...JSON.parse(localStorage.getItem("bookmarks")),
+          { url: url, title: title },
+        ]
+      : [{ url: url, title: title }];
 
-  // Exit early if iframe or its contentWindow are not accessible
-  if (!iframe?.contentWindow) return;
-
-  const { contentWindow: iframeWin } = iframe;
-  const iframeDoc = iframeWin.document;
-
-  if (iframeWin.eruda) {
-    // Eruda is loaded, toggle its visibility and update state
-    isErudaVisible ? iframeWin.eruda.hide() : iframeWin.eruda.show();
-    isErudaVisible = !isErudaVisible;
-  } else {
-    // Eruda is not loaded, inject the script
-    const script = iframeDoc.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/eruda";
-    script.onload = () => {
-      // Initialize and show Eruda after the script loads
-      // Assuming eruda is guaranteed to be available on iframeWin after onload
-      iframeWin.eruda.init({ tool: ["console", "elements", "sources"] });
-      iframeWin.eruda.show();
-      isErudaVisible = true; // Set initial state to true after first load
-    };
-    iframeDoc.head.appendChild(script);
-  }
-});
+    localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+  })
 
 
-//
-  // let isErudaVisible = false;
-  //
-  // devButton.addEventListener("click", () => {
-  //   const iframe = document.getElementById("frame");
-  //   if (iframe && iframe.contentWindow) {
-  //     const iframeDoc = iframe.contentWindow.document;
-  //
-  //     if (iframe.contentWindow.eruda) {
-  //       if (isErudaVisible) {
-  //         iframe.contentWindow.eruda.hide(); // Call Eruda's hide method
-  //         isErudaVisible = false; // Update our state
-  //       } else {
-  //         iframe.contentWindow.eruda.show(); 
-  //         isErudaVisible = true;
-  //       }
-  //     } else {
-  //       // If Eruda is not loaded, inject the script
-  //       const script = iframeDoc.createElement("script");
-  //       script.src = "https://cdn.jsdelivr.net/npm/eruda";
-  //       script.onload = () => {
-  //         // Ensure Eruda is initialized and shown after loading
-  //         if (iframe.contentWindow.eruda) {
-  //           iframe.contentWindow.eruda.init({ tool: ["console", "elements", "sources"] });
-  //           iframe.contentWindow.eruda.show(); // Show Eruda on first load
-  //           isErudaVisible = true; // Set initial state to true
-  //         }
-  //       };
-  //       // Append the script to the head of the iframe's document
-  //       iframeDoc.head.appendChild(script);
-  //     }
-  //   }
-  // });
+  devButton.addEventListener("click", () => {
+    const iframe = document.getElementById("frame");
+
+    if (!iframe?.contentWindow) return;
+
+    const { contentWindow: iframeWin } = iframe;
+    const iframeDoc = iframeWin.document;
+
+    if (iframeWin.eruda) {
+      isErudaVisible ? iframeWin.eruda.hide() : iframeWin.eruda.show();
+      isErudaVisible = !isErudaVisible;
+    } else {
+      const script = iframeDoc.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/eruda";
+      script.onload = () => {
+        iframeWin.eruda.init({ tool: ["console", "elements", "sources"] });
+        iframeWin.eruda.show();
+        isErudaVisible = true; // Set initial state to true after first load
+      };
+      iframeDoc.head.appendChild(script);
+    }
+  });
+
+
 </script>
