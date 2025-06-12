@@ -12,8 +12,8 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
 
 <html lang="en">
   <head>
-
-    <meta name="keywords"
+    <meta
+      name="keywords"
       content="proxy, web proxy, uncensor, bypass firewall, free web proxy"
     />
     <meta name="description" content={desc} />
@@ -34,10 +34,9 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
     <meta name="googlebot" content="index, follow, snippet" />
     <link rel="canonical" href="https://bromine.pages.dev" />
 
-    <link rel="canonical" href="http://bromine.pages.dev" />
-
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-    <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"
+    ></script>
 
     <script defer>
       const originalSetItem = localStorage.setItem;
@@ -50,10 +49,9 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
       });
 
       document.addEventListener("DOMContentLoaded", () => {
-        document.body.dataset.theme=localStorage.getItem("theme");
+        document.body.dataset.theme = localStorage.getItem("theme");
       });
     </script>
-
 
     <title>{title}</title>
   </head>
@@ -70,8 +68,7 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props;
     <main id="main" class="flex flex-col flex-grow h-screen">
       <slot />
     </main>
- 
-    <Footer />
 
+    <Footer />
   </body>
 </html>

@@ -14,7 +14,6 @@ import Popup from "@/Popup.astro";
   <ul class="space-y-2" id="history"></ul>
 </Popup>
 
-
 <script defer async type="module">
   import { makeURL, getProxied } from "./lethal.mjs";
 
@@ -30,7 +29,7 @@ import Popup from "@/Popup.astro";
     list.innerHTML = "";
     history.forEach((item) => {
       const li = document.createElement("li");
-      li.innerHTML = `<a title="${item.url}" class="text-iris hover:underline">${item.title}</a>`;
+      li.innerHTML = `<span title="${item.url}" class="text-iris underline">${item.title}</span>`;
       li.addEventListener("click", () => handleHistoryItemClick(item.url));
       list.appendChild(li);
     });

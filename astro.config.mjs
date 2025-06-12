@@ -9,6 +9,12 @@ export default defineConfig({
   integrations: [icon(), (await import("@playform/compress")).default()],
 
   vite: {
+    build: {
+      sourcemap: true, // enable production source maps
+    },
+    css: {
+      devSourcemap: true // enable CSS source maps during development
+    },
     plugins: [
       tailwindcss(),
     ],

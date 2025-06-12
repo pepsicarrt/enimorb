@@ -19,15 +19,15 @@
   --color-highlight-low: #21202e;
   --color-highlight-med: #403d52;
   --color-highlight-high: #524f67;
-
 }
 
 @font-face {
-  font-family: 'Switzer';
+  font-family: "Switzer";
   font-style: normal;
-  src: local('Switzer'), local('Switzer'),
-    url("/switzer.woff2")
-      format('woff2');
+  src:
+    local("Switzer"),
+    local("Switzer"),
+    url("/switzer.woff2") format("woff2");
   font-display: swap;
 }
 

@@ -5,7 +5,8 @@ import { Icon } from "astro-icon/components";
 import Bookmarks from "@/components/Bookmarks.astro";
 ---
 
-<nav class="sticky bg-base p-2 flex items-center space-x-2 z-[25]">
+<Bookmarks />
+<nav class="sticky top-0 bg-base/50 p-2 flex items-center space-x-2 z-[25]">
   <h1 class="mr-auto">bromine</h1>
   <div class="flex items-center justify-center flex-1 space-x-2">
     <button
@@ -56,10 +57,7 @@ import Bookmarks from "@/components/Bookmarks.astro";
       <Icon name="ph:bookmark-simple-bold" class="size-4.5" />
     </button>
 
-
     <History />
-
-
 
     <button
       aria-label="Dev Tools"
@@ -72,7 +70,6 @@ import Bookmarks from "@/components/Bookmarks.astro";
     <Settings />
   </div>
 </nav>
-<Bookmarks/>
 
 <script is:inline defer async>
   let isErudaVisible = false;
@@ -113,8 +110,7 @@ import Bookmarks from "@/components/Bookmarks.astro";
       : [{ url: url, title: title }];
 
     localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-  })
-
+  });
 
   devButton.addEventListener("click", () => {
     const iframe = document.getElementById("frame");
@@ -138,6 +134,4 @@ import Bookmarks from "@/components/Bookmarks.astro";
       iframeDoc.head.appendChild(script);
     }
   });
-
-
 </script>

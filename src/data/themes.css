@@ -1,43 +1,42 @@
-
 body[data-theme="mocha"] {
-  --color-base: #1E1E2E; /* Catppuccin Base */
+  --color-base: #1e1e2e; /* Catppuccin Base */
   --color-surface: #313244; /* Catppuccin Surface0 */
-  --color-overlay: #45475A; /* Catppuccin Surface1 */
-  --color-muted: #A6ADC8; /* Catppuccin Subtext0 */
-  --color-subtle: #BAC2DE; /* Catppuccin Subtext1 */
-  --color-text: #CDD6F4; /* Catppuccin Text */
+  --color-overlay: #45475a; /* Catppuccin Surface1 */
+  --color-muted: #a6adc8; /* Catppuccin Subtext0 */
+  --color-subtle: #bac2de; /* Catppuccin Subtext1 */
+  --color-text: #cdd6f4; /* Catppuccin Text */
 
-  --color-love: #F38BA8; /* Catppuccin Red (good for 'love') */
-  --color-gold: #FAB387; /* Catppuccin Peach (matches 'gold' well) */
-  --color-rose: #F2CDCD; /* Catppuccin Flamingo (good for 'rose') */
-  --color-pine: #89DCEB; /* Catppuccin Sky (a cool blue-green for 'pine') */
-  --color-foam: #94E2D5; /* Catppuccin Teal (a lighter blue-green for 'foam') */
-  --color-iris: #CBA6F7; /* Catppuccin Mauve (a purple for 'iris') */
+  --color-love: #f38ba8; /* Catppuccin Red (good for 'love') */
+  --color-gold: #fab387; /* Catppuccin Peach (matches 'gold' well) */
+  --color-rose: #f2cdcd; /* Catppuccin Flamingo (good for 'rose') */
+  --color-pine: #89dceb; /* Catppuccin Sky (a cool blue-green for 'pine') */
+  --color-foam: #94e2d5; /* Catppuccin Teal (a lighter blue-green for 'foam') */
+  --color-iris: #cba6f7; /* Catppuccin Mauve (a purple for 'iris') */
 
   --color-highlight-low: #181825; /* Catppuccin Mantle (darker highlight) */
-  --color-highlight-med: #585B70; /* Catppuccin Surface2 (mid-tone highlight) */
-  --color-highlight-high: #6C7086; /* Catppuccin Overlay0 (lighter highlight) */
+  --color-highlight-med: #585b70; /* Catppuccin Surface2 (mid-tone highlight) */
+  --color-highlight-high: #6c7086; /* Catppuccin Overlay0 (lighter highlight) */
 }
 
 /* Catppuccin Macchiato */
 body[data-theme="macchiato"] {
-  --color-base: #24273A;
-  --color-surface: #363A4F;
-  --color-overlay: #494D64;
-  --color-muted: #A7C0CD; /* Subtext0 */
-  --color-subtle: #BBC0D7; /* Subtext1 */
-  --color-text: #CAD3F5;
+  --color-base: #24273a;
+  --color-surface: #363a4f;
+  --color-overlay: #494d64;
+  --color-muted: #a7c0cd; /* Subtext0 */
+  --color-subtle: #bbc0d7; /* Subtext1 */
+  --color-text: #cad3f5;
 
-  --color-love: #ED8796; /* Red */
-  --color-gold: #F5A97F; /* Peach */
-  --color-rose: #F0C6C6; /* Flamingo */
-  --color-pine: #91D7E3; /* Sky */
-  --color-foam: #8BD5CA; /* Teal */
-  --color-iris: #C6A0F6; /* Mauve */
+  --color-love: #ed8796; /* Red */
+  --color-gold: #f5a97f; /* Peach */
+  --color-rose: #f0c6c6; /* Flamingo */
+  --color-pine: #91d7e3; /* Sky */
+  --color-foam: #8bd5ca; /* Teal */
+  --color-iris: #c6a0f6; /* Mauve */
 
-  --color-highlight-low: #1E2030; /* Mantle */
-  --color-highlight-med: #5B6078; /* Surface2 */
-  --color-highlight-high: #6E738D; /* Overlay0 */
+  --color-highlight-low: #1e2030; /* Mantle */
+  --color-highlight-med: #5b6078; /* Surface2 */
+  --color-highlight-high: #6e738d; /* Overlay0 */
 }
 
 /* Catppuccin Frappe */
@@ -45,62 +44,62 @@ body[data-theme="frappe"] {
   --color-base: #303446;
   --color-surface: #414559;
   --color-overlay: #51576d;
-  --color-muted: #A6ADBB; /* Subtext0 */
-  --color-subtle: #B0B9DD; /* Subtext1 */
-  --color-text: #C6D0F5;
+  --color-muted: #a6adbb; /* Subtext0 */
+  --color-subtle: #b0b9dd; /* Subtext1 */
+  --color-text: #c6d0f5;
 
-  --color-love: #E58A8A; /* Red */
-  --color-gold: #EFAD74; /* Peach */
-  --color-rose: #EEBEBE; /* Flamingo */
-  --color-pine: #99D1DB; /* Sky */
-  --color-foam: #81C8BE; /* Teal */
-  --color-iris: #CA9EE6; /* Mauve */
+  --color-love: #e58a8a; /* Red */
+  --color-gold: #efad74; /* Peach */
+  --color-rose: #eebebe; /* Flamingo */
+  --color-pine: #99d1db; /* Sky */
+  --color-foam: #81c8be; /* Teal */
+  --color-iris: #ca9ee6; /* Mauve */
 
-  --color-highlight-low: #292C3C; /* Mantle */
+  --color-highlight-low: #292c3c; /* Mantle */
   --color-highlight-med: #626880; /* Surface2 */
   --color-highlight-high: #737994; /* Overlay0 */
 }
 
 /* Catppuccin Latte (Light Theme) */
 body[data-theme="latte"] {
-  --color-base: #EFF1F5; /* Base (lightest background) */
-  --color-surface: #E6E9EF; /* Mantle (slightly darker surface) */
-  --color-overlay: #DCE0EE; /* Crust (even darker overlay) */
-  --color-muted: #9CA0B0; /* Overlay0 */
-  --color-subtle: #6C6F85; /* Subtext0 */
-  --color-text: #4C4F69; /* Text (darkest main text) */
+  --color-base: #eff1f5; /* Base (lightest background) */
+  --color-surface: #e6e9ef; /* Mantle (slightly darker surface) */
+  --color-overlay: #dce0ee; /* Crust (even darker overlay) */
+  --color-muted: #9ca0b0; /* Overlay0 */
+  --color-subtle: #6c6f85; /* Subtext0 */
+  --color-text: #4c4f69; /* Text (darkest main text) */
 
-  --color-love: #D20F39; /* Red */
-  --color-gold: #C37A3C; /* Yellow */
-  --color-rose: #DD7878; /* Flamingo */
-  --color-pine: #20B796; /* Teal */
-  --color-foam: #38B8ED; /* Sky */
-  --color-iris: #8839AD; /* Mauve */
+  --color-love: #d20f39; /* Red */
+  --color-gold: #c37a3c; /* Yellow */
+  --color-rose: #dd7878; /* Flamingo */
+  --color-pine: #20b796; /* Teal */
+  --color-foam: #38b8ed; /* Sky */
+  --color-iris: #8839ad; /* Mauve */
 
-  --color-highlight-low: #CCD0DA; /* Surface0 */
-  --color-highlight-med: #BCC0CC; /* Surface1 */
-  --color-highlight-high: #ACAFBE; /* Surface2 */
+  --color-highlight-low: #ccd0da; /* Surface0 */
+  --color-highlight-med: #bcc0cc; /* Surface1 */
+  --color-highlight-high: #acafbe; /* Surface2 */
 }
 
 /* Rose Pine Dawn (Light Theme) */
 body[data-theme="dawn"] {
-  --color-base: #F2FDFF;
-  --color-surface: #FFF0F0;
-  --color-overlay: #F4ECCF;
-  --color-muted: #988B81;
-  --color-subtle: #7F776B;
+  --color-base: #f2fdff;
+  --color-surface: #fff0f0;
+  --color-overlay: #f4eccf;
+  --color-muted: #988b81;
+  --color-subtle: #7f776b;
   --color-text: #575279;
 
-  --color-love: #ED64A6;
-  --color-gold: #F2AF60;
-  --color-rose: #ED7D7D;
-  --color-pine: #5E77A7;
-  --color-foam: #94B5B5;
-  --color-iris: #B48ED3;
+  --color-love: #ed64a6;
+  --color-gold: #f2af60;
+  --color-rose: #ed7d7d;
+  --color-pine: #5e77a7;
+  --color-foam: #94b5b5;
+  --color-iris: #b48ed3;
 
-  --color-highlight-low: #F4EBD7;
-  --color-highlight-med: #F6E0B5;
-  --color-highlight-high: #FDE68A;
+  --color-highlight-low: #f4ebd7;
+  --color-highlight-med: #f6e0b5;
+  --color-highlight-high: #fde68a;
 }
 
 body[data-theme="moon"] {
@@ -121,47 +120,46 @@ body[data-theme="moon"] {
   --color-highlight-high: #56526e;
 }
 
-
 body[data-theme="amoled"] {
   --color-base: #000000; /* Pure Black for AMOLED screens */
-  --color-surface: #1A1A1A; /* Very dark gray */
-  --color-overlay: #2C2C2C; /* Slightly lighter dark gray */
+  --color-surface: #1a1a1a; /* Very dark gray */
+  --color-overlay: #2c2c2c; /* Slightly lighter dark gray */
   --color-muted: #757575; /* Muted gray for secondary info */
-  --color-subtle: #A0A0A0; /* Subtle text */
-  --color-text: #E0E0E0; /* Light gray for main text */
+  --color-subtle: #a0a0a0; /* Subtle text */
+  --color-text: #e0e0e0; /* Light gray for main text */
 
-  --color-love: #FF6B6B; /* Vibrant Red */
-  --color-gold: #FFC107; /* Vibrant Yellow/Amber */
-  --color-rose: #FF69B4; /* Hot Pink */
-  --color-pine: #00BCD4; /* Bright Cyan */
-  --color-foam: #4DD0E1; /* Light Blue-Green */
-  --color-iris: #9C27B0; /* Vibrant Purple */
+  --color-love: #ff6b6b; /* Vibrant Red */
+  --color-gold: #ffc107; /* Vibrant Yellow/Amber */
+  --color-rose: #ff69b4; /* Hot Pink */
+  --color-pine: #00bcd4; /* Bright Cyan */
+  --color-foam: #4dd0e1; /* Light Blue-Green */
+  --color-iris: #9c27b0; /* Vibrant Purple */
 
-  --color-highlight-low: #0D0D0D; /* Darker than surface for subtle highlight */
-  --color-highlight-med: #3A3A3A; /* Mid-tone highlight for hover/selection */
-  --color-highlight-high: #4F4F4F; /* Lighter highlight for active states */
+  --color-highlight-low: #0d0d0d; /* Darker than surface for subtle highlight */
+  --color-highlight-med: #3a3a3a; /* Mid-tone highlight for hover/selection */
+  --color-highlight-high: #4f4f4f; /* Lighter highlight for active states */
 }
 
 /* Custom Summer Solstice Theme */
 body[data-theme="solstice"] {
   /* Base & Text Colors (Warm & Natural) */
-  --color-base: #FDFCEF; /* Very light, warm cream - like sun-drenched parchment */
-  --color-surface: #F7F7E0; /* Slightly darker cream for subtle layering */
-  --color-overlay: #F0F0DB; /* A bit more depth, still very light */
-  --color-muted: #8A8A7A; /* Muted, earthy gray-brown for secondary info */
-  --color-subtle: #ABA79B; /* Lighter, subtle gray-brown for less important text */
-  --color-text: #4A4D3E; /* Deep, earthy charcoal-green for main text, good contrast */
+  --color-base: #fdfcef; /* Very light, warm cream - like sun-drenched parchment */
+  --color-surface: #f7f7e0; /* Slightly darker cream for subtle layering */
+  --color-overlay: #f0f0db; /* A bit more depth, still very light */
+  --color-muted: #8a8a7a; /* Muted, earthy gray-brown for secondary info */
+  --color-subtle: #aba79b; /* Lighter, subtle gray-brown for less important text */
+  --color-text: #4a4d3e; /* Deep, earthy charcoal-green for main text, good contrast */
 
   /* Accent Colors (Vibrant & Summery) */
-  --color-love: #E55C5C; /* Warm, vibrant red - like a poppy or sunset */
-  --color-gold: #EAA000; /* Rich, golden yellow - essential for sun/solstice */
-  --color-rose: #F09180; /* Soft, warm peachy-pink - like a summer bloom or twilight */
-  --color-pine: #5F8B60; /* Lush, deep forest green - for abundant summer foliage */
-  --color-foam: #7CC0E0; /* Bright, clear sky blue - for clear summer skies */
-  --color-iris: #9050B0; /* Deep, vibrant purple - like dusk or rich lavender */
+  --color-love: #e55c5c; /* Warm, vibrant red - like a poppy or sunset */
+  --color-gold: #eaa000; /* Rich, golden yellow - essential for sun/solstice */
+  --color-rose: #f09180; /* Soft, warm peachy-pink - like a summer bloom or twilight */
+  --color-pine: #5f8b60; /* Lush, deep forest green - for abundant summer foliage */
+  --color-foam: #7cc0e0; /* Bright, clear sky blue - for clear summer skies */
+  --color-iris: #9050b0; /* Deep, vibrant purple - like dusk or rich lavender */
 
   /* Highlight Colors (Subtle & Complementary) */
-  --color-highlight-low: #EAEAD5; /* Very subtle light highlight */
-  --color-highlight-med: #D8D8C5; /* Mid-tone highlight for hover states */
-  --color-highlight-high: #C8C8B5; /* Slightly stronger highlight for active states */
+  --color-highlight-low: #eaead5; /* Very subtle light highlight */
+  --color-highlight-med: #d8d8c5; /* Mid-tone highlight for hover states */
+  --color-highlight-high: #c8c8b5; /* Slightly stronger highlight for active states */
 }

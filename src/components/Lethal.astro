@@ -8,7 +8,7 @@
     setWisp,
     setProxy,
     makeURL,
-    getProxied
+    getProxied,
   } from "./lethal.mjs";
 
   // --- Form ---
@@ -52,8 +52,6 @@
   else if (navigator.userAgent.indexOf("Firefox") > 0) setTransport("libcurl");
   else setTransport("epoxy");
 
-
-
   // --- Form ---
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -69,7 +67,6 @@
   window.addEventListener("proxy-backend-changed", () => {
     backend = localStorage.getItem("proxy-backend");
     setProxy(localStorage.getItem("proxy-backend"));
-
   });
   window.addEventListener("wisp-server-changed", () => {
     wisp = localStorage.getItem("wisp-server");
