@@ -45,7 +45,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(
                     class="bg-base text-text rounded-md p-1 border border-overlay focus:border-iris focus:outline-none"
                   >
                     {setting.options?.map((option) => (
-                      <option value={option.value}>{option.label}</option>
+                      <option disabled={option.disabled} value={option.value}>{option.label}</option>
                     ))}
                   </select>
                 )}

@@ -11,32 +11,40 @@
           "description": "It's simple. Make this website look different",
           "options": [
             {
+              "label": "Rosé Pine",
+              "disabled": true
+            },
+            {
               "value": "main",
-              "label": "Rosé Pine"
+              "label": "Default"
             },
             {
               "value": "moon",
-              "label": "Rosé Pine Moon"
+              "label": "Moon"
             },
             {
               "value": "dawn",
-              "label": "Rosé Pine Dawn"
+              "label": "Dawn"
+            },
+            {
+              "label": "Catppuccin",
+              "disabled": true
             },
             {
               "value": "macchiato",
-              "label": "Catppuccin Macchiato"
+              "label": "Macchiato"
             },
             {
               "value": "mocha",
-              "label": "Catppuccin Mocha"
+              "label": "Mocha"
             },
             {
               "value": "frappe",
-              "label": "Catppuccin Frappe"
+              "label": "Frappe"
             },
             {
               "value": "latte",
-              "label": "Catppuccin Latte"
+              "label": "Latte"
             }
           ]
         },
@@ -74,6 +82,14 @@
             {
               "value": "https://www.qwant.com/?q=%s",
               "label": "Qwant"
+            },
+            {
+              "value": "https://www.ecosia.org/search?q=%s",
+              "label": "Ecosia"
+            },
+            {
+              "value": "https://yandex.com/search?text=%s",
+              "label": "Yandex"
             }
           ]
         }
@@ -87,7 +103,7 @@
           "label": "Proxy Backend",
           "type": "select",
           "defaultValue": "uv",
-          "description": "Select the core proxy engine. Ultraviolet is recommended for a stable and slow experience.",
+          "description": "Select the core proxy engine. Scramjet is experimental and very fast.",
           "options": [
             {
               "value": "uv",
@@ -95,7 +111,7 @@
             },
             {
               "value": "scram",
-              "label": "Scramjet (Beta)"
+              "label": "Scramjet"
             }
           ]
         },
