@@ -137,6 +137,8 @@
           "label": "Wisp Server",
           "type": "text",
           "defaultValue": "",
+          "regex": "^wss:\\/\\/[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+\\/$",
+          "validationMessage": "bro look at the description idiot",
           "placeholder": "wss://wisp.pro/",
           "description": "The transport server used. This requires a '/' at the end"
         }
