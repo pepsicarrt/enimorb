@@ -33,20 +33,32 @@ import Bookmarks from "@/components/Bookmarks.astro";
       <Icon name="ph:arrow-clockwise-bold" class="size-4.5" />
     </button>
 
-    <div
-      class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5"
-    >
-      <Icon name="ph:magnifying-glass-bold" class="size-4.5 mr-2" />
-      <form id="form" class="flex-center w-full sm:w-md">
-        <input
-          spellcheck="false"
-          autocomplete="off"
-          id="address"
-          type="text"
-          placeholder="Search the web freely"
-          class="bg-transparent w-full focus:outline-none"
-        />
-      </form>
+    <!-- NEW CONTAINER FOR INPUT AND SUGGESTIONS -->
+    <!-- The `flex-1` makes this section take available space, `max-w-md` constrains its width. -->
+    <div class="relative flex-1 max-w-md">
+      <div
+        class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5"
+      >
+        <Icon name="ph:magnifying-glass-bold" class="size-4.5 mr-2" />
+        <form id="form" class="flex-center w-full">
+          <input
+            spellcheck="false"
+            autocomplete="off"
+            id="address"
+            type="text"
+            placeholder="Search the web freely"
+            class="bg-transparent w-full focus:outline-none"
+          />
+        </form>
+      </div>
+      <!-- Suggestions Container -->
+      <div
+        id="suggestions-container"
+        class="absolute w-full bg-surface rounded-md shadow-lg z-30 hidden"
+        style="top: 100%; left: 0;"
+      >
+        <ul id="suggestions-list" class="divide-y divide-gray-700"></ul>
+      </div>
     </div>
 
     <button
@@ -80,27 +92,32 @@ import Bookmarks from "@/components/Bookmarks.astro";
   const devButton = document.getElementById("omnibar-dev-btn");
   const bookmarkButton = document.getElementById("omnibar-save-btn");
 
+  // Get references for search suggestion logic and form submission
+  const addressInput = document.getElementById("address");
+  const suggestionsContainer = document.getElementById("suggestions-container");
+  const suggestionsList = document.getElementById("suggestions-list");
+  const form = document.getElementById("form");
+  const iframe = document.getElementById("frame"); // Assuming an iframe with id="frame" exists in the main layout
+
+  // Existing navigation button logic
   backButton.addEventListener("click", () => {
-    const iframe = document.getElementById("frame");
     if (iframe && iframe.contentWindow) iframe.contentWindow.history.back();
   });
 
   forwardButton.addEventListener("click", () => {
-    const iframe = document.getElementById("frame");
     if (iframe && iframe.contentWindow) iframe.contentWindow.history.forward();
   });
 
   reloadButton.addEventListener("click", () => {
-    const iframe = document.getElementById("frame");
     if (iframe && iframe.contentWindow) iframe.contentWindow.location.reload();
   });
 
   bookmarkButton.addEventListener("click", () => {
-    const iframe = document.getElementById("frame");
-    let url = decodeURIComponent(
-      frame.contentWindow.location.href.split("/").pop(),
-    );
-    let title = frame.contentWindow.document.title;
+    if (!iframe || !iframe.contentWindow) return;
+
+    // Use full href for bookmarking
+    let url = iframe.contentWindow.location.href;
+    let title = iframe.contentWindow.document.title;
 
     let bookmarks = localStorage.getItem("bookmarks")
       ? [
@@ -113,8 +130,6 @@ import Bookmarks from "@/components/Bookmarks.astro";
   });
 
   devButton.addEventListener("click", () => {
-    const iframe = document.getElementById("frame");
-
     if (!iframe?.contentWindow) return;
 
     const { contentWindow: iframeWin } = iframe;
@@ -129,9 +144,203 @@ import Bookmarks from "@/components/Bookmarks.astro";
       script.onload = () => {
         iframeWin.eruda.init({ tool: ["console", "elements", "sources"] });
         iframeWin.eruda.show();
-        isErudaVisible = true; // Set initial state to true after first load
+        isErudaVisible = true;
       };
       iframeDoc.head.appendChild(script);
     }
+  });
+
+  // --- Search Suggestions Logic ---
+  let debounceTimeout;
+  const SEARCH_API_URL = "/api/suggestions?q="; // DuckDuckGo autocomplete API
+  let currentHighlightedIndex = -1; // For keyboard navigation
+
+  // Function to fetch suggestions from API
+  const fetchSuggestions = async (query) => {
+    if (!query) return [];
+    try {
+      const response = await fetch(`${SEARCH_API_URL}${encodeURIComponent(query)}`);
+      const data = await response.json();
+      return data; // DuckDuckGo returns an array of objects like [{phrase: "suggestion"}]
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      return [];
+    }
+  };
+
+  // Function to render suggestions in the dropdown
+  const renderSuggestions = (suggestions) => {
+    suggestionsList.innerHTML = ""; // Clear previous suggestions
+    currentHighlightedIndex = -1; // Reset highlight index
+
+    if (suggestions.length === 0) {
+      suggestionsContainer.classList.add("hidden");
+      return;
+    }
+
+    suggestions.forEach((item, index) => {
+      const li = document.createElement("li");
+      li.className = "p-2 cursor-pointer hover:bg-highlight-low text-text";
+      li.textContent = item.phrase;
+      li.dataset.index = index; // Store index for keyboard navigation
+
+      li.addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent accidental text selection
+        addressInput.value = item.phrase; // Populate input with selected suggestion
+        suggestionsContainer.classList.add("hidden");
+        form.dispatchEvent(new Event("submit")); // Programmatically submit the form
+        addressInput.blur(); // Hide keyboard (especially on mobile)
+      });
+      suggestionsList.appendChild(li);
+    });
+
+    suggestionsContainer.classList.remove("hidden"); // Show the suggestions container
+  };
+
+  // Function to highlight a suggestion (for keyboard navigation)
+  const highlightSuggestion = (index) => {
+    const items = suggestionsList.children;
+    if (items.length === 0) return;
+
+    // Remove existing highlight
+    if (currentHighlightedIndex > -1 && items[currentHighlightedIndex]) {
+      items[currentHighlightedIndex].classList.remove("bg-highlight-low");
+    }
+
+    // Add highlight to new index
+    if (index >= 0 && index < items.length) {
+      items[index].classList.add("bg-highlight-low");
+      addressInput.value = items[index].textContent; // Update input with highlighted suggestion
+      currentHighlightedIndex = index;
+    } else {
+      // If navigating out of bounds, restore original input value
+      addressInput.value = addressInput.dataset.originalValue || "";
+      currentHighlightedIndex = -1;
+    }
+  };
+
+  // Event listener for input changes (debounced)
+  addressInput.addEventListener("input", () => {
+    clearTimeout(debounceTimeout);
+    const query = addressInput.value.trim();
+
+    // Store the original input value before it's changed by highlighting suggestions
+    if (!addressInput.dataset.originalValue || currentHighlightedIndex === -1) {
+      addressInput.dataset.originalValue = addressInput.value;
+    }
+
+    if (query.length < 2) { // Minimum 2 characters to trigger suggestions
+      suggestionsList.innerHTML = "";
+      suggestionsContainer.classList.add("hidden");
+      return;
+    }
+
+    debounceTimeout = setTimeout(async () => {
+      const suggestions = await fetchSuggestions(query);
+      renderSuggestions(suggestions);
+    }, 300); // Debounce for 300ms
+  });
+
+  // Show suggestions if input is focused and has content
+  addressInput.addEventListener("focus", async () => {
+    const query = addressInput.value.trim();
+    if (query.length >= 2 && suggestionsList.children.length > 0) {
+      // If suggestions are already rendered, just show the container
+      suggestionsContainer.classList.remove("hidden");
+    } else if (query.length >= 2) {
+      // Otherwise, fetch and render them
+      const suggestions = await fetchSuggestions(query);
+      renderSuggestions(suggestions);
+    }
+  });
+
+  // Hide suggestions when input loses focus
+  addressInput.addEventListener("blur", () => {
+    // Small timeout to allow click events on suggestions to register before hiding
+    setTimeout(() => {
+      suggestionsContainer.classList.add("hidden");
+      // Restore original input value if no suggestion was selected
+      if (currentHighlightedIndex === -1 && addressInput.dataset.originalValue) {
+        addressInput.value = addressInput.dataset.originalValue;
+      }
+      delete addressInput.dataset.originalValue; // Clean up stored original value
+      currentHighlightedIndex = -1; // Reset highlight
+    }, 100);
+  });
+
+  // Keyboard navigation for suggestions
+  addressInput.addEventListener("keydown", (e) => {
+    const items = suggestionsList.children;
+    if (items.length === 0 || suggestionsContainer.classList.contains("hidden")) {
+      return; // No suggestions to navigate
+    }
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault(); // Prevent cursor movement in input field
+      let newIndex = currentHighlightedIndex + 1;
+      if (newIndex >= items.length) {
+        newIndex = -1; // Loop back to input field (or -1 to indicate no highlight)
+      }
+      highlightSuggestion(newIndex);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault(); // Prevent cursor movement in input field
+      let newIndex = currentHighlightedIndex - 1;
+      if (newIndex < -1) { // If currently on input and pressing up
+        newIndex = items.length - 1; // Loop to the last suggestion
+      }
+      highlightSuggestion(newIndex);
+    } else if (e.key === "Enter") {
+      // If a suggestion is highlighted, simulate a click on it to select and submit.
+      // Otherwise, allow default form submission for the current input value.
+      if (currentHighlightedIndex > -1) {
+        e.preventDefault(); // Prevent default form submission at this point
+        items[currentHighlightedIndex].click(); // Simulate click on highlighted item
+      }
+      // If nothing highlighted, the form.addEventListener("submit") below will handle it
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      suggestionsContainer.classList.add("hidden");
+      addressInput.value = addressInput.dataset.originalValue || ""; // Restore original value
+      delete addressInput.dataset.originalValue;
+      currentHighlightedIndex = -1;
+      addressInput.blur(); // Optional: remove focus from input
+    }
+  });
+
+  // --- Form Submission Logic ---
+  // This logic assumes it's within the main page script or a shared script that handles the iframe.
+  // It determines if the input is a URL or a search query and loads it into the iframe.
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let query = addressInput.value.trim();
+
+    if (!query) {
+      if (iframe) iframe.src = "about:blank"; // Clear iframe or show homepage if input is empty
+      return;
+    }
+
+    let url;
+    // Simple check to determine if it's likely a URL (contains a dot and no spaces)
+    const isLikelyUrl = query.includes(".") && !query.includes(" ");
+
+    if (isLikelyUrl) {
+      if (!query.startsWith("http://") && !query.startsWith("https://")) {
+        url = `https://${query}`; // Prepend https:// for domains (e.g., "example.com" -> "https://example.com")
+      } else {
+        url = query; // Use as-is if protocol is already present
+      }
+    } else {
+      // Otherwise, treat as a search query
+      url = `https://duckduckgo.com/?q=${encodeURIComponent(query)}`; // Use DuckDuckGo for search
+    }
+
+    if (iframe) {
+      iframe.src = url; // Load the determined URL into the iframe
+    }
+
+    addressInput.blur(); // Hide keyboard on mobile
+    suggestionsContainer.classList.add("hidden"); // Hide suggestions after submission
+    delete addressInput.dataset.originalValue; // Clean up stored original value
+    currentHighlightedIndex = -1; // Reset highlight
   });
 </script>
