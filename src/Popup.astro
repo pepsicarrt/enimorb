@@ -12,7 +12,7 @@ export interface Props {
   // --- Content ---
   title: string;
   triggerAriaLabel: string;
-  triggerIcon: string; // Icon name e.g., 'lucide:settings'
+  triggerIcon: string;
 }
 
 const {
@@ -43,7 +43,7 @@ const {
 >
   <div
     id={contentId}
-    class="relative bg-overlay w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform -translate-y-full transition-transform duration-300 ease-in-out"
+    class="glass-card relative bg-overlay w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform -translate-y-full transition-transform duration-300 ease-in-out"
   >
     <!-- Header -->
     <div class="flex justify-between items-center mb-3">
@@ -81,7 +81,6 @@ const {
       popup.classList.add("opacity-100");
       popupContent.classList.remove("-translate-y-full");
       popupContent.classList.add("translate-y-0");
-      // Dispatch a custom event when the popup opens
       document.dispatchEvent(
         new CustomEvent("popup-opened", { detail: { popupId } }),
       );
@@ -92,7 +91,6 @@ const {
       popup.classList.add("invisible", "pointer-events-none");
       popupContent.classList.remove("translate-y-0");
       popupContent.classList.add("-translate-y-full");
-      // Dispatch a custom event when the popup closes
       document.dispatchEvent(
         new CustomEvent("popup-closed", { detail: { popupId } }),
       );
@@ -116,7 +114,6 @@ const {
   }
 </script>
 
-<!-- 5. Common Styling -->
 <style is:global>
   .overflow-y-auto::-webkit-scrollbar {
     width: 8px;

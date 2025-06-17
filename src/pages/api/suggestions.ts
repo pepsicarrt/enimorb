@@ -32,10 +32,7 @@ export const GET: APIRoute = async ({ url }) => {
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        // Add CORS headers if you want this API route to be accessible by other origins
-        // For internal use (client-side of the same Astro app), this isn't strictly needed,
-        // but it's good practice if you anticipate external usage.
-        // "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "*",
       },
     });
   } catch (error) {

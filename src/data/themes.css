@@ -81,6 +81,26 @@ body[data-theme="latte"] {
   --color-highlight-high: #acafbe; /* Surface2 */
 }
 
+@media (prefers-color-scheme: light) {
+  --color-base: #f2fdff;
+  --color-surface: #fff0f0;
+  --color-overlay: #f4eccf;
+  --color-muted: #988b81;
+  --color-subtle: #7f776b;
+  --color-text: #575279;
+
+  --color-love: #ed64a6;
+  --color-gold: #f2af60;
+  --color-rose: #ed7d7d;
+  --color-pine: #5e77a7;
+  --color-foam: #94b5b5;
+  --color-iris: #b48ed3;
+
+  --color-highlight-low: #f4ebd7;
+  --color-highlight-med: #f6e0b5;
+  --color-highlight-high: #fde68a;
+}
+
 /* Rose Pine Dawn (Light Theme) */
 body[data-theme="dawn"] {
   --color-base: #f2fdff;
@@ -163,3 +183,44 @@ body[data-theme="solstice"] {
   --color-highlight-med: #d8d8c5; /* Mid-tone highlight for hover states */
   --color-highlight-high: #c8c8b5; /* Slightly stronger highlight for active states */
 }
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 20px 10px rgba(255, 255, 255, 1);
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+}
+
+.glass-card::after {
+  content: '';
+  position: absolute;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8),
+    transparent,
+    rgba(255, 255, 255, 0.3)
+  );
+}
+
+
