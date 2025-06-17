@@ -52,7 +52,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(
                   </select>
                 )}
                 {setting.type === "text" && (
-                  <div class="flex flex-col"> {/* New wrapper for input + error */}
+                  <div class="flex flex-col">
                     <input
                       type="text"
                       id={setting.id}
@@ -97,11 +97,9 @@ const flatSettingsConfig = settingsData.sections.flatMap(
   const popupContent = document.getElementById("settings-popup-content");
   const tooltip = document.getElementById("info-tooltip");
 
-  // New helper function to validate and display error messages
   function validateSetting(element, setting) {
     const errorElement = document.getElementById(`${setting.id}-error`);
     if (!errorElement || setting.type !== "text" || !setting.regex) {
-      // No validation needed for this element or no regex defined
       return true;
     }
 
@@ -111,13 +109,13 @@ const flatSettingsConfig = settingsData.sections.flatMap(
     if (!isValid) {
       errorElement.textContent = setting.validationMessage || "Invalid input.";
       errorElement.classList.remove("hidden");
-      element.classList.add("border-rose"); // Add visual error state
+      element.classList.add("border-rose");
       element.setAttribute("aria-invalid", "true");
       return false;
     } else {
       errorElement.classList.add("hidden");
       errorElement.textContent = "";
-      element.classList.remove("border-rose"); // Remove visual error state
+      element.classList.remove("border-rose");
       element.setAttribute("aria-invalid", "false");
       return true;
     }
@@ -135,7 +133,6 @@ const flatSettingsConfig = settingsData.sections.flatMap(
       } else {
         element.value = valueToApply;
       }
-      // Validate after loading to show any initial errors
       validateSetting(element, setting);
     });
   }
@@ -145,10 +142,9 @@ const flatSettingsConfig = settingsData.sections.flatMap(
     const setting = settingsConfig.find((s) => s.id === element.id);
     if (!setting) return;
 
-    // Validate before saving. If invalid, prevent saving.
     const isValid = validateSetting(element, setting);
     if (!isValid) {
-      return; // Do not save invalid data
+      return;
     }
 
     const valueToStore =
@@ -162,7 +158,6 @@ const flatSettingsConfig = settingsData.sections.flatMap(
       const element = document.getElementById(setting.id);
       if (element) {
         element.addEventListener("change", saveSettings);
-        // For text inputs with regex, add an 'input' listener for real-time validation feedback
         if (setting.type === "text" && setting.regex) {
           element.addEventListener("input", (event) => {
             const currentElement = event.target;
@@ -225,9 +220,6 @@ const flatSettingsConfig = settingsData.sections.flatMap(
 
   document.addEventListener("popup-opened", (event) => {
     if (event.detail.popupId === "settings-popup") {
-      // Original code was toggling visibility on #bookmarks. Assuming this is intentional
-      // If #bookmarks is not in the DOM, this will throw an error.
-      // Make sure document.getElementById("bookmarks") exists or handle null
       const bookmarksElement = document.getElementById("bookmarks");
       if (bookmarksElement) {
         bookmarksElement.classList.toggle("invisible");
