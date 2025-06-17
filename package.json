@@ -6,8 +6,8 @@
     "dev": "astro dev",
     "check": "bunx biome check --write * && astro check",
     "build": "astro build",
-    "lint": "bunx biome lint --write",
-    "format": "bunx biome format --write",
+    "lint": "bunx biome lint src/ public/ --write",
+    "fmt": "bunx biome format src/ public/ --write",
     "deploy": "wrangler deploy"
   },
   "dependencies": {
@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "wrangler": "^4.19.1",
-    "prettier-plugin-astro": "^0.14.1"
   },
   "trustedDependencies": [
     "@parcel/watcher",
