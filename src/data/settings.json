@@ -92,6 +92,13 @@
               "label": "Yandex"
             }
           ]
+        },
+        {
+          "id": "history",
+          "label": "Stealth Mode",
+          "type": "toggle",
+          "defaultValue": "on",
+          "description": "This will hide all your proxied searches from even browser back/forward arrows!"
         }
       ]
     },
