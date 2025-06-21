@@ -58,8 +58,9 @@
 
     const urlToLoad = makeURL(addressInput.value, search);
     if (localStorage.getItem("stealth-mode"))
-      frame.contentWindow.location.replace(await getProxied(urltoLoad))
-    else rame.src = await getProxied(urlToLoad);
+    {
+      frame.contentWindow.location.replace(await getProxied(urlToLoad))
+    }else frame.src = await getProxied(urlToLoad);
   });
 
   // --- Event Listeners ---

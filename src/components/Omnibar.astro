@@ -1,4 +1,6 @@
 ---
+
+import Suggestions from "@/components/Suggestions.astro";
 import Settings from "@/components/Settings.astro";
 import History from "@/components/History.astro";
 import { Icon } from "astro-icon/components";
@@ -33,7 +35,6 @@ import Bookmarks from "@/components/Bookmarks.astro";
       <Icon name="ph:arrow-clockwise-bold" class="size-4.5" />
     </button>
 
-    <!-- INPUT AND SUGGESTIONS -->
     <div class="relative flex-1 max-w-md">
       <div
         class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5"
@@ -41,6 +42,7 @@ import Bookmarks from "@/components/Bookmarks.astro";
         <Icon name="ph:magnifying-glass-bold" class="size-4.5 mr-2" />
         <form id="form" class="flex-center w-full">
           <input
+            autofocus="true"
             spellcheck="false"
             autocomplete="off"
             id="address"
@@ -50,14 +52,7 @@ import Bookmarks from "@/components/Bookmarks.astro";
           />
         </form>
       </div>
-      <!-- Suggestions Container -->
-      <div
-        id="suggestions-container"
-        class="absolute w-full bg-surface rounded-md shadow-lg z-30 hidden"
-        style="top: 100%; left: 0;"
-      >
-        <ul id="suggestions-list" class="divide-y divide-gray-700"></ul>
-      </div>
+      <Suggestions />
     </div>
 
     <button
@@ -91,10 +86,6 @@ import Bookmarks from "@/components/Bookmarks.astro";
   const devButton = document.getElementById("omnibar-dev-btn");
   const bookmarkButton = document.getElementById("omnibar-save-btn");
 
-  const addressInput = document.getElementById("address");
-  const suggestionsContainer = document.getElementById("suggestions-container");
-  const suggestionsList = document.getElementById("suggestions-list");
-  const form = document.getElementById("form");
 
   backButton.addEventListener("click", () => {
 
@@ -156,182 +147,4 @@ import Bookmarks from "@/components/Bookmarks.astro";
     }
   });
 
-  // --- Search Suggestions Logic ---
-  let debounceTimeout;
-  const SEARCH_API_URL = "/api/suggestions?q=";
-  let currentHighlightedIndex = -1;
-
-  // Function to fetch suggestions from API
-  const fetchSuggestions = async (query) => {
-    if (!query) return [];
-    try {
-      const response = await fetch(`${SEARCH_API_URL}${encodeURIComponent(query)}`);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-      return [];
-    }
-  };
-
-  // Function to render suggestions in the dropdown
-  const renderSuggestions = (suggestions) => {
-    suggestionsList.innerHTML = "";
-    currentHighlightedIndex = -1;
-
-    if (suggestions.length === 0) {
-      suggestionsContainer.classList.add("hidden");
-      return;
-    }
-
-    suggestions.forEach((item, index) => {
-      const li = document.createElement("li");
-      li.className = "p-2 cursor-pointer hover:bg-highlight-low text-text";
-      li.textContent = item.phrase;
-      li.dataset.index = index;
-
-      li.addEventListener("click", (e) => {
-        e.preventDefault();
-        addressInput.value = item.phrase;
-        suggestionsContainer.classList.add("hidden");
-        form.dispatchEvent(new Event("submit"));
-        addressInput.blur();
-      });
-      suggestionsList.appendChild(li);
-    });
-
-    suggestionsContainer.classList.remove("hidden");
-  };
-
-  const highlightSuggestion = (index) => {
-    const items = suggestionsList.children;
-    if (items.length === 0) return;
-
-    if (currentHighlightedIndex > -1 && items[currentHighlightedIndex]) {
-      items[currentHighlightedIndex].classList.remove("bg-highlight-low");
-    }
-
-    if (index >= 0 && index < items.length) {
-      items[index].classList.add("bg-highlight-low");
-      addressInput.value = items[index].textContent; 
-      currentHighlightedIndex = index;
-    } else {
-      addressInput.value = addressInput.dataset.originalValue || "";
-      currentHighlightedIndex = -1;
-    }
-  };
-
-  // Event listener for input changes (debounced)
-  addressInput.addEventListener("input", () => {
-
-    clearTimeout(debounceTimeout);
-    const query = addressInput.value.trim();
-
-    if (!addressInput.dataset.originalValue || currentHighlightedIndex === -1) {
-      addressInput.dataset.originalValue = addressInput.value;
-    }
-
-    if (query.length < 2) {
-      suggestionsList.innerHTML = "";
-      suggestionsContainer.classList.add("hidden");
-      return;
-    }
-
-    debounceTimeout = setTimeout(async () => {
-      const suggestions = await fetchSuggestions(query);
-      renderSuggestions(suggestions);
-    }, 300);
-  });
-
-  addressInput.addEventListener("focus", async () => {
-    const query = addressInput.value.trim();
-    if (query.length >= 2 && suggestionsList.children.length > 0) {
-      suggestionsContainer.classList.remove("hidden");
-    } else if (query.length >= 2) {
-      const suggestions = await fetchSuggestions(query);
-      renderSuggestions(suggestions);
-    }
-  });
-
-  addressInput.addEventListener("blur", () => {
-    setTimeout(() => {
-      suggestionsContainer.classList.add("hidden");
-      if (currentHighlightedIndex === -1 && addressInput.dataset.originalValue) {
-        addressInput.value = addressInput.dataset.originalValue;
-      }
-      delete addressInput.dataset.originalValue;
-      currentHighlightedIndex = -1;
-    }, 100);
-  });
-
-  addressInput.addEventListener("keydown", (e) => {
-    const items = suggestionsList.children;
-    if (items.length === 0 || suggestionsContainer.classList.contains("hidden")) {
-      return;
-    }
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault(); 
-      let newIndex = currentHighlightedIndex + 1;
-      if (newIndex >= items.length) {
-        newIndex = -1; 
-      }
-      highlightSuggestion(newIndex);
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      let newIndex = currentHighlightedIndex - 1;
-      if (newIndex < -1) { 
-        newIndex = items.length - 1; 
-      }
-      highlightSuggestion(newIndex);
-    } else if (e.key === "Enter") {
-      if (currentHighlightedIndex > -1) {
-        e.preventDefault();
-        items[currentHighlightedIndex].click(); // Simulate click on highlighted item
-      }
-    } else if (e.key === "Escape") {
-      e.preventDefault();
-      suggestionsContainer.classList.add("hidden");
-      addressInput.value = addressInput.dataset.originalValue || ""; 
-      delete addressInput.dataset.originalValue;
-      currentHighlightedIndex = -1;
-      addressInput.blur();
-    }
-  });
-
-  // --- Form Submission Logic ---
-  form.addEventListener("submit", (e) => {
-
-
-  const iframe = document.getElementById("frame");
-    e.preventDefault();
-    let query = addressInput.value.trim();
-
-    if (!query) {
-      if (iframe) iframe.src = "about:blank";
-      return;
-    }
-
-    let url;
-    const isLikelyUrl = query.includes(".") && !query.includes(" ");
-
-    if (isLikelyUrl) {
-      if (!query.startsWith("http://") && !query.startsWith("https://")) {
-        url = `https://${query}`;
-      } else {
-        url = query;
-      }
-    } else {
-      url = `https://duckduckgo.com/?q=${encodeURIComponent(query)}`;
-    }
-
-    if (iframe) {
-      iframe.src = url;
-    }
-
-    addressInput.blur(); 
-    suggestionsContainer.classList.add("hidden");
-    delete addressInput.dataset.originalValue;
-    currentHighlightedIndex = -1;
-  });
 </script>

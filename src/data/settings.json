@@ -94,7 +94,7 @@
           ]
         },
         {
-          "id": "steal-mode",
+          "id": "stealth-mode",
           "label": "Stealth Mode",
           "type": "toggle",
           "defaultValue": "on",
