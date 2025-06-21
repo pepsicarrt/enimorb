@@ -1,11 +1,11 @@
 ---
-import { Icon } from "astro-icon/components";
-import settingsData from "@/data/settings.json";
-import Popup from "@/Popup.astro";
+import Popup from "@/Popup.astro"
+import settingsData from "@/data/settings.json"
+import { Icon } from "astro-icon/components"
 
 const flatSettingsConfig = settingsData.sections.flatMap(
   (section) => section.settings,
-);
+)
 ---
 
 <Popup
