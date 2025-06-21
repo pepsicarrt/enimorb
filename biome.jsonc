@@ -22,8 +22,7 @@
     "bracketSpacing": true
   },
   "files": {
-    "includes": ["public", "src"],
-    "excludes": ["public/scram/"]
+    "includes": [ "!public/scram/", "public/", "src/"]
   },
   "organizeImports": { "enabled": true },
   "linter": { "enabled": true, "rules": { "recommended": true } },
