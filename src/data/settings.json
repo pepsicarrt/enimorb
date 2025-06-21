@@ -94,7 +94,7 @@
           ]
         },
         {
-          "id": "history",
+          "id": "steal-mode",
           "label": "Stealth Mode",
           "type": "toggle",
           "defaultValue": "on",

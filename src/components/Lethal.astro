@@ -57,7 +57,9 @@
     event.preventDefault();
 
     const urlToLoad = makeURL(addressInput.value, search);
-    frame.src = await getProxied(urlToLoad);
+    if (localStorage.getItem("stealth-mode"))
+      frame.contentWindow.location.replace(await getProxied(urltoLoad))
+    else rame.src = await getProxied(urlToLoad);
   });
 
   // --- Event Listeners ---
