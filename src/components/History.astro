@@ -21,7 +21,6 @@ import Popup from "@/Popup.astro";
     document.getElementById("frame").src = await getProxied(url);
   }
 
-  // Function to render the list from localStorage
   function renderHistoryList() {
     const history = JSON.parse(localStorage.getItem("history") || "[]");
     const list = document.getElementById("history");
@@ -35,7 +34,6 @@ import Popup from "@/Popup.astro";
     });
   }
 
-  // Listen for storage changes from other tabs/windows
   window.addEventListener("storage", (event) => {
     if (event.key === "history") {
       renderHistoryList();

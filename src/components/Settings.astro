@@ -94,145 +94,157 @@ const flatSettingsConfig = settingsData.sections.flatMap(
   </div>
 </Popup>
 <script define:vars={{ settingsConfig: flatSettingsConfig }} defer is:inline>
-  const popupContent = document.getElementById("settings-popup-content");
-  const tooltip = document.getElementById("info-tooltip");
 
-  function validateSetting(element, setting) {
-    const errorElement = document.getElementById(`${setting.id}-error`);
-    if (!errorElement || setting.type !== "text" || !setting.regex) {
-      return true;
-    }
 
-    const regex = new RegExp(setting.regex);
-    const isValid = regex.test(element.value);
 
-    if (!isValid) {
-      errorElement.textContent = setting.validationMessage || "Invalid input.";
-      errorElement.classList.remove("hidden");
-      element.classList.add("border-rose");
-      element.setAttribute("aria-invalid", "true");
-      return false;
+
+
+
+
+// --- DOM Element Caching (for Settings and Tooltips) ---
+const popupContent = document.getElementById("settings-popup-content");
+const tooltip = document.getElementById("info-tooltip");
+
+
+// --- Settings Management Functions ---
+
+const validateSetting = (element, setting) => {
+  const errorElement = document.getElementById(`${setting.id}-error`);
+
+  if (!errorElement || setting.type !== "text" || !setting.regex) {
+    return true;
+  }
+
+  const regex = new RegExp(setting.regex);
+  const isValid = regex.test(element.value);
+
+  errorElement.classList.toggle("hidden", isValid);
+  errorElement.textContent = isValid ? "" : (setting.validationMessage ?? "Invalid input.");
+  element.classList.toggle("border-rose", !isValid); 
+  element.setAttribute("aria-invalid", (!isValid).toString()); 
+
+  return isValid;
+};
+
+const loadSettings = () => {
+  settingsConfig.forEach((setting) => {
+    const element = document.getElementById(setting.id);
+    if (!element) return;
+
+    const storedValue = localStorage.getItem(setting.id);
+    const valueToApply = storedValue ?? setting.defaultValue;
+
+    if (setting.type === "toggle") {
+      element.checked = valueToApply === "true";
     } else {
-      errorElement.classList.add("hidden");
-      errorElement.textContent = "";
-      element.classList.remove("border-rose");
-      element.setAttribute("aria-invalid", "false");
-      return true;
-    }
-  }
-
-  function loadSettings() {
-    settingsConfig.forEach((setting) => {
-      const element = document.getElementById(setting.id);
-      if (!element) return;
-      const storedValue = localStorage.getItem(setting.id);
-      const valueToApply =
-        storedValue !== null ? storedValue : setting.defaultValue;
-      if (setting.type === "toggle") {
-        element.checked = valueToApply === "true";
-      } else {
-        element.value = valueToApply;
-      }
-      validateSetting(element, setting);
-    });
-  }
-
-  function saveSettings(event) {
-    const element = event.target;
-    const setting = settingsConfig.find((s) => s.id === element.id);
-    if (!setting) return;
-
-    const isValid = validateSetting(element, setting);
-    if (!isValid) {
-      return;
-    }
-
-    const valueToStore =
-      setting.type === "toggle" ? element.checked : element.value;
-    localStorage.setItem(setting.id, valueToStore.toString());
-  }
-
-  function initializeSettings() {
-    loadSettings();
-    settingsConfig.forEach((setting) => {
-      const element = document.getElementById(setting.id);
-      if (element) {
-        element.addEventListener("change", saveSettings);
-        if (setting.type === "text" && setting.regex) {
-          element.addEventListener("input", (event) => {
-            const currentElement = event.target;
-            const currentSetting = settingsConfig.find((s) => s.id === currentElement.id);
-            if (currentSetting) {
-                validateSetting(currentElement, currentSetting);
-            }
-          });
-        }
-      }
-    });
-  }
-
-  // --- Tooltip Functions ---
-  function showTooltip(button) {
-    const description = button.dataset.description;
-    if (!description || !tooltip) return;
-
-    tooltip.textContent = description;
-    tooltip.classList.remove("hidden");
-
-    // --- POSITIONING LOGIC ---
-    const buttonRect = button.getBoundingClientRect();
-    const contentRect = popupContent.getBoundingClientRect();
-
-    tooltip.style.left = "50%";
-    tooltip.style.transform = "translateX(-50%)";
-
-    let top = buttonRect.top - contentRect.top + button.offsetHeight + 8;
-
-    if (top + tooltip.offsetHeight > popupContent.clientHeight) {
-      top = buttonRect.top - contentRect.top - tooltip.offsetHeight - 8;
-    }
-
-    tooltip.style.top = `${top + popupContent.scrollTop}px`;
-  }
-
-  function hideTooltip() {
-    if (tooltip && !tooltip.classList.contains("hidden")) {
-      tooltip.classList.add("hidden");
-    }
-  }
-
-  // --- Ping Function (Client-Side) ---
-  async function updatePing() {
-    const url = location.origin;
-    const pingResultEl = document.getElementById("ping-result");
-    if (!pingResultEl) return;
-    pingResultEl.textContent = "Pinging...";
-    const startTime = performance.now();
-    try {
-      await fetch(url, { mode: "no-cors", cache: "no-store" });
-      const endTime = performance.now();
-      const duration = Math.round(endTime - startTime);
-      pingResultEl.textContent = `${duration}ms`;
-    } catch (e) {
-      pingResultEl.textContent = "Error";
-    }
-  }
-
-  document.addEventListener("popup-opened", (event) => {
-    if (event.detail.popupId === "settings-popup") {
-      const bookmarksElement = document.getElementById("bookmarks");
-      if (bookmarksElement) {
-        bookmarksElement.classList.toggle("invisible");
-      }
-      updatePing();
+      element.value = valueToApply;
     }
   });
-  initializeSettings();
-  document.querySelectorAll(".info-btn").forEach((button) => {
-    button.addEventListener("mouseenter", () => showTooltip(button));
-    button.addEventListener("mouseleave", hideTooltip);
-    button.addEventListener("focus", () => showTooltip(button));
-    button.addEventListener("blur", hideTooltip);
+};
+
+const saveSettings = (event) => {
+  const { target: element } = event;
+  const setting = settingsConfig.find((s) => s.id === element.id);
+  if (!setting) return;
+
+  if (!validateSetting(element, setting)) {
+    return;
+  }
+
+  const valueToStore = setting.type === "toggle" ? element.checked : element.value;
+  localStorage.setItem(setting.id, valueToStore.toString());
+};
+
+
+const initializeSettings = () => {
+  loadSettings();
+
+  settingsConfig.forEach((setting) => {
+    const element = document.getElementById(setting.id);
+    if (element) {
+      element.addEventListener("change", saveSettings);
+
+      if (setting.type === "text" && setting.regex) {
+        element.addEventListener("input", ({ target: currentElement }) => {
+          const currentSetting = settingsConfig.find((s) => s.id === currentElement.id);
+          currentSetting && validateSetting(currentElement, currentSetting);
+        });
+      }
+    }
   });
-  popupContent.addEventListener("scroll", hideTooltip, { passive: true });
+};
+
+
+// --- Tooltip Functions ---
+
+const showTooltip = (button) => {
+  const { description } = button.dataset;
+  if (!description || !tooltip) return;
+
+  tooltip.textContent = description;
+  tooltip.classList.remove("hidden");
+
+  // --- POSITIONING LOGIC ---
+  const buttonRect = button.getBoundingClientRect();
+  const contentRect = popupContent.getBoundingClientRect();
+
+  tooltip.style.left = "50%";
+  tooltip.style.transform = "translateX(-50%)";
+
+  let top = buttonRect.top - contentRect.top + button.offsetHeight + 8;
+
+  if (top + tooltip.offsetHeight > popupContent.clientHeight) {
+    top = buttonRect.top - contentRect.top - tooltip.offsetHeight - 8;  }
+
+  tooltip.style.top = `${top + popupContent.scrollTop}px`;
+};
+
+
+const hideTooltip = () => {
+  tooltip?.classList.add("hidden");
+};
+
+
+// --- Ping ---
+
+const updatePing = async () => {
+  const url = location.origin;
+  const pingResultEl = document.getElementById("ping-result");
+  if (!pingResultEl) return; 
+
+  pingResultEl.textContent = "Pinging...";
+  const startTime = performance.now();
+
+  try {
+    await fetch(url, { mode: "no-cors", cache: "no-store" });
+    const endTime = performance.now();
+    const duration = Math.round(endTime - startTime);
+    pingResultEl.textContent = `${duration}ms`;
+  } catch (e) {
+    pingResultEl.textContent = "Error"; 
+    console.error("Ping failed:", e);
+  }
+};
+
+
+// --- Initialization and Event Handling for Settings and Tooltips ---
+
+document.addEventListener("popup-opened", ({ detail }) => {
+  if (detail?.popupId === "settings-popup") {
+   const bookmarksElement = document.getElementById("bookmarks");
+    bookmarksElement?.classList.add("hidden");
+    updatePing();
+  }
+});
+
+initializeSettings();
+
+document.querySelectorAll(".info-btn").forEach((button) => {
+  button.addEventListener("mouseenter", () => showTooltip(button));
+  button.addEventListener("mouseleave", hideTooltip);
+  button.addEventListener("focus", () => showTooltip(button));
+  button.addEventListener("blur", hideTooltip);   
+});
+
+popupContent.addEventListener("scroll", hideTooltip, { passive: true });
 </script>
