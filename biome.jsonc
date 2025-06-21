@@ -21,6 +21,10 @@
     "attributePosition": "auto",
     "bracketSpacing": true
   },
+  "files": {
+    "includes": ["public", "src"],
+    "excludes": ["public/scram/"]
+  },
   "organizeImports": { "enabled": true },
   "linter": { "enabled": true, "rules": { "recommended": true } },
   "javascript": {
