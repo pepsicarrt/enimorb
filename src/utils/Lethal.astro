@@ -17,14 +17,16 @@
   let search =
     localStorage.getItem("search-engine") ||
     "https://search.brave.com/search?q=%s";
-  const frame = document.getElementById("frame");
+  let tabCounter = 1;
+  let currentTab = 1;
+  let currentFrame = document.getElementById(`frame-${currentTab}`);
 
   // --- URL Change ---
-  frame.addEventListener("load", () => {
+  currentFrame.addEventListener("load", () => {
     let url = decodeURIComponent(
-      frame.contentWindow.location.href.split("/").pop(),
+      currentFrame.contentWindow.location.href.split("/").pop(),
     );
-    let title = frame.contentWindow.document.title;
+    let title = currentFrame.contentWindow.document.title;
 
     if (title === "Scramjet") return;
 
@@ -59,8 +61,8 @@
     const urlToLoad = makeURL(addressInput.value, search);
     if (localStorage.getItem("stealth-mode"))
     {
-      frame.contentWindow.location.replace(await getProxied(urlToLoad))
-    }else frame.src = await getProxied(urlToLoad);
+      currentFrame.contentWindow.location.replace(await getProxied(urlToLoad))
+    }else currentFrame.src = await getProxied(urlToLoad);
   });
 
   // --- Event Listeners ---
@@ -79,4 +81,28 @@
     transport = localStorage.getItem("proxy-transport");
     setTransport(localStorage.getItem("proxy-transport"));
   });
+
+  function newTab() {
+    tabCounter++;
+
+    let frames = document.querySelectorAll('iframe');
+    let framesArr = [...frames];
+    framesArr.forEach(frame => {
+      frame.classList.add('hidden');
+    });
+
+    let frame = document.createElement("iframe")
+    frame.setAttribute("class", "w-full h-full border-0 fixed");
+    frame.setAttribute("title", "Proxy Frame");
+    frame.setAttribute("id", `frame-${tabCounter}`);
+    document.getElementById("frames").appendChild(frame);
+
+    currentTab = tabCounter;
+    currentFrame = document.getElementById(`frame-${tabCounter}`);
+  }
+
+  const tabButton = document.getElementById("omnibar-tab-btn");
+  tabButton.addEventListener("click", () => {
+    newTab();
+  })
 </script>

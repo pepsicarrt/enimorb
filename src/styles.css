@@ -70,3 +70,11 @@ button:active {
 [data-icon] {
   stroke-width: 3; /* Increase stroke thickness */
 }
+
+/* iframe { */
+/*   display: none; */
+/* } */
+/**/
+/* iframe.active { */
+/*   display: fixed; */
+/* } */
