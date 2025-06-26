@@ -1,0 +1,46 @@
+---
+import Popup from "@/Popup.astro"
+---
+
+<Popup
+  title="History"
+  triggerAriaLabel="History"
+  triggerIcon="ph:clock-counter-clockwise-bold"
+  triggerId="omnibar-history-btn"
+  popupId="history-popup"
+  contentId="history-popup-content"
+  closeBtnId="history-close-btn"
+>
+  <ul class="space-y-2" id="history"></ul>
+</Popup>
+
+<script defer async type="module">
+  import { makeURL, getProxied } from "./lethal.mjs";
+
+  async function handleHistoryItemClick(url) {
+    document.getElementById("frame").src = await getProxied(url);
+  }
+
+  function renderHistoryList() {
+    const history = JSON.parse(localStorage.getItem("history") || "[]");
+    const list = document.getElementById("history");
+    if (!list) return;
+    list.innerHTML = "";
+    history.forEach((item) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span title="${item.url}" class="text-iris underline">${item.title}</span>`;
+      li.addEventListener("click", () => handleHistoryItemClick(item.url));
+      list.appendChild(li);
+    });
+  }
+
+  window.addEventListener("storage", (event) => {
+    if (event.key === "history") {
+      renderHistoryList();
+    }
+  });
+
+  window.addEventListener("history-changed", renderHistoryList);
+
+  renderHistoryList();
+</script>
