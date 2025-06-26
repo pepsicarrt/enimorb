@@ -3,7 +3,3 @@
 <section id="frames">
   <iframe title="Proxy Frame" id="frame-1" class="w-full h-full border-0 fixed"></iframe>
 </sections>
-<script defer async type="module">
-  import { getProxied } from "./lethal.mjs";
-  document.getElementById("frame-1").src = await getProxied("https://example.com");
-</script>
