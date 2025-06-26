@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro"
 
-export const GET: APIRoute = async ({ url }) => {
+export const GET: APIRoute = async ({ url }): Promise<Response> => {
   const query = url.searchParams.get("q")
 
   if (!query) {
@@ -13,7 +13,7 @@ export const GET: APIRoute = async ({ url }) => {
   }
 
   try {
-    const externalApiUrl = `https://duckduckgo.com/ac/?q=${encodeURIComponent(query)}`
+    const externalApiUrl = `https://duckduckgo.com/ac/?q=${query}`
     const response = await fetch(externalApiUrl)
 
     if (!response.ok) {

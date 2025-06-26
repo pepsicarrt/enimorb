@@ -10,7 +10,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(
 
 <Popup
   title="Settings"
-  triggerAriaLabel="Settings"
+  label="Settings"
   triggerIcon="ph:gear-six-bold"
   triggerId="omnibar-settings-btn"
   popupId="settings-popup"
@@ -95,20 +95,13 @@ const flatSettingsConfig = settingsData.sections.flatMap(
 </Popup>
 <script define:vars={{ settingsConfig: flatSettingsConfig }} defer is:inline>
 
-
-
-
-
-
-
 // --- variables ---
 const popupContent = document.getElementById("settings-popup-content");
 const tooltip = document.getElementById("info-tooltip");
 
-
 // --- Settings Change ---
 
-const validateSetting = (element, setting) => {
+const checkRegex = (element, setting) => {
   const errorElement = document.getElementById(`${setting.id}-error`);
 
   if (!errorElement || setting.type !== "text" || !setting.regex) {
@@ -126,7 +119,7 @@ const validateSetting = (element, setting) => {
   return isValid;
 };
 
-const loadSettings = () => {
+const load = () => {
   settingsConfig.forEach((setting) => {
     const element = document.getElementById(setting.id);
     if (!element) return;
@@ -142,12 +135,12 @@ const loadSettings = () => {
   });
 };
 
-const saveSettings = (event) => {
+const save = (event) => {
   const { target: element } = event;
   const setting = settingsConfig.find((s) => s.id === element.id);
   if (!setting) return;
 
-  if (!validateSetting(element, setting)) {
+  if (!checkRegex(element, setting)) {
     return;
   }
 
@@ -155,25 +148,23 @@ const saveSettings = (event) => {
   localStorage.setItem(setting.id, valueToStore.toString());
 };
 
-
-const initializeSettings = () => {
-  loadSettings();
+const init = () => {
+  load();
 
   settingsConfig.forEach((setting) => {
     const element = document.getElementById(setting.id);
     if (element) {
-      element.addEventListener("change", saveSettings);
+      element.addEventListener("change", save);
 
       if (setting.type === "text" && setting.regex) {
         element.addEventListener("input", ({ target: currentElement }) => {
           const currentSetting = settingsConfig.find((s) => s.id === currentElement.id);
-          currentSetting && validateSetting(currentElement, currentSetting);
+          currentSetting && checkRegex(currentElement, currentSetting);
         });
       }
     }
   });
 };
-
 
 // --- Tooltip ---
 
@@ -198,15 +189,13 @@ const showTooltip = (button) => {
   tooltip.style.top = `${top + popupContent.scrollTop}px`;
 };
 
-
 const hideTooltip = () => {
   tooltip?.classList.add("hidden");
 };
 
-
 // --- Ping ---
 
-const updatePing = async () => {
+const ping = async () => {
   const url = location.origin;
   const pingResultEl = document.getElementById("ping-result");
   if (!pingResultEl) return; 
@@ -225,18 +214,17 @@ const updatePing = async () => {
   }
 };
 
-
 // --- Event listeners and init ---
 
 document.addEventListener("popup-opened", ({ detail }) => {
   if (detail?.popupId === "settings-popup") {
    const bookmarksElement = document.getElementById("bookmarks");
     bookmarksElement?.classList.add("hidden");
-    updatePing();
+    ping();
   }
 });
 
-initializeSettings();
+init();
 
 document.querySelectorAll(".info-btn").forEach((button) => {
   button.addEventListener("mouseenter", () => showTooltip(button));

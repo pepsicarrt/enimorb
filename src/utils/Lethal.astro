@@ -21,6 +21,8 @@
   let currentTab = 1;
   let currentFrame = document.getElementById(`frame-${currentTab}`);
 
+  window.currentFrame = currentFrame;
+
   // --- URL Change ---
   currentFrame.addEventListener("load", () => {
     let url = decodeURIComponent(
@@ -44,7 +46,7 @@
 
   // --- Proxy ---
   let backend = localStorage.getItem("proxy-backend") || "uv";
-  let wisp = (localStorage.getItem("wisp-server") || "wss://anura.pro") + "/";
+  let wisp = (localStorage.getItem("wisp-server") || "wss://wisp.bromine.dev");
   let transport = localStorage.getItem("proxy-transport");
 
   setWisp(wisp);
@@ -69,14 +71,17 @@
   window.addEventListener("search-engine-changed", () => {
     search = localStorage.getItem("search-engine");
   });
+
   window.addEventListener("proxy-backend-changed", () => {
     backend = localStorage.getItem("proxy-backend");
     setProxy(localStorage.getItem("proxy-backend"));
   });
+
   window.addEventListener("wisp-server-changed", () => {
     wisp = localStorage.getItem("wisp-server");
     setWisp(localStorage.getItem("wisp-server"));
   });
+
   window.addEventListener("proxy-transport-changed", () => {
     transport = localStorage.getItem("proxy-transport");
     setTransport(localStorage.getItem("proxy-transport"));
@@ -114,8 +119,6 @@
       else frame.classList.remove("hidden");
     });
 
-
-
     currentTab = tabNumber;
     currentFrame = document.getElementById(`frame-${tabNumber}`);
     document.dispatchEvent(new CustomEvent("switch-tab", {
@@ -132,18 +135,18 @@
       if (frame.id === `frame-${tabNumber}`) frame.remove(); 
     });
 
-     tabCounter--;
+    tabCounter--;
     currentFrame = document.getElementById(`frame-${tabCounter}`);
     document.dispatchEvent(new CustomEvent("close-tab", {
       detail: {
         tabNumber: tabNumber
       }})
     );
-} 
+  } 
 
-window.newTab = newTab;
-window.switchTab = switchTab;
-window.closeTab = closeTab;
+  window.newTab = newTab;
+  window.switchTab = switchTab;
+  window.closeTab = closeTab;
 
   const tabButton = document.getElementById("omnibar-tab-btn");
   tabButton.addEventListener("click", () => {

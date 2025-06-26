@@ -6,16 +6,16 @@ body[data-theme="mocha"] {
   --color-subtle: #bac2de; /* Catppuccin Subtext1 */
   --color-text: #cdd6f4; /* Catppuccin Text */
 
-  --color-love: #f38ba8; /* Catppuccin Red (good for 'love') */
-  --color-gold: #fab387; /* Catppuccin Peach (matches 'gold' well) */
-  --color-rose: #f2cdcd; /* Catppuccin Flamingo (good for 'rose') */
-  --color-pine: #89dceb; /* Catppuccin Sky (a cool blue-green for 'pine') */
-  --color-foam: #94e2d5; /* Catppuccin Teal (a lighter blue-green for 'foam') */
-  --color-iris: #cba6f7; /* Catppuccin Mauve (a purple for 'iris') */
+  --color-love: #f38ba8; /* Catppuccin Red */
+  --color-gold: #fab387; /* Catppuccin Peach */
+  --color-rose: #f2cdcd; /* Catppuccin Flamingo */
+  --color-pine: #89dceb; /* Catppuccin Sky */
+  --color-foam: #94e2d5; /* Catppuccin Teal */
+  --color-iris: #cba6f7; /* Catppuccin Mauve */
 
-  --color-highlight-low: #181825; /* Catppuccin Mantle (darker highlight) */
-  --color-highlight-med: #585b70; /* Catppuccin Surface2 (mid-tone highlight) */
-  --color-highlight-high: #6c7086; /* Catppuccin Overlay0 (lighter highlight) */
+  --color-highlight-low: #181825; /* Catppuccin Mantle */
+  --color-highlight-med: #585b70; /* Catppuccin Surface2 */
+  --color-highlight-high: #6c7086; /* Catppuccin Overlay0 */
 }
 
 /* Catppuccin Macchiato */
@@ -62,12 +62,12 @@ body[data-theme="frappe"] {
 
 /* Catppuccin Latte (Light Theme) */
 body[data-theme="latte"] {
-  --color-base: #eff1f5; /* Base (lightest background) */
-  --color-surface: #e6e9ef; /* Mantle (slightly darker surface) */
-  --color-overlay: #dce0ee; /* Crust (even darker overlay) */
+  --color-base: #eff1f5; /* Base */
+  --color-surface: #e6e9ef; /* Mantle */
+  --color-overlay: #dce0ee; /* Crust */
   --color-muted: #9ca0b0; /* Overlay0 */
   --color-subtle: #6c6f85; /* Subtext0 */
-  --color-text: #4c4f69; /* Text (darkest main text) */
+  --color-text: #4c4f69; /* Text */
 
   --color-love: #d20f39; /* Red */
   --color-gold: #c37a3c; /* Yellow */
@@ -141,22 +141,22 @@ body[data-theme="moon"] {
 }
 
 body[data-theme="amoled"] {
-  --color-base: #000000; /* Pure Black for AMOLED screens */
-  --color-surface: #1a1a1a; /* Very dark gray */
-  --color-overlay: #2c2c2c; /* Slightly lighter dark gray */
-  --color-muted: #757575; /* Muted gray for secondary info */
-  --color-subtle: #a0a0a0; /* Subtle text */
-  --color-text: #e0e0e0; /* Light gray for main text */
+  --color-base: #000000;
+  --color-surface: #1a1a1a;
+  --color-overlay: #2c2c2c;
+  --color-muted: #757575;
+  --color-subtle: #a0a0a0;
+  --color-text: #e0e0e0;
 
-  --color-love: #ff6b6b; /* Vibrant Red */
-  --color-gold: #ffc107; /* Vibrant Yellow/Amber */
-  --color-rose: #ff69b4; /* Hot Pink */
-  --color-pine: #00bcd4; /* Bright Cyan */
-  --color-foam: #4dd0e1; /* Light Blue-Green */
-  --color-iris: #9c27b0; /* Vibrant Purple */
+  --color-love: #ff6b6b;
+  --color-gold: #ffc107;
+  --color-rose: #ff69b4;
+  --color-pine: #00bcd4;
+  --color-foam: #4dd0e1;
+  --color-iris: #9c27b0;
 
-  --color-highlight-low: #0d0d0d; /* Darker than surface for subtle highlight */
-  --color-highlight-med: #3a3a3a; /* Mid-tone highlight for hover/selection */
-  --color-highlight-high: #4f4f4f; /* Lighter highlight for active states */
+  --color-highlight-low: #0d0d0d;
+  --color-highlight-med: #3a3a3a;
+  --color-highlight-high: #4f4f4f;
 }
 

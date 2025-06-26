@@ -11,24 +11,17 @@ export interface Props {
 
   // --- Content ---
   title: string
-  triggerAriaLabel: string
+  label: string
   triggerIcon: string
 }
 
-const {
-  triggerId,
-  popupId,
-  contentId,
-  closeBtnId,
-  title,
-  triggerAriaLabel,
-  triggerIcon,
-} = Astro.props
+const { triggerId, popupId, contentId, closeBtnId, title, label, triggerIcon } =
+  Astro.props
 ---
 
 <!-- 1. Nice Button -->
 <button
-  aria-label={triggerAriaLabel}
+  aria-label={label}
   id={triggerId}
   class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
 >
@@ -78,7 +71,7 @@ const {
     return
   }
 
-    function openPopup() {
+    function open() {
       popup.classList.remove("hidden", "pointer-events-none");
       popup.classList.add("opacity-100");
       popupContent.classList.remove("-translate-y-full");
@@ -88,7 +81,7 @@ const {
       );
     }
 
-    function closePopup() {
+    function close() {
       popup.classList.remove("opacity-100");
       popup.classList.add("hidden", "pointer-events-none");
       popupContent.classList.remove("translate-y-0");
@@ -98,19 +91,19 @@ const {
       );
     }
 
-    triggerButton.addEventListener("click", openPopup);
-    closeButton.addEventListener("click", closePopup);
+    triggerButton.addEventListener("click", open);
+    closeButton.addEventListener("click", close);
 
     popup.addEventListener("click", (event) => {
       if (event.target === popup) {
-        closePopup();
+        close();
       }
     });
 
     window.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && !popup.classList.contains("hidden")) {
         event.preventDefault();
-        closePopup();
+        close();
       }
     });
   

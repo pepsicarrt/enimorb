@@ -68,13 +68,5 @@ button:active {
 }
 
 [data-icon] {
-  stroke-width: 3; /* Increase stroke thickness */
+  stroke-width: 3;
 }
-
-/* iframe { */
-/*   display: none; */
-/* } */
-/**/
-/* iframe.active { */
-/*   display: fixed; */
-/* } */

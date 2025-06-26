@@ -26,19 +26,18 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props
     <meta content="0.1.5" name="version" />
 
     <meta property="og:site_name" content="Bromine" />
-    <meta property="og:url" content="https://bromine.pages.dev/" />
+    <meta property="og:url" content="https://bromine.pages.dev"/>
     <meta property="og:title" content={title} />
     <meta property="og:type" content="website" />
     <meta property="og:description" content={desc} />
 
     <meta name="googlebot" content="index, follow, snippet" />
-    <link rel="canonical" href="https://bromine.pages.dev" />
+    <link rel="canonical" href="https://bromine.pages.dev"/>
 
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-    <script defer async src="https://scripts.simpleanalyticscdn.com/latest.js"
-    ></script>
+    <link rel="preconnect" href="https://bromine.pages.dev"/>
+    <script is:inline defer async src="https://bromine.pages.dev"></script>
 
-    <script defer>
+    <script is:inline defer>
       const originalSetItem = localStorage.setItem;
       localStorage.setItem = function (key, value) {
         originalSetItem.apply(this, arguments);
