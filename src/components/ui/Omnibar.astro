@@ -66,14 +66,6 @@ import { Icon } from "astro-icon/components"
     </button>
 
     <Settings />
-
-    <button
-      aria-label="New Tab"
-      id="omnibar-tab-btn"
-      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
-    >
-      <Icon name="ph:plus-bold" class="size-4.5" />
-    </button>
   </div>
 </nav>
 
@@ -101,7 +93,7 @@ import { Icon } from "astro-icon/components"
   });
 
   devButton.addEventListener("click", () => {
-    const iframe = document.getElementById("frame")?.contentWindow?.document;
+    const iframe = currentFrame?.contentWindow?.document;
     if (!iframe) return;
 
     if (iframe.eruda) {
