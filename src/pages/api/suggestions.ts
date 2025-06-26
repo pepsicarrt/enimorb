@@ -17,7 +17,6 @@ export const GET: APIRoute = async ({ url }) => {
     const response = await fetch(externalApiUrl)
 
     if (!response.ok) {
-      // Forward the error status from the external API
       return new Response(await response.text(), {
         status: response.status,
         headers: {

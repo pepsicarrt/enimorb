@@ -101,12 +101,12 @@ const flatSettingsConfig = settingsData.sections.flatMap(
 
 
 
-// --- DOM Element Caching (for Settings and Tooltips) ---
+// --- variables ---
 const popupContent = document.getElementById("settings-popup-content");
 const tooltip = document.getElementById("info-tooltip");
 
 
-// --- Settings Management Functions ---
+// --- Settings Change ---
 
 const validateSetting = (element, setting) => {
   const errorElement = document.getElementById(`${setting.id}-error`);
@@ -175,7 +175,7 @@ const initializeSettings = () => {
 };
 
 
-// --- Tooltip Functions ---
+// --- Tooltip ---
 
 const showTooltip = (button) => {
   const { description } = button.dataset;
@@ -184,7 +184,6 @@ const showTooltip = (button) => {
   tooltip.textContent = description;
   tooltip.classList.remove("hidden");
 
-  // --- POSITIONING LOGIC ---
   const buttonRect = button.getBoundingClientRect();
   const contentRect = popupContent.getBoundingClientRect();
 
@@ -227,7 +226,7 @@ const updatePing = async () => {
 };
 
 
-// --- Initialization and Event Handling for Settings and Tooltips ---
+// --- Event listeners and init ---
 
 document.addEventListener("popup-opened", ({ detail }) => {
   if (detail?.popupId === "settings-popup") {

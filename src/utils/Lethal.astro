@@ -101,7 +101,7 @@
     currentFrame = document.getElementById(`frame-${tabCounter}`);
     document.dispatchEvent(new CustomEvent("new-tab", {
       detail: {
-        tabNumber: tabCounter;
+        tabNumber: tabCounter
       }})
     );
   }
@@ -120,7 +120,7 @@
     currentFrame = document.getElementById(`frame-${tabNumber}`);
     document.dispatchEvent(new CustomEvent("switch-tab", {
       detail: {
-        tabNumber: tabNumber;
+        tabNumber: tabNumber
       }})
     );
   }
@@ -136,7 +136,7 @@
     currentFrame = document.getElementById(`frame-${tabCounter}`);
     document.dispatchEvent(new CustomEvent("close-tab", {
       detail: {
-        tabNumber: tabNumber;
+        tabNumber: tabNumber
       }})
     );
 } 

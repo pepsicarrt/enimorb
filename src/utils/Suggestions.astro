@@ -14,12 +14,11 @@
   const suggestionsContainer = document.getElementById("suggestions-container");
   const suggestionsList = document.getElementById("suggestions-list");
   const form = document.getElementById("form");
-  // --- Search Suggestions Logic ---
+  // --- actual Logic ---
 let debounceTimeout;
 const SEARCH_API_URL = "/api/suggestions?q=";
 let currentHighlightedIndex = -1;
 
-// Function to fetch suggestions from API
 const fetchSuggestions = async (query) => {
   if (!query) return [];
   try {
@@ -32,7 +31,6 @@ const fetchSuggestions = async (query) => {
   }
 };
 
-// Function to render suggestions in the dropdown
 const renderSuggestions = (suggestions) => {
   suggestionsList.innerHTML = "";
   currentHighlightedIndex = -1;
@@ -62,7 +60,7 @@ const renderSuggestions = (suggestions) => {
 };
 
 const highlightSuggestion = (index) => {
-  const items = [...suggestionsList.children]; // Convert HTMLCollection to Array
+  const items = [...suggestionsList.children];
   if (items.length === 0) return;
 
   if (currentHighlightedIndex > -1 && items[currentHighlightedIndex]) {
@@ -79,7 +77,7 @@ const highlightSuggestion = (index) => {
   }
 };
 
-// Event listener for input changes (debounced)
+// Event listener
 addressInput.addEventListener("input", () => {
   clearTimeout(debounceTimeout);
   const query = addressInput.value.trim();
