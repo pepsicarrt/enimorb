@@ -1,208 +1,214 @@
 ---
+import Popup from "../Popup.astro";
 
+// Unique IDs for the popup elements
+const popupId = 'bookmarks-popup';
+const triggerId = 'bookmarks-trigger';
+const contentId = 'bookmarks-content';
+const closeBtnId = 'bookmarks-close';
 ---
-<nav
-  id="bookmarks"
-  class="hidden bg-transparent sticky top-0 bg-base py-0.5 px-1 flex items-center space-x-2 z-[9999] shadow-lg"
+
+<Popup 
+  {popupId}
+  {triggerId}
+  {contentId}
+  {closeBtnId}
+  title="Bookmarks"
+  triggerAriaLabel="Toggle bookmarks"
+  triggerIcon="ph:bookmark-simple"
 >
-  <ul id="bookmarks" class="flex flex-wrap items-center gap-2 flex-grow">
-  </ul>
-
-  <div
-    id="add-edit-bookmark-popup"
-    class="popup backdrop-blur-[1px] fixed inset-0 flex items-center z-[50] justify-center bg-base/80 invisible pointer-events-none opacity-0 transition-opacity duration-300 ease-in-out"
-    title="Bookmark Details"
-  >
-    <form id="bookmark-form" class="flex flex-col space-y-2 p-3">
-      <input type="hidden" id="bookmark-id" />
-
-      <label for="bookmark-title" class="text-text font-semibold text-sm"
-        >Title:</label
-      >
-      <input
-        type="text"
-        id="bookmark-title"
-        name="title"
-        required
-        class="bg-surface0 text-text p-1 rounded focus:outline-none focus:ring-2 focus:ring-iris text-sm"
-        placeholder="e.g., My Favorite Site"
-      />
-
-      <label for="bookmark-url" class="text-text font-semibold text-sm"
-        >URL:</label
-      >
-      <input
-        type="url"
-        id="bookmark-url"
-        name="url"
-        required
-        class="bg-surface0 text-text p-1 rounded focus:outline-none focus:ring-2 focus:ring-iris text-sm"
-        placeholder="e.g., https://example.com"
-      />
-
-      <div class="flex space-x-2 mt-4 z-[50]">
-        <button
-          type="submit"
-          class="bg-green text-text px-3 py-1 rounded hover:bg-opacity-80 transition-colors flex-grow text-sm"
-        >
-          Save Bookmark
-        </button>
-        <button
-          type="button"
-          id="delete-bookmark-in-popup-btn"
-          class="bg-red text-text px-3 py-1 rounded hover:bg-opacity-80 transition-colors flex-grow hidden text-sm"
-        >
-          Delete Bookmark
-        </button>
-      </div>
-    </form>
+  <div class="space-y-4">
+    <div class="flex flex-col space-y-2">
+      <form id="bookmark-form" class="flex flex-col space-y-2">
+        <input type="hidden" id="bookmark-id" />
+        <div>
+          <label for="bookmark-title" class="text-text font-semibold text-sm">Title:</label>
+          <input
+            type="text"
+            id="bookmark-title"
+            name="title"
+            required
+            class="w-full bg-surface0 text-text p-2 rounded focus:outline-none focus:ring-2 focus:ring-iris text-sm"
+            placeholder="e.g., My Favorite Site"
+          />
+        </div>
+        <div>
+          <label for="bookmark-url" class="text-text font-semibold text-sm">URL:</label>
+          <input
+            type="url"
+            id="bookmark-url"
+            name="url"
+            required
+            class="w-full bg-surface0 text-text p-2 rounded focus:outline-none focus:ring-2 focus:ring-iris text-sm"
+            placeholder="e.g., https://example.com"
+          />
+        </div>
+        <div class="flex space-x-2 pt-2">
+          <button
+            type="submit"
+            class="bg-green text-text px-3 py-1.5 rounded hover:bg-opacity-80 transition-colors flex-grow text-sm"
+          >
+            Save Bookmark
+          </button>
+          <button
+            type="button"
+            id="delete-bookmark-in-popup-btn"
+            class="bg-red text-text px-3 py-1.5 rounded hover:bg-opacity-80 transition-colors flex-grow hidden text-sm"
+          >
+            Delete Bookmark
+          </button>
+        </div>
+      </form>
+    </div>
+    
+    <div class="border-t border-surface1 pt-3">
+      <h3 class="text-text font-semibold mb-2">Your Bookmarks</h3>
+      <ul id="bookmarks-list" class="space-y-2 max-h-[40vh] overflow-y-auto pr-2">
+        <!-- Bookmarks will be dynamically inserted here -->
+      </ul>
+    </div>
   </div>
+</Popup>
 
-  <div
-    id="bookmark-context-menu"
-    class="z-[10000] fixed hidden bg-surface0 text-text rounded shadow-lg py-0.5 border border-surface1"
+<!-- Context Menu -->
+<div
+  id="bookmark-context-menu"
+  class="z-[10000] fixed hidden bg-surface0 text-text rounded shadow-lg py-0.5 border border-surface1"
+>
+  <button
+    data-action="edit"
+    class="block w-full text-left px-3 py-1 hover:bg-surface1 text-sm"
   >
-    <button
-      data-action="edit"
-      class="block w-full text-left px-3 py-1 hover:bg-surface1 text-sm"
-      >Edit</button
-    >
-    <button
-      data-action="delete"
-      class="block w-full text-left px-3 py-1 hover:bg-surface1 text-sm"
-      >Delete</button
-    >
-  </div>
-</nav>
+    Edit
+  </button>
+  <button
+    data-action="delete"
+    class="block w-full text-left px-3 py-1 hover:bg-surface1 text-sm text-red"
+  >
+    Delete
+  </button>
+</div>
 
-<script defer async type="module">
-if (!localStorage.getItem("bookmarkedd")) {
-  localStorage.setItem("bookmarkedd", "true");
-  alert("toggle bookmarks bar with alt-shift-b and cursor in the input");
-}
+<script>
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // Get DOM elements
+  const popup = document.getElementById("bookmarks-popup");
+  const popupContent = document.getElementById("bookmarks-content");
+  const closeButton = document.getElementById("bookmarks-close");
+  const bookmarksList = document.getElementById("bookmarks-list");
+  const bookmarkForm = document.getElementById("bookmark-form");
+  const bookmarkIdInput = document.getElementById("bookmark-id");
+  const bookmarkTitleInput = document.getElementById("bookmark-title");
+  const bookmarkUrlInput = document.getElementById("bookmark-url");
+  const deleteBookmarkInPopupBtn = document.getElementById("delete-bookmark-in-popup-btn");
+  const contextMenu = document.getElementById("bookmark-context-menu");
+  
+  // State
+  let bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
+  let contextMenuIndex = -1;
 
-// --- Init ---
+  // Toggle popup visibility
+  function togglePopup(show = null) {
+    const isHidden = popup.classList.contains('hidden');
+    const shouldShow = show !== null ? show : isHidden;
+    
+    if (shouldShow) {
+      popup.classList.remove('hidden', 'pointer-events-none');
+      popupContent.classList.remove('-translate-y-full');
+      popupContent.classList.add('translate-y-0');
+      // Focus the title input when showing
+      setTimeout(() => bookmarkTitleInput?.focus(), 100);
+    } else {
+      popupContent.classList.remove('translate-y-0');
+      popupContent.classList.add('-translate-y-full');
+      // Small delay before hiding to allow for animation
+      setTimeout(() => {
+        popup.classList.add('hidden', 'pointer-events-none');
+      }, 300);
+    }
+  }
 
-import { makeURL, getProxied } from "./lethal.mjs";
-
-const mainNav = document.getElementById("bookmarks");
-const bookmarksList = document.getElementById("bookmarks");
-const addEditBookmarkPopup = document.getElementById("add-edit-bookmark-popup");
-const bookmarkForm = document.getElementById("bookmark-form");
-const bookmarkIdInput = document.getElementById("bookmark-id");
-const bookmarkTitleInput = document.getElementById("bookmark-title");
-const bookmarkUrlInput = document.getElementById("bookmark-url");
-const deleteBookmarkInPopupBtn = document.getElementById("delete-bookmark-in-popup-btn");
-const contextMenu = document.getElementById("bookmark-context-menu");
-
-
-const renderBookmarksList = () => {
-  bookmarks = JSON.parse(localStorage.getItem("bookmarks") ?? "[]");
-  if (!bookmarksList) return;
-
-  bookmarksList.innerHTML = "";
-
-  bookmarks.forEach((item, index) => {
-    const li = document.createElement("li");
-    li.classList.add(
-      "bookmark-item", "flex", "items-center", "gap-1", "cursor-pointer",
-      "group", "relative", "py-0.5", "px-1", "rounded", "hover:bg-surface0",
-      "transition-colors"
-    );
-    li.dataset.index = index;
-
-    const favicon = document.createElement("img");
-    favicon.src = `https://s2.googleusercontent.com/s2/favicons?domain_url=${encodeURIComponent(item.url)}&size=16`;
-    favicon.classList.add("w-3", "h-3", "flex-shrink-0");
-    favicon.onerror = () => { favicon.style.display = "none"; };
-    li.appendChild(favicon);
-
-    const a = document.createElement("a");
-    a.title = item.url;
-    a.classList.add(
-      "text-iris", "hover:underline", "whitespace-nowrap", "truncate", "text-sm"
-    );
-    a.textContent = item.title;
-    a.href = "#";
-    a.addEventListener("click", (e) => {
+  // Keyboard shortcut: Alt+Shift+B
+  document.addEventListener('keydown', (e) => {
+    if (e.altKey && e.shiftKey && e.key.toLowerCase() === 'b') {
       e.preventDefault();
-      handleBookmarksItemClick(item.url);
+      togglePopup();
+    }
+  });
+
+  // Close popup when clicking outside
+  popup?.addEventListener('click', (e) => {
+    if (e.target === popup) {
+      togglePopup(false);
+    }
+  });
+
+  // Close button
+  closeButton?.addEventListener('click', () => togglePopup(false));
+
+  // Render bookmarks list
+  const renderBookmarksList = () => {
+    if (!bookmarksList) return;
+    
+    if (bookmarks.length === 0) {
+      bookmarksList.innerHTML = `
+        <div class="text-center py-4 text-text-muted text-sm">
+          No bookmarks yet. Add one above!
+        </div>
+      `;
+      return;
+    }
+    
+    bookmarksList.innerHTML = bookmarks.map((bookmark, index) => `
+      <li class="group flex items-center justify-between p-2 rounded hover:bg-surface1 transition-colors">
+        <a 
+          href="${bookmark.url}" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="flex-1 min-w-0 truncate text-sm text-text hover:text-iris transition-colors"
+          title="${bookmark.title}\n${bookmark.url}"
+        >
+          <span class="font-medium">${bookmark.title}</span>
+          <span class="text-text-muted text-xs block truncate">${bookmark.url}</span>
+        </a>
+        <button 
+          class="bookmark-context-trigger p-1 rounded hover:bg-surface2 text-text-muted hover:text-text transition-colors opacity-0 group-hover:opacity-100"
+          data-index="${index}"
+          aria-label="Bookmark actions"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="1"/>
+            <circle cx="12" cy="5" r="1"/>
+            <circle cx="12" cy="19" r="1"/>
+          </svg>
+        </button>
+      </li>
+    `).join('');
+    
+    // Add event listeners to context menu triggers
+    document.querySelectorAll('.bookmark-context-trigger').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const index = parseInt(btn.getAttribute('data-index'));
+        showContextMenu(e, index);
+      });
     });
-    li.appendChild(a);
+  };
 
-    bookmarksList.appendChild(li);
-  })
-}
-
-let bookmarks = [];
-let activeBookmarkIndex = null;
-
-const handleBookmarksItemClick = async (url) => {
-  document.getElementById("frame").src = await getProxied(url);
-};
-
-// --- Bookmark Management ---
-
-const saveBookmarksToLocalStorage = () => {
-  localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-};
-
-const addOrUpdateBookmark = (title, url, index = null) => {
-  index !== null && index >= 0 && index < bookmarks.length
-    ? (bookmarks[index] = { title, url })
-    : bookmarks.push({ title, url });
-  saveBookmarksToLocalStorage();
-};
-
-const deleteBookmark = (index) => {
-  if (index >= 0 && index < bookmarks.length) {
-    bookmarks.splice(index, 1);
-    saveBookmarksToLocalStorage();
-  }
-};
-
-// --- Event Listeners ---
-
-window.addEventListener("storage", ({ key }) => { // Destructure event object
-  if (key === "bookmarks") {
+  // Save bookmarks to localStorage
+  const saveBookmarksToLocalStorage = () => {
+    localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
     renderBookmarksList();
-  }
-});
+  };
 
-window.addEventListener("bookmarks-changed", renderBookmarksList);
-
-bookmarkForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const title = bookmarkTitleInput.value.trim();
-  const url = bookmarkUrlInput.value.trim();
-  const index = bookmarkIdInput.value === "" ? null : parseInt(bookmarkIdInput.value);
-
-  if (!title || !url) {
-    alert("Please enter both title and URL.");
-    return;
-  }
-
-  addOrUpdateBookmark(title, url, index);
-  addEditBookmarkPopup.close();
-});
-
-deleteBookmarkInPopupBtn.addEventListener("click", () => {
-  const index = parseInt(bookmarkIdInput.value);
-  if (index !== undefined && index !== null && confirm(`Are you sure you want to delete "${bookmarks[index]?.title}"?`)) {
-    deleteBookmark(index);
-    addEditBookmarkPopup.close();
-  }
-});
-
-// --- Context Menu Handling ---
-
-bookmarksList.addEventListener("contextmenu", (e) => {
-  const bookmarkItem = e.target.closest(".bookmark-item");
-  if (bookmarkItem) {
-    e.preventDefault();
-    activeBookmarkIndex = parseInt(bookmarkItem.dataset.index);
-
-    contextMenu.style.top = `${e.clientY + 5}px`;
+  // Add or update a bookmark
+  const addOrUpdateBookmark = (title, url, index = null) => {
+    if (index !== null && index >= 0 && index < bookmarks.length) {
+      bookmarks[index] = { title, url };
+    } else {
+      bookmarks.push({ title, url });
     contextMenu.style.left = `${e.clientX + 5}px`;
     contextMenu.classList.remove("hidden");
   } else {
