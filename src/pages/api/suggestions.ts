@@ -1,7 +1,39 @@
-import type { APIRoute } from "astro"
+import type { APIRoute } from "astro";
+
+/**
+ * Fetches search suggestions from various search engines.
+ * The search engine can be specified with the `engine` query parameter.
+ * Supported engines: google, yahoo, bing, duckduckgo (default).
+ * Example: /api/suggestions?q=astro&engine=google
+ */
+
+const engines = {
+  google: {
+    url: (query: string) =>
+      `http://suggestqueries.google.com/complete/search?client=firefox&q=${query}`,
+    transform: (data: any): string[] => data[1] || [],
+  },
+  yahoo: {
+    url: (query: string) =>
+      `https://ff.search.yahoo.com/gossip?output=fxjson&command=${query}`,
+    transform: (data: any): string[] =>
+      data.gossip?.results?.map((item: any) => item.key) || [],
+  },
+  bing: {
+    url: (query: string) => `https://api.bing.com/osjson.aspx?query=${query}`,
+    transform: (data: any): string[] => data[1] || [],
+  },
+  duckduckgo: {
+    url: (query: string) => `https://duckduckgo.com/ac/?q=${query}`,
+    transform: (data: any): string[] =>
+      data.map((item: any) => item.phrase) || [],
+  },
+};
 
 export const GET: APIRoute = async ({ url }): Promise<Response> => {
-  const query = url.searchParams.get("q")
+  const query = url.searchParams.get("q");
+  const engineName =
+    (url.searchParams.get("engine") as keyof typeof engines) || "duckduckgo";
 
   if (!query) {
     return new Response(JSON.stringify({ error: "Missing query parameter" }), {
@@ -9,12 +41,30 @@ export const GET: APIRoute = async ({ url }): Promise<Response> => {
       headers: {
         "Content-Type": "application/json",
       },
-    })
+    });
+  }
+
+  const engine = engines[engineName];
+
+  if (!engine) {
+    return new Response(
+      JSON.stringify({
+        error: `Unsupported engine. Supported engines are: ${Object.keys(
+          engines
+        ).join(", ")}`,
+      }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 
   try {
-    const externalApiUrl = `https://duckduckgo.com/ac/?q=${query}`
-    const response = await fetch(externalApiUrl)
+    const externalApiUrl = engine.url(query);
+    const response = await fetch(externalApiUrl);
 
     if (!response.ok) {
       return new Response(await response.text(), {
@@ -22,25 +72,27 @@ export const GET: APIRoute = async ({ url }): Promise<Response> => {
         headers: {
           "Content-Type": response.headers.get("Content-Type") || "text/plain",
         },
-      })
+      });
     }
 
-    const data = await response.json()
+    const data = await response.json();
+    const suggestions = engine.transform(data);
 
-    return new Response(JSON.stringify(data), {
+    return new Response(JSON.stringify(suggestions), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
-    })
+    });
   } catch (error) {
-    console.error("Error fetching suggestions from external API:", error)
+    console.error(`Error fetching suggestions from ${engineName}:`, error);
     return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: {
         "Content-Type": "application/json",
       },
-    })
+    });
   }
-}
+};
+
