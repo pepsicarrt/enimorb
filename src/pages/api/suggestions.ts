@@ -1,9 +1,6 @@
 import type { APIRoute } from "astro";
 
 /**
- * Fetches search suggestions from various search engines.
- * The search engine can be specified with the `engine` query parameter.
- * Supported engines: google, yahoo, bing, duckduckgo (default).
  * Example: /api/suggestions?q=astro&engine=google
  */
 
@@ -23,7 +20,7 @@ const engines = {
     url: (query: string) => `https://api.bing.com/osjson.aspx?query=${query}`,
     transform: (data: any): string[] => data[1] || [],
   },
-  duckduckgo: {
+  ddg: {
     url: (query: string) => `https://duckduckgo.com/ac/?q=${query}`,
     transform: (data: any): string[] =>
       data.map((item: any) => item.phrase) || [],

@@ -23,7 +23,7 @@
     if (!query) return [];
     try {
       const response = await fetch(
-        `${SEARCH_API_URL}${encodeURIComponent(query)}`,
+        `${SEARCH_API_URL}${encodeURIComponent(query)}&engine=ddg`,
       );
       const data = await response.json();
       return data;
