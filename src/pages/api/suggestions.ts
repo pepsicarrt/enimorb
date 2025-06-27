@@ -1,4 +1,4 @@
-import type { APIRoute } from "astro";
+import type { APIRoute } from "astro"
 
 /**
  * Example: /api/suggestions?q=astro&engine=google
@@ -25,12 +25,12 @@ const engines = {
     transform: (data: any): string[] =>
       data.map((item: any) => item.phrase) || [],
   },
-};
+}
 
 export const GET: APIRoute = async ({ url }): Promise<Response> => {
-  const query = url.searchParams.get("q");
+  const query = url.searchParams.get("q")
   const engineName =
-    (url.searchParams.get("engine") as keyof typeof engines) || "duckduckgo";
+    (url.searchParams.get("engine") as keyof typeof engines) || "ddg"
 
   if (!query) {
     return new Response(JSON.stringify({ error: "Missing query parameter" }), {
@@ -38,16 +38,16 @@ export const GET: APIRoute = async ({ url }): Promise<Response> => {
       headers: {
         "Content-Type": "application/json",
       },
-    });
+    })
   }
 
-  const engine = engines[engineName];
+  const engine = engines[engineName]
 
   if (!engine) {
     return new Response(
       JSON.stringify({
         error: `Unsupported engine. Supported engines are: ${Object.keys(
-          engines
+          engines,
         ).join(", ")}`,
       }),
       {
@@ -55,13 +55,13 @@ export const GET: APIRoute = async ({ url }): Promise<Response> => {
         headers: {
           "Content-Type": "application/json",
         },
-      }
-    );
+      },
+    )
   }
 
   try {
-    const externalApiUrl = engine.url(query);
-    const response = await fetch(externalApiUrl);
+    const externalApiUrl = engine.url(query)
+    const response = await fetch(externalApiUrl)
 
     if (!response.ok) {
       return new Response(await response.text(), {
@@ -69,11 +69,11 @@ export const GET: APIRoute = async ({ url }): Promise<Response> => {
         headers: {
           "Content-Type": response.headers.get("Content-Type") || "text/plain",
         },
-      });
+      })
     }
 
-    const data = await response.json();
-    const suggestions = engine.transform(data);
+    const data = await response.json()
+    const suggestions = engine.transform(data)
 
     return new Response(JSON.stringify(suggestions), {
       status: 200,
@@ -81,15 +81,14 @@ export const GET: APIRoute = async ({ url }): Promise<Response> => {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
-    });
+    })
   } catch (error) {
-    console.error(`Error fetching suggestions from ${engineName}:`, error);
+    console.error(`Error fetching suggestions from ${engineName}:`, error)
     return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: {
         "Content-Type": "application/json",
       },
-    });
+    })
   }
-};
-
+}

@@ -5,7 +5,7 @@ import icon from "astro-icon"
 
 import cloudflare from "@astrojs/cloudflare"
 
-import netlify from "@astrojs/netlify";
+// import netlify from "@astrojs/netlify";
 
 export default defineConfig({
   integrations: [icon(), (await import("@playform/compress")).default()],
@@ -22,7 +22,7 @@ export default defineConfig({
 
   output: "server",
   adapter: cloudflare({
-    imageService: "compile"
+    imageService: "compile",
   }),
   experimental: {
     preserveScriptOrder: true,
