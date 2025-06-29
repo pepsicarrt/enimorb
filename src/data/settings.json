@@ -92,13 +92,25 @@
               "label": "Yandex"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "title": "Cloaking",
+      "settings": [
         {
           "id": "stealth-mode",
           "label": "Stealth Mode",
           "type": "toggle",
           "defaultValue": "on",
-          "description": "This will hide all your proxied searches from even browser back/forward arrows!"
+          "description": "This will hide all your activity from even browser back/forward arrows!"
+        },
+        {
+          "id": "ab",
+          "label": "About Blank",
+          "type": "toggle",
+          "defaultValue": "false",
+          "description": "About blanks the proxy. Hides the proxy from history but not back/forward buttons."
         }
       ]
     },
