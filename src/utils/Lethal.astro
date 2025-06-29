@@ -40,8 +40,14 @@
 
     localStorage.setItem("history", JSON.stringify(history));
 
+
+          changeTitle(currentTab, title, url);
+
     addressInput.value = url;
+
   });
+
+
 
   // --- Proxy ---
   let backend = localStorage.getItem("proxy-backend") || "uv";
@@ -117,6 +123,7 @@
   }
 
   function switchTab(tabNumber) {
+
     let frames = document.querySelectorAll('iframe');
     let framesArr = [...frames];
     framesArr.forEach(frame => {
@@ -126,6 +133,32 @@
 
     currentTab = tabNumber;
     currentFrame = document.getElementById(`frame-${tabNumber}`);
+
+  // --- URL Change ---
+    currentFrame.addEventListener("load", () => {
+    let url = decodeURIComponent(
+      currentFrame.contentWindow.location.href.split("/").pop(),
+    );
+    let title = currentFrame.contentWindow.document.title;
+
+    if (title === "Scramjet") return;
+
+    let history = localStorage.getItem("history")
+      ? [
+          ...JSON.parse(localStorage.getItem("history")),
+          { url: url, title: title },
+        ]
+      : [{ url: url, title: title }];
+
+    localStorage.setItem("history", JSON.stringify(history));
+
+
+          changeTitle(currentTab, title, url);
+
+    addressInput.value = url;
+
+  });
+
     document.dispatchEvent(new CustomEvent("switch-tab", {
       detail: {
         tabNumber: tabNumber

@@ -14,7 +14,7 @@ import { Icon } from "astro-icon/components"
   </button>
 </div>
 
-<script defer>
+<script is:inline async defer>
   let tabs = [];
   let currentTabId = 1;
   const tabsContainer = document.getElementById('tabs');
@@ -29,7 +29,7 @@ import { Icon } from "astro-icon/components"
     favicon.textContent = '🌐';
     
     const titleSpan = document.createElement('span');
-    titleSpan.className = 'truncate flex-1';
+    titleSpan.className = 'tab truncate flex-1';
     titleSpan.textContent = title;
     
     const close = document.createElement('button');
@@ -99,7 +99,7 @@ import { Icon } from "astro-icon/components"
     tab.title = title || 'New Tab';
     tab.url = url || '';
     
-    const titleSpan = tab.element.querySelector('span:not([class*="icon"])');
+    const titleSpan = tab.element.querySelector('.tab');
     if (titleSpan) {
       titleSpan.textContent = tab.title;
     }
@@ -107,12 +107,23 @@ import { Icon } from "astro-icon/components"
   
   document.addEventListener('DOMContentLoaded', () => {
     checkState();
+
+
+
+    if (tabsContainer) {
+      new Sortable(tabsContainer, {
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+      });
+    }
     
     document.getElementById('new-tab-btn')?.addEventListener('click', () => {
       if (window.newTab) window.newTab();
     });
     
     document.addEventListener('new-tab', (e) => {
+
+ 
       const tabId = e.detail.tabNumber;
       if (!tabs.some(tab => tab.id === tabId)) {
         createTab(tabId, 'New Tab');
@@ -136,18 +147,8 @@ import { Icon } from "astro-icon/components"
       checkState();
     });
     
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'childList' && mutation.target === document.querySelector('title')) {
-          const title = document.title;
-          const activeFrame = document.querySelector('iframe:not(.hidden)');
-          const url = activeFrame?.contentWindow?.location.href || '';
-          changeTitle(currentTabId, title, url);
-        }
-      });
-    });
+
     
-    observer.observe(document.querySelector('title'), { childList: true });
   });
 </script>
 
@@ -172,5 +173,10 @@ import { Icon } from "astro-icon/components"
   
   [data-tab-id].active {
     border-bottom-color: var(--color-iris);
+  }
+
+  .sortable-ghost {
+    opacity: 0.5;
+    background: var(--color-highlight-med);
   }
 </style>
