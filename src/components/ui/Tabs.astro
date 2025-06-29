@@ -110,13 +110,6 @@ import { Icon } from "astro-icon/components"
 
 
 
-    if (tabsContainer) {
-      new Sortable(tabsContainer, {
-        animation: 150,
-        ghostClass: 'sortable-ghost',
-      });
-    }
-    
     document.getElementById('new-tab-btn')?.addEventListener('click', () => {
       if (window.newTab) window.newTab();
     });
