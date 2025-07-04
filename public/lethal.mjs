@@ -27,6 +27,29 @@ const stockSW = "./ultraworker.js"
 const swAllowedHostnames = ["localhost", "127.0.0.1"]
 
 async function registerSW() {
+      await import("/scram/scramjet.shared.js")
+    await import("/scram/scramjet.controller.js")
+
+    const scramjet = new ScramjetController({
+      files: {
+        wasm: "/scram/scramjet.wasm.wasm",
+        worker: "/scram/scramjet.worker.js",
+        client: "/scram/scramjet.client.js",
+        shared: "/scram/scramjet.shared.js",
+        sync: "/scram/scramjet.sync.js",
+      },
+      flags: {
+        serviceworkers: false,
+        syncxhr: false,
+        naiiveRewriter: false,
+        strictRewrites: true,
+        rewriterLogs: false,
+        captureErrors: true,
+        cleanErrors: true,
+        scramitize: false,
+        sourcemaps: true,
+      },
+    })
   if (!navigator.serviceWorker) {
     if (
       location.protocol !== "https:" &&
@@ -101,29 +124,7 @@ export async function setProxy(proxy) {
 
     await import("./uv.config.js")
   } else {
-    await import("/scram/scramjet.shared.js")
-    await import("/scram/scramjet.controller.js")
 
-    const scramjet = new ScramjetController({
-      files: {
-        wasm: "/scram/scramjet.wasm.wasm",
-        worker: "/scram/scramjet.worker.js",
-        client: "/scram/scramjet.client.js",
-        shared: "/scram/scramjet.shared.js",
-        sync: "/scram/scramjet.sync.js",
-      },
-      flags: {
-        serviceworkers: false,
-        syncxhr: false,
-        naiiveRewriter: false,
-        strictRewrites: true,
-        rewriterLogs: false,
-        captureErrors: true,
-        cleanErrors: true,
-        scramitize: false,
-        sourcemaps: true,
-      },
-    })
 
     scramjet.init()
     import("/scram/scramjet.worker.js")
