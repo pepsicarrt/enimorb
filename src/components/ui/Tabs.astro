@@ -156,7 +156,7 @@ import { Icon } from "astro-icon/components"
     document.addEventListener('switch-tab', (e) => {
       const tabId = e.detail.tabNumber;
       currentTabId = tabId;
-      syncWithNewStateIDKwhattoputhere(tabId);
+      syncUI(tabId);
     });
     
     document.addEventListener('close-tab', (e) => {
