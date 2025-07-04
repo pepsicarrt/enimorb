@@ -1,0 +1,109 @@
+---
+import "@/styles.css"
+---
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script is:inline defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        document.body.dataset.theme = localStorage.getItem("theme")
+      })
+    </script>
+</head>
+<body class="text-text bg-base flex">
+
+
+    <main id="main" class="flex flex-col flex-grow h-screen justify-center items-center">
+            <h1 class="text-4xl font-bold mb-4">New Tab</h1>
+
+        <form id="form" class="flex justify-center w-full">
+
+          <input
+            autofocus="true"
+            spellcheck="false"
+            autocomplete="off"
+            id="address"
+            type="text"
+                    class="text-text border border-iris:border-iris rounded-lg p-2 mb-4 w-full max-w-md"
+                    id="input"
+                    required
+                    placeholder="Search the world wide web"
+                >
+            </form>
+
+      <script is:inline defer type="module">
+  import {
+    setTransport,
+    setWisp,
+    setProxy,
+    makeURL,
+    getProxied,
+  } from "./lethal.mjs"
+ let backend = localStorage.getItem("proxy-backend") || "uv"
+  let wisp = localStorage.getItem("wisp-server") || "wss://anura.pro/"
+  let transport = localStorage.getItem("proxy-transport")
+
+  setWisp(wisp)
+  setProxy(backend)
+
+  if (transport) setTransport(transport)
+  else if (navigator.userAgent.indexOf("Firefox") > 0) setTransport("libcurl")
+  else setTransport("epoxy")
+  let search =
+    localStorage.getItem("search-engine") ||
+    "https://search.brave.com/search?q=%s"
+
+            const form = document.getElementById("form")
+            const input = document.getElementById("address")
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault()
+
+    const proxiedUrl = await getProxied(makeURL(input.value, search))
+
+    if (localStorage.getItem("stealth-mode")) 
+      location.replace(proxiedUrl)
+     else 
+      location.href = proxiedUrl
+    
+
+  })
+
+
+  window.addEventListener("search-engine-changed", () => {
+    search = localStorage.getItem("search-engine")
+  })
+
+  window.addEventListener("proxy-backend-changed", () => {
+    backend = localStorage.getItem("proxy-backend")
+    setProxy(localStorage.getItem("proxy-backend"))
+  })
+
+  window.addEventListener("wisp-server-changed", () => {
+    wisp = localStorage.getItem("wisp-server")
+    setWisp(localStorage.getItem("wisp-server"))
+  })
+
+  window.addEventListener("proxy-transport-changed", () => {
+    transport = localStorage.getItem("proxy-transport")
+    setTransport(localStorage.getItem("proxy-transport"))
+  })
+        </script>
+    </main>
+
+</body>
+</html>
+

@@ -2,189 +2,181 @@
 
 ---
 
-<script defer type="module">
+<script is:inline defer type="module">
+  // --- LETHAL IMPORTS ---
   import {
     setTransport,
     setWisp,
     setProxy,
     makeURL,
     getProxied,
-  } from "./lethal.mjs";
+  } from "./lethal.mjs"
 
-  // --- Form ---
-  const form = document.getElementById("form");
-  const addressInput = document.getElementById("address");
+  // --- INIT ---
+  const form = document.getElementById("form")
+  const addressInput = document.getElementById("address")
   let search =
     localStorage.getItem("search-engine") ||
-    "https://search.brave.com/search?q=%s";
-  let tabCounter = 1;
-  let currentTab = 1;
-  let currentFrame = document.getElementById(`frame-${currentTab}`);
+    "https://search.brave.com/search?q=%s"
+  let tabCounter = null
+  let currentTab = null
+  let currentFrame = document.getElementById(`frame-${currentTab}`)
 
+  let backend = localStorage.getItem("proxy-backend") || "uv"
+  let wisp = localStorage.getItem("wisp-server") || "wss://anura.pro/"
+  let transport = localStorage.getItem("proxy-transport")
 
-  // --- URL Change ---
-  currentFrame.addEventListener("load", () => {
-    let url = decodeURIComponent(
-      currentFrame.contentWindow.location.href.split("/").pop(),
-    );
-    let title = currentFrame.contentWindow.document.title;
+  setWisp(wisp)
+  setProxy(backend)
 
-    if (title === "Scramjet") return;
+  if (transport) setTransport(transport)
+  else if (navigator.userAgent.indexOf("Firefox") > 0) setTransport("libcurl")
+  else setTransport("epoxy")
 
-    let history = localStorage.getItem("history")
-      ? [
-          ...JSON.parse(localStorage.getItem("history")),
-          { url: url, title: title },
-        ]
-      : [{ url: url, title: title }];
-
-    localStorage.setItem("history", JSON.stringify(history));
-
-
-          changeTitle(currentTab, title, url);
-
-    addressInput.value = url;
-
-  });
-
-
-
-  // --- Proxy ---
-  let backend = localStorage.getItem("proxy-backend") || "uv";
-  let wisp = (localStorage.getItem("wisp-server") || "wss://anura.pro/");
-  let transport = localStorage.getItem("proxy-transport");
-
-  setWisp(wisp);
-  setProxy(backend);
-
-  if (transport) setTransport(transport);
-  else if (navigator.userAgent.indexOf("Firefox") > 0) setTransport("libcurl");
-  else setTransport("epoxy");
-
-  // --- Form ---
+  // --- EVENTS ---
   form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    const urlToLoad = makeURL(addressInput.value, search);
-    if (localStorage.getItem("stealth-mode"))
-    {
-      currentFrame.contentWindow.location.replace(await getProxied(urlToLoad))
-    }else currentFrame.src = await getProxied(urlToLoad);
-  });
+    const urlToLoad = makeURL(addressInput.value, search)
+    const proxiedUrl = await getProxied(urlToLoad)
 
-  // --- Event Listeners ---
+    if (localStorage.getItem("stealth-mode")) {
+      currentFrame.contentWindow.location.replace(proxiedUrl)
+    } else {
+      currentFrame.src = proxiedUrl
+    }
+    addressInput.value = urlToLoad
+  })
+
   window.addEventListener("search-engine-changed", () => {
-    search = localStorage.getItem("search-engine");
-  });
+    search = localStorage.getItem("search-engine")
+  })
 
   window.addEventListener("proxy-backend-changed", () => {
-    backend = localStorage.getItem("proxy-backend");
-    setProxy(localStorage.getItem("proxy-backend"));
-  });
+    backend = localStorage.getItem("proxy-backend")
+    setProxy(localStorage.getItem("proxy-backend"))
+  })
 
   window.addEventListener("wisp-server-changed", () => {
-    wisp = localStorage.getItem("wisp-server");
-    setWisp(localStorage.getItem("wisp-server"));
-  });
+    wisp = localStorage.getItem("wisp-server")
+    setWisp(localStorage.getItem("wisp-server"))
+  })
 
   window.addEventListener("proxy-transport-changed", () => {
-    transport = localStorage.getItem("proxy-transport");
-    setTransport(localStorage.getItem("proxy-transport"));
-  });
+    transport = localStorage.getItem("proxy-transport")
+    setTransport(localStorage.getItem("proxy-transport"))
+  })
 
-  // --- Tabs ---
-  function newTab() {
-    tabCounter++;
+  // --- UTILITIES ---
+  async function newTab() {
+    tabCounter++
 
-    let frames = document.querySelectorAll('iframe');
-    let framesArr = [...frames];
-    framesArr.forEach(frame => {
-      frame.classList.add('hidden');
-    });
+    let frames = document.querySelectorAll("iframe")
+    let framesArr = [...frames]
+    framesArr.forEach((frame) => {
+      frame.classList.add("hidden")
+    })
 
     let frame = document.createElement("iframe")
-    frame.setAttribute("class", "w-full h-full border-0 fixed");
-    frame.setAttribute("title", "Proxy Frame");
-    frame.setAttribute("src", "https://example.com");
-    frame.setAttribute("id", `frame-${tabCounter}`);
-    document.getElementById("frames").appendChild(frame);
+    frame.setAttribute("class", "w-full h-full border-0 fixed")
+    frame.setAttribute("title", "Proxy Frame")
+    frame.setAttribute("src", "/newtab")
+    frame.setAttribute("id", `frame-${tabCounter}`)
+    document.getElementById("frames").appendChild(frame)
 
-    currentTab = tabCounter;
-    switchTab(tabCounter);
-    document.dispatchEvent(new CustomEvent("new-tab", {
-      detail: {
-        tabNumber: tabCounter
-      }})
-    );
-    if(!localStorage.getItem("exampled")) {
-      alert("yes, im using example.com as a homepage :skull:");
-      localStorage.setItem("exampled", "bread");
-    }
+    currentTab = tabCounter
+    switchTab(tabCounter)
+
+    frame.addEventListener("load", () => {
+      let url = decodeURIComponent(
+        currentFrame.contentWindow.location.href.split("/").pop(),
+      )
+      let title = currentFrame.contentWindow.document.title
+
+      let history = localStorage.getItem("history")
+        ? JSON.parse(localStorage.getItem("history"))
+        : []
+      history = [...history, { url: url, title: title }]
+      localStorage.setItem("history", JSON.stringify(history))
+
+      document.dispatchEvent(
+        new CustomEvent("url-changed", {
+          detail: {
+            tabId: currentTab,
+            title: title,
+            url: url,
+          },
+        }),
+      )
+
+      addressInput.value = url
+    })
+
+    document.dispatchEvent(
+      new CustomEvent("new-tab", {
+        detail: {
+          tabNumber: tabCounter,
+        },
+      }),
+    )
+
   }
 
   function switchTab(tabNumber) {
+    let frames = document.querySelectorAll("iframe")
+    let framesArr = [...frames]
+    framesArr.forEach((frame) => {
+      if (frame.id != `frame-${tabNumber}`) frame.classList.add("hidden")
+      else frame.classList.remove("hidden")
+    })
 
-    let frames = document.querySelectorAll('iframe');
-    let framesArr = [...frames];
-    framesArr.forEach(frame => {
-      if (frame.id != `frame-${tabNumber}`) frame.classList.add("hidden");
-      else frame.classList.remove("hidden");
-    });
+    currentTab = tabNumber
+    currentFrame = document.getElementById(`frame-${tabNumber}`)
 
-    currentTab = tabNumber;
-    currentFrame = document.getElementById(`frame-${tabNumber}`);
-
-  // --- URL Change ---
-    currentFrame.addEventListener("load", () => {
-    let url = decodeURIComponent(
+    addressInput.value = decodeURIComponent(
       currentFrame.contentWindow.location.href.split("/").pop(),
-    );
-    let title = currentFrame.contentWindow.document.title;
+    )
 
-    if (title === "Scramjet") return;
-
-    let history = localStorage.getItem("history")
-      ? [
-          ...JSON.parse(localStorage.getItem("history")),
-          { url: url, title: title },
-        ]
-      : [{ url: url, title: title }];
-
-    localStorage.setItem("history", JSON.stringify(history));
-
-
-          changeTitle(currentTab, title, url);
-
-    addressInput.value = url;
-
-  });
-
-    document.dispatchEvent(new CustomEvent("switch-tab", {
-      detail: {
-        tabNumber: tabNumber
-      }})
-    );
+    document.dispatchEvent(
+      new CustomEvent("switch-tab", {
+        detail: {
+          tabNumber: tabNumber,
+        },
+      }),
+    )
   }
 
   function closeTab(tabNumber) {
-    let frames = document.querySelectorAll('iframe');
-    let framesArr = [...frames];
-    framesArr.forEach(frame => {
-      if (frame.id === `frame-${tabNumber}`) frame.remove(); 
-    });
+    let frames = document.querySelectorAll("iframe")
+    let framesArr = [...frames]
+    framesArr.forEach((frame) => {
+      if (frame.id === `frame-${tabNumber}`) {
+        frame.remove()
+      }
+    })
 
-    tabCounter--;
-    currentFrame = document.getElementById(`frame-${tabCounter}`);
-    document.dispatchEvent(new CustomEvent("close-tab", {
-      detail: {
-        tabNumber: tabNumber
-      }})
-    );
-  } 
+    if (currentTab === tabNumber) {
+      const otherFrames = document.querySelectorAll('iframe[id^="frame-"]')
+      if (otherFrames.length > 0) {
+        switchTab(parseInt(otherFrames[0].id.replace("frame-", "")))
+      } else {
+        newTab()
+      }
+    }
 
-  window.newTab = newTab;
-  window.switchTab = switchTab;
-  window.closeTab = closeTab;
+    document.dispatchEvent(
+      new CustomEvent("close-tab", {
+        detail: {
+          tabNumber: tabNumber,
+        },
+      }),
+    )
+  }
 
-  window.currentFrame = currentFrame;
+  // --- Housekeeping lol ---
+  window.newTab = newTab
+  window.switchTab = switchTab
+  window.closeTab = closeTab
+
+  newTab()
 </script>
