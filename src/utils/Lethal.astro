@@ -80,7 +80,7 @@
     let frame = document.createElement("iframe")
     frame.setAttribute("class", "w-full h-full border-0 fixed")
     frame.setAttribute("title", "Proxy Frame")
-    frame.setAttribute("src", "https://example.com/")
+    frame.setAttribute("src", "/newtab")
     frame.setAttribute("id", `frame-${tabCounter}`)
     document.getElementById("frames").appendChild(frame)
 
@@ -102,7 +102,7 @@
       document.dispatchEvent(
         new CustomEvent("url-changed", {
           detail: {
-            tabId: tabId,
+            tabId: currentTab,
             title: title,
             url: url,
           },
@@ -120,10 +120,6 @@
       }),
     )
 
-    if (!localStorage.getItem("exampled")) {
-      alert("yes, i'm using example.com as a homepage :skull:")
-      localStorage.setItem("exampled", "bread")
-    }
   }
 
   function switchTab(tabNumber) {

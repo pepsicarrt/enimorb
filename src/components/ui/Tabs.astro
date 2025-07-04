@@ -91,7 +91,7 @@ import { Icon } from "astro-icon/components"
       (frame) => !frame.classList.contains("hidden"),
     )
     if (visibleFrame) {
-      const activeTabId = parseInt(currentFrame.id.replace("frame-", ""))
+      const activeTabId = parseInt(visibleFrame.id.replace("frame-", ""))
       syncUI(activeTabId)
     }
   }
