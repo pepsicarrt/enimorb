@@ -134,19 +134,42 @@ import { Icon } from "astro-icon/components"
     syncUI(tabId)
   })
 
-  document.addEventListener("close-tab", (e) => {
-    const tabId = e.detail.tabNumber
-    const tabIndex = tabs.findIndex((tab) => tab.id === tabId)
-    if (tabIndex !== -1) {
-      tabs[tabIndex].element.remove()
-      tabs.splice(tabIndex, 1)
-    }
-    checkState()
-  })
 
   document.addEventListener("url-changed", (e) => {
     renameTab(e.detail.tabId, e.detail.title, e.detail.url)
   })
+    
+    document.getElementById('new-tab-btn')?.addEventListener('click', () => {
+      if (window.newTab) window.newTab();
+    });
+    
+    document.addEventListener('new-tab', (e) => {
+
+ 
+      const tabId = e.detail.tabNumber;
+      if (!tabs.some(tab => tab.id === tabId)) {
+        createTab(tabId, 'New Tab');
+      }
+      checkState();
+    });
+    
+    document.addEventListener('switch-tab', (e) => {
+      const tabId = e.detail.tabNumber;
+      currentTabId = tabId;
+      syncWithNewStateIDKwhattoputhere(tabId);
+    });
+    
+    document.addEventListener('close-tab', (e) => {
+      const tabId = e.detail.tabNumber;
+      const tabIndex = tabs.findIndex(tab => tab.id === tabId);
+      if (tabIndex !== -1) {
+        tabs[tabIndex].element.remove();
+        tabs.splice(tabIndex, 1);
+      }
+      checkState();
+    });
+    
+
 
   checkState()
 </script>
