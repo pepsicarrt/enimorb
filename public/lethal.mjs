@@ -24,6 +24,8 @@ const scramjet = new ScramjetController({
     sourcemaps: true,
   },
 })
+    scramjet.init()
+
 
 import * as BareMux from "https://unpkg.com/@mercuryworkshop/bare-mux@2.1.7/dist/index.mjs"
 
@@ -126,7 +128,6 @@ export async function setProxy(proxy) {
 
     await import("./uv.config.js")
   } else {
-    scramjet.init()
     import("/scram/scramjet.worker.js")
   }
   proxyOption = proxy
