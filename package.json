@@ -10,18 +10,18 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.0",
-    "@astrojs/netlify": "^6.4.0",
+    "@astrojs/netlify": "6.4.1",
     "@astrojs/ts-plugin": "^1.10.4",
     "@iconify-json/ph": "^1.2.2",
-    "@iconify-json/simple-icons": "^1.2.39",
+    "@iconify-json/simple-icons": "^1.2.41",
     "@playform/compress": "^0.1.9",
-    "@tailwindcss/vite": "^4.1.10",
-    "astro": "^5.10.0",
+    "@tailwindcss/vite": "^4.1.11",
+    "astro": "5.11.0",
     "astro-icon": "^1.1.5",
-    "tailwindcss": "^4.1.10"
+    "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
-    "wrangler": "^4.20.5"
+    "wrangler": "^4.23.0"
   },
   "trustedDependencies": [
     "@parcel/watcher",
