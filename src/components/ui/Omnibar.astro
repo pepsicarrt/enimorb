@@ -100,7 +100,7 @@ import { Icon } from "astro-icon/components"
       devtoolsVisible = !devtoolsVisible;
     } else {
       const script = iframe.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/npm/eruda";
+      script.src = "https://unpkg.com/eruda@3.4.3/eruda.js";
       script.onload = () => {
         iframe.eruda.init({ tool: ["console", "elements", "sources"] });
         iframe.eruda.show();
