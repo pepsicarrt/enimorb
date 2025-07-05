@@ -143,16 +143,7 @@ import { Icon } from "astro-icon/components"
       if (window.newTab) window.newTab();
     });
     
-    document.addEventListener('new-tab', (e) => {
 
- 
-      const tabId = e.detail.tabNumber;
-      if (!tabs.some(tab => tab.id === tabId)) {
-        createTab(tabId, 'New Tab');
-      }
-      checkState();
-    });
-    
     document.addEventListener('switch-tab', (e) => {
       const tabId = e.detail.tabNumber;
       currentTabId = tabId;
