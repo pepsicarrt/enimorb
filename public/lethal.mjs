@@ -22,9 +22,10 @@ const scramjet = new ScramjetController({
     cleanErrors: true,
     scramitize: false,
     sourcemaps: true,
-  },
+  }
 })
-    scramjet.init()
+
+scramjet.init()
 
 
 import * as BareMux from "https://unpkg.com/@mercuryworkshop/bare-mux@2.1.7/dist/index.mjs"
