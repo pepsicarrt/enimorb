@@ -30,21 +30,18 @@ self.addEventListener("install", () => {
 })
 
 async function handleRequest(event) {
-
+  let mwResponse = await ww.run(event)();
+  if (mwResponse.includes(null)) {
+    return;
+  }
+  
   await scramjet.loadConfig()
   if (scramjet.route(event)) {
     return scramjet.fetch(event)
   }
 
 
-  if (uv.route(event)) {
-    let mwResponse = await ww.run(event)();
-    if (mwResponse.includes(null)) {
-      return;
-    }
-  
-    return await uv.fetch(event)
-  }
+  if (uv.route(event)) return await uv.fetch(event);
     
   return await fetch(event.request)
 }
