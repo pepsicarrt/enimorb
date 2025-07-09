@@ -34,14 +34,15 @@ async function handleRequest(event) {
   if (mwResponse.includes(null)) {
     return;
   }
-
-    await scramjet.loadConfig()
+  
+  await scramjet.loadConfig()
   if (scramjet.route(event)) {
     return scramjet.fetch(event)
   }
 
-  if (uv.route(event)) return await uv.fetch(event)
 
+  if (uv.route(event)) return await uv.fetch(event);
+    
   return await fetch(event.request)
 }
 
