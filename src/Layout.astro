@@ -59,7 +59,7 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props
         document.title = cloakk[0];
         const icon = document.querySelector("link[rel=icon]");
         if (icon)
-          iconLink.href = cloakk[1];
+          icon.href = cloakk[1];
       };
 
       window.addEventListener("cloak-changed", cloak);
