@@ -117,7 +117,7 @@
           "label": "Cloaking",
           "type": "select",
           "defaultValue": "Google|https://www.google.com/favicon.ico",
-          "description": "Disguises the tab with a different title and favicon to hide your activity."
+          "description": "Disguises the tab with a different title and favicon to hide your activity.",
           "options": [
             {
               "value": "bromine|favicon.svg",
