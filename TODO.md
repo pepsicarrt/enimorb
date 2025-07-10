@@ -1,8 +1,9 @@
 # Todo
+
 - [ ] newtab wallpapers
 - [ ] perforamncec metrics
 - [ ] panic key
-- [ ] tab cloaking changable tab
+- [x] tab cloaking changable tab
 - [ ] micatheme
 - [ ] ai
 - [ ] games
