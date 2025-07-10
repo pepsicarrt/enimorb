@@ -1,0 +1,23 @@
+{
+  "sections": [
+    {
+      "title": "New Tab Page",
+      "settings": [
+        {
+          "id": "show-bookmarks",
+          "label": "Show Bookmarks",
+          "type": "toggle",
+          "defaultValue": "true",
+          "description": "Show your bookmarks on the new tab page."
+        },
+        {
+          "id": "show-history",
+          "label": "Show History",
+          "type": "toggle",
+          "defaultValue": "true",
+          "description": "Show your history on the new tab page."
+        }
+      ]
+    }
+  ]
+}

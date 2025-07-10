@@ -3,7 +3,7 @@ import { Icon } from "astro-icon/components"
 ---
 
 <footer
-  class="w-full absolute bottom-0 bg-surface bg-opacity-75 flex justify-between items-center p-4"
+  class="w-full absolute bottom-0 bg-surface bg-surface/50 flex justify-between items-center p-4"
 >
   <section class="flex items-center gap-4">
     <div class="flex items-center gap-3">
@@ -38,17 +38,8 @@ import { Icon } from "astro-icon/components"
     href="https://dashboard.simpleanalytics.com/?utm_source=bromineproxy.netlify.app&utm_content=badge&affiliate=dewof-bek"
     referrerpolicy="origin"
     target="_blank"
+    class="underline text-iris hover:text-iris/80 transition-colors"
   >
-    <img
-      src="https://simpleanalyticsbadges.com/bromineproxy.netlify.app"
-      referrerpolicy="no-referrer"
-      crossorigin="anonymous"
-      decoding="async"
-      fetchpriority="high"
-      loading="eager"
-      height="50"
-      width="210"
-      alt="Simple Analytics Badge"
-    />
+    Simple Analytics
   </a>
 </footer>

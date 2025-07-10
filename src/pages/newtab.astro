@@ -1,7 +1,11 @@
 ---
 import "@/styles.css"
+// import settingsData from "@/data/newtabsettings.json"
+//
+// const flatSettingsConfig = settingsData.sections.flatMap(
+//   (section) => section.settings,
+// )
 ---
-
 
 <html lang="en">
 <head>
@@ -104,6 +108,70 @@ import "@/styles.css"
         </script>
     </main>
 
+    <!-- <aside class="fixed top-4 right-4 bg-base border border-overlay rounded-lg p-4 space-y-4"> -->
+    <!--   { -->
+    <!--     settingsData.sections.map((section) => ( -->
+    <!--       <section class="space-y-2"> -->
+    <!--         <h2 class="text-lg font-medium text-text">{section.title}</h2> -->
+    <!--         {section.settings.map((setting) => ( -->
+    <!--           <div class="flex items-center justify-between gap-4"> -->
+    <!--             <label class="text-text" for={setting.id}> -->
+    <!--               {setting.label} -->
+    <!--             </label> -->
+    <!--             <label class="relative inline-flex items-center cursor-pointer"> -->
+    <!--               <input -->
+    <!--                 type="checkbox" -->
+    <!--                 id={setting.id} -->
+    <!--                 class="sr-only peer" -->
+    <!--               /> -->
+    <!--               <div class="w-11 h-6 bg-overlay rounded-full peer peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-iris peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-iris" /> -->
+    <!--             </label> -->
+    <!--           </div> -->
+    <!--         ))} -->
+    <!--       </section> -->
+    <!--     )) -->
+    <!--   } -->
+    <!-- </aside> -->
 </body>
 </html>
+<!---->
+<!-- <script define:vars={{ settingsConfig: flatSettingsConfig }} defer is:inline> -->
+<!--   const load = () => { -->
+<!--     settingsConfig.forEach((setting) => { -->
+<!--       const element = document.getElementById(setting.id); -->
+<!--       if (!element) return; -->
+<!---->
+<!--       const storedValue = localStorage.getItem(setting.id); -->
+<!--       const valueToApply = storedValue ?? setting.defaultValue; -->
+<!---->
+<!--       if (setting.type === "toggle") { -->
+<!--         element.checked = valueToApply === "true"; -->
+<!--       } else { -->
+<!--         element.value = valueToApply; -->
+<!--       } -->
+<!--     }); -->
+<!--   }; -->
+<!---->
+<!--   const save = (event) => { -->
+<!--     const { target: element } = event; -->
+<!--     const setting = settingsConfig.find((s) => s.id === element.id); -->
+<!--     if (!setting) return; -->
+<!---->
+<!--     const valueToStore = setting.type === "toggle" ? element.checked : element.value; -->
+<!--     localStorage.setItem(setting.id, valueToStore.toString()); -->
+<!--   }; -->
+<!---->
+<!--   const init = () => { -->
+<!--     load(); -->
+<!---->
+<!--     settingsConfig.forEach((setting) => { -->
+<!--       const element = document.getElementById(setting.id); -->
+<!--       if (element) { -->
+<!--         element.addEventListener("change", save); -->
+<!--       } -->
+<!--     }); -->
+<!--   }; -->
+<!---->
+<!--   init(); -->
+<!-- </script> -->
 

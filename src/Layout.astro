@@ -26,12 +26,7 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props
     />
     <meta content="0.1.5" name="version" />
 
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-
+    <link rel="icon" href="favicon.svg" sizes="any" type="image/svg+xml">
 
     <meta property="og:site_name" content="Bromine" />
     <meta property="og:url" content="https://bromine.pages.dev"/>
@@ -56,8 +51,22 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props
         document.body.dataset.theme = localStorage.getItem("theme");
       });
 
+      const cloak = () => {
+        const cloakValue = localStorage.getItem("cloak");
+        if (!cloakValue || cloakValue === 'none') return;
+
+        const cloakk = cloakValue.split("|");
+        document.title = cloakk[0];
+        const icon = document.querySelector("link[rel=icon]");
+        if (icon)
+          icon.href = cloakk[1];
+      };
+
+      window.addEventListener("cloak-changed", cloak);
+
       document.addEventListener("DOMContentLoaded", () => {
         document.body.dataset.theme = localStorage.getItem("theme");
+        cloak();
       });
     </script>
 
