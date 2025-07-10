@@ -116,8 +116,8 @@
           "id": "cloak",
           "label": "Cloaking",
           "type": "select",
-          "defaultValue": "none",
-          "description": "Select the core proxy engine. Scramjet is experimental and very fast.",
+          "defaultValue": "Google|https://www.google.com/favicon.ico",
+          "description": "Disguises the tab with a different title and favicon to hide your activity."
           "options": [
             {
               "value": "bromine|favicon.svg",
