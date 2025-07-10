@@ -120,7 +120,7 @@
           "description": "Select the core proxy engine. Scramjet is experimental and very fast.",
           "options": [
             {
-              "value": "none",
+              "value": "bromine|/favicon.svg",
               "label": "Default/None"
             },
             {
