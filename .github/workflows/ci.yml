@@ -22,6 +22,7 @@ jobs:
       - name: Send Clickable Lighthouse Links to Discord
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.ACTIONS_WEBHOOK_URL }}
+          LINKS: ${{steps.LHCIAction.outputs.links}}
         run: |          
           TEMPORARY_STORAGE_URL="${{ steps.lighthouse_audit.outputs.temporaryPublicStorageUrl }}"
           MESSAGE_CONTENT="Lighthouse CI Audit Complete for ${{ github.event.repository.full_name }} (${{ github.sha }})\n\n"
@@ -38,5 +39,6 @@ jobs:
 
           ESCAPED_MESSAGE_CONTENT=$(echo "$MESSAGE_CONTENT" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
           curl -X POST -H "Content-Type: application/json" \
-               -d "{\"content\": \"${ESCAPED_MESSAGE_CONTENT}\", \"username\": \"Lighthouse CI Bot\"}" \
+                # \"${ESCAPED_MESSAGE_CONTENT}\"
+               -d "{\"content\": $LINKS, \"username\": \"Lighthouse CI Bot\"}" \
                "${{ env.DISCORD_WEBHOOK_URL }}"
