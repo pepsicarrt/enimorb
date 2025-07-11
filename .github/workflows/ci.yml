@@ -1,4 +1,4 @@
-name: LHCI-output-webhook
+name: Load Times
 on:
   workflow_dispatch:
   
