@@ -16,20 +16,23 @@ jobs:
           uploadArtifacts: true # save results as an action artifacts
           temporaryPublicStorage: true # upload lighthouse report to the temporary storage
 
-      # Step 3: Send all captured clickable Lighthouse links to Discord
-      - name: Send All Clickable Lighthouse Links to Discord
+      - name: Send Lighthouse Links to Discord
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.ACTIONS_WEBHOOK_URL }} # Your Discord webhook URL secret
+          DISCORD_WEBHOOK_URL: ${{ secrets.ACTIONS_WEBHOOK_URL }}
+          RAW_LINKS_OUTPUT: ${{ steps.LHCIAction.outputs.links }}
         run: |
-          RAW_LINKS_OUTPUT="${{ steps.LHCIAction.outputs.links }}"
-          
-          FORMATTED_LINKS=$(echo "$RAW_LINKS_OUTPUT" | jq -r '.[]')
+          # 1. Format the links into a single string with newlines for the message
+          # This creates a bulleted list like: "- https://report1.html\n- https://report2.html"
+          FORMATTED_CONTENT=$(echo "$RAW_LINKS_OUTPUT" | jq -r 'to_entries | map("- <\(.value)>") | join("\n")')
 
-          DISCORD_PAYLOAD="{
-            \"username\": \"Lighthouse CI Bot\",
-            \"content\": \"${FORMATTED_LINKS}\"
-          }"
+          # 2. Safely build the JSON payload using jq
+          # This prevents syntax errors from special characters or newlines
+          JSON_PAYLOAD=$(jq -n \
+                            --arg username "Lighthouse Bot" \
+                            --arg content "$FORMATTED_CONTENT" \
+                            '{username: $username, content: $content}')
 
+          # 3. Send the payload to Discord
           curl -X POST -H "Content-Type: application/json" \
-               -d "${DISCORD_PAYLOAD}" \
-               "${{ env.DISCORD_WEBHOOK_URL }}"
+               -d "$JSON_PAYLOAD" \
+               "${DISCORD_WEBHOOK_URL}"
