@@ -1,6 +1,5 @@
-name: Lighthouse CI - All in Embed (No HTML/Artifact)
+name: Lighthouse CI - Use Action, Send Links (No HTML)
 on: 
-  push:
   workflow_dispatch:
 
 jobs:
@@ -9,11 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install jq (for JSON parsing)
-        run: sudo apt-get update && sudo apt-get install -y jq
-
       - name: Audit URLs using Lighthouse Action
-        id: lighthouse_audit # Add an ID to reference outputs
+        id: lighthouse_audit
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
@@ -22,63 +18,25 @@ jobs:
             https://bromine.on-to.space
           uploadArtifacts: true
           temporaryPublicStorage: true
-          output: "json"
 
-      - name: Send Lighthouse Report as Embed to Discord
+      - name: Send Clickable Lighthouse Links to Discord
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.ACTIONS_WEBHOOK_URK }}
-        run: |
+          DISCORD_WEBHOOK_URL: ${{ secrets.ACTIONS_WEBHOOK_URL }}
+        run: |          
           TEMPORARY_STORAGE_URL="${{ steps.lighthouse_audit.outputs.temporaryPublicStorageUrl }}"
+          MESSAGE_CONTENT="Lighthouse CI Audit Complete for ${{ github.event.repository.full_name }} (${{ github.sha }})\n\n"
           
-          REPORT_JSON_FILE=$(find .lighthouseci -name "*.json" | head -n 1)
-
-          EMBED_FIELDS_JSON="[]"
-          EMBED_DESCRIPTION_TEXT="Lighthouse CI Audit Complete for ${{ github.event.repository.full_name }} (${{ github.sha }})\n\n"
-
-          if [ -n "$REPORT_JSON_FILE" ]; then
-            echo "Found JSON report: $REPORT_JSON_FILE"
-            PERFORMANCE_SCORE=$(jq -r '.categories.performance.score * 100 | floor' "$REPORT_JSON_FILE")
-            ACCESSIBILITY_SCORE=$(jq -r '.categories.accessibility.score * 100 | floor' "$REPORT_JSON_FILE")
-            BEST_PRACTICES_SCORE=$(jq -r '.categories."best-practices".score * 100 | floor' "$REPORT_JSON_FILE")
-            SEO_SCORE=$(jq -r '.categories.seo.score * 100 | floor' "$REPORT_JSON_FILE")
-            PWA_SCORE=$(jq -r '.categories.pwa.score * 100 | floor' "$REPORT_JSON_FILE")
-
-            AUDITED_URL=$(jq -r '.finalUrl' "$REPORT_JSON_FILE")
-
-            EMBED_DESCRIPTION_TEXT+="Audit of: [${AUDITED_URL}](${AUDITED_URL})\n"
-
-            EMBED_FIELDS_JSON="[
-              { \"name\": \"Performance\", \"value\": \"${PERFORMANCE_SCORE}%\", \"inline\": true },
-              { \"name\": \"Accessibility\", \"value\": \"${ACCESSIBILITY_SCORE}%\", \"inline\": true },
-              { \"name\": \"Best Practices\", \"value\": \"${BEST_PRACTICES_SCORE}%\", \"inline\": true },
-              { \"name\": \"SEO\", \"value\": \"${SEO_SCORE}%\", \"inline\": true },
-            ]"
-          else
-            EMBED_DESCRIPTION_TEXT+="No detailed scores available.\n"
-          fi
-
           if [ -n "$TEMPORARY_STORAGE_URL" ]; then
-            EMBED_DESCRIPTION_TEXT+="\n**View Full Report (Clickable Link):**\n"
-            EMBED_DESCRIPTION_TEXT+="- ${TEMPORARY_STORAGE_URL}\n\n"
-            EMBED_DESCRIPTION_TEXT+="*(This link is typically for the last audited URL. If you audited multiple sites, please check the GitHub Actions workflow run logs for all individual temporary links.)*\n"
+            MESSAGE_CONTENT+="**Lighthouse Report Link:**\n"
+            MESSAGE_CONTENT+="- ${TEMPORARY_STORAGE_URL}\n\n"
+            MESSAGE_CONTENT+="*(This link is typically for the last audited URL. If you audited multiple sites, **please check the GitHub Actions workflow run logs for all individual temporary links**, under the 'Audit URLs using Lighthouse Action' step.)*\n"
           else
-            EMBED_DESCRIPTION_TEXT+="\nNo temporary Lighthouse report link was found from the action's output. Please check the workflow logs for details."
+            MESSAGE_CONTENT+="No temporary Lighthouse report link was found from the action's output. Please check the workflow logs for details."
           fi
 
-          ESCAPED_EMBED_DESCRIPTION_TEXT=$(echo "$EMBED_DESCRIPTION_TEXT" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+          MESSAGE_CONTENT+="\n*(Click on the link to view the detailed Lighthouse report in your browser.)*"
 
-          DISCORD_PAYLOAD="{
-            \"username\": \"Lighthouse CI Bot\",
-            \"embeds\": [
-              {
-                \"title\": \"Lighthouse Audit Results\",
-                \"description\": \"${ESCAPED_EMBED_DESCRIPTION_TEXT}\",
-                \"color\": 3447003, # Green color
-                \"fields\": ${EMBED_FIELDS_JSON}
-              }
-            ]
-          }"
-
+          ESCAPED_MESSAGE_CONTENT=$(echo "$MESSAGE_CONTENT" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
           curl -X POST -H "Content-Type: application/json" \
-               -d "${DISCORD_PAYLOAD}" \
+               -d "{\"content\": \"${ESCAPED_MESSAGE_CONTENT}\", \"username\": \"Lighthouse CI Bot\"}" \
                "${{ env.DISCORD_WEBHOOK_URL }}"
