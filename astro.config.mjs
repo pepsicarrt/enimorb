@@ -5,10 +5,12 @@ import icon from "astro-icon"
 
 import cloudflare from "@astrojs/cloudflare"
 
+import partytown from "@astrojs/partytown";
+
 // import netlify from "@astrojs/netlify";
 
 export default defineConfig({
-  integrations: [icon(), (await import("@playform/compress")).default()],
+  integrations: [icon(), (await import("@playform/compress")).default(), partytown()],
 
   vite: {
     build: {

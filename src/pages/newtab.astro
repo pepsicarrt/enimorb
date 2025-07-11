@@ -16,15 +16,33 @@ import "@/styles.css"
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
     />
 
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <script is:inline defer>
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e61e964fbec94d7a930bc79a7775d076"}'></script>
+
+<script type="text/partytown" async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <link rel="icon" href="favicon.svg" sizes="any" type="image/svg+xml">
+<script type="text/partytown" is:inline defer>
+      window.addEventListener("theme-changed", () => {
+        document.body.dataset.theme = localStorage.getItem("theme");
+      });
+
+      const cloak = () => {
+        const cloakValue = localStorage.getItem("cloak");
+        if (!cloakValue || cloakValue === 'none') return;
+
+        const cloakk = cloakValue.split("|");
+        document.title = cloakk[0];
+        const icon = document.querySelector("link[rel=icon]");
+        if (icon)
+          icon.href = cloakk[1];
+      };
+
+      window.addEventListener("cloak-changed", cloak);
+
       document.addEventListener("DOMContentLoaded", () => {
-        document.body.dataset.theme = localStorage.getItem("theme")
-      })
+        document.body.dataset.theme = localStorage.getItem("theme");
+        cloak();
+      });
+
     </script>
 </head>
 <body class="text-text bg-base flex">
