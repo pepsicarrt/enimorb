@@ -1,13 +1,11 @@
 name: CI
 on: [push]
 jobs:
-  lighthouseci:
+  Lighthouse CI:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - run: npm install && npm install -g @lhci/cli@0.15.x
-      - run: npm run build
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install && bun install -g @lhci/cli@0.15.x
+      - run: bun run build
       - run: lhci autorun
