@@ -20,7 +20,7 @@ jobs:
       - name: Webhook
         uses: denar90/webhook-action@0.1.1
         with:
-          webhookUrl: ${{secrets.ACTIONS_WEBHOOK_URL}}
+          webhookUrl: ${{ secrets.ACTIONS_WEBHOOK_URL }}
           data: '{ "links": ${{steps.LHCIAction.outputs.links}}, "manifest": ${{steps.LHCIAction.outputs.manifest}} }'
             
       # Step 3: Send all captured clickable Lighthouse links to Discord
