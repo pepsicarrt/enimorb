@@ -61,6 +61,9 @@ import { Icon } from "astro-icon/components"
   }
 
   function getIcon(url) {
+    const regex = new RegExp("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)") 
+    if(!regex.test(url))
+      return "https://placehold.co/16"
     return `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=64&url=${url}`
   }
 

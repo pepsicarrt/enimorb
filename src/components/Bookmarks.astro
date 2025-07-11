@@ -89,8 +89,8 @@ import Popup from "../Popup.astro"
   </button>
 </div>
 
-<script is:inline defer type="module">
-  import { getProxied } from "./lethal.mjs";
+<script>
+  import { getProxied } from "@/utils/lethal.ts";
   const bookmarksList = document.getElementById("bookmarks");
   const bookmarkForm = document.getElementById("bookmark-form");
   const bookmarkIdInput = document.getElementById("bookmark-id");

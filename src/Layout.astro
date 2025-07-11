@@ -29,17 +29,14 @@ const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props
     <link rel="icon" href="favicon.svg" sizes="any" type="image/svg+xml">
 
     <meta property="og:site_name" content="Bromine" />
-    <meta property="og:url" content="https://bromine.pages.dev"/>
     <meta property="og:title" content={title} />
     <meta property="og:type" content="website" />
     <meta property="og:description" content={desc} />
 
     <meta name="googlebot" content="index, follow, snippet" />
-    <link rel="canonical" href="https://bromine.pages.dev"/>
 
+    <link rel="preconnect" href="https://t1.gstatic.com/" />
     <Lethal />
-    <link rel="preconnect" href="https://bromine.pages.dev"/>
-    <script is:inline defer src="/alu-adblocker.js"></script>
 
     <script is:inline defer>
       const originalSetItem = localStorage.setItem;

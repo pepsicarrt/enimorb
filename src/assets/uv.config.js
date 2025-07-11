@@ -18,4 +18,3 @@ self.__uv$config = {
   sw: "https://unpkg.com/@titaniumnetwork-dev/ultraviolet@3.2.10/dist/uv.sw.js",
 }
 
-

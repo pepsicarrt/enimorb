@@ -2,7 +2,7 @@
 
 ---
 
-<script is:inline defer type="module">
+<script>
   // --- LETHAL IMPORTS ---
   import {
     setTransport,
@@ -10,7 +10,7 @@
     setProxy,
     makeURL,
     getProxied,
-  } from "./lethal.mjs"
+  } from "./lethal.ts"
 
   // --- INIT ---
   const form = document.getElementById("form")
@@ -88,6 +88,7 @@
     switchTab(tabCounter)
 
     frame.addEventListener("load", () => {
+      const regex = new RegExp("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)") 
       let url = decodeURIComponent(
         currentFrame.contentWindow.location.href.split("/").pop(),
       )

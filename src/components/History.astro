@@ -14,8 +14,8 @@ import Popup from "@/Popup.astro"
   <ul class="space-y-2" id="history"></ul>
 </Popup>
 
-<script is:inline defer async type="module">
-  import { getProxied } from "./lethal.mjs";
+<script>
+  import { getProxied } from "@/utils/lethal.ts";
 
   function renderList() {
     const history = JSON.parse(localStorage.getItem("history") || "[]");

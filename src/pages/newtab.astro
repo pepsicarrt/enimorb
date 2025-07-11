@@ -36,7 +36,7 @@ import "@/styles.css"
         <form id="form" class="flex justify-center w-full">
 
           <input
-            autofocus="true"
+            autofocus
             spellcheck="false"
             autocomplete="off"
             id="address"
@@ -48,14 +48,16 @@ import "@/styles.css"
                 >
             </form>
 
-      <script is:inline defer type="module">
+      <script>
   import {
     setTransport,
     setWisp,
     setProxy,
     makeURL,
     getProxied,
-  } from "./lethal.mjs"
+  } from "@/utils/lethal.ts"
+  
+
  let backend = localStorage.getItem("proxy-backend") || "uv"
   let wisp = localStorage.getItem("wisp-server") || "wss://anura.pro/"
   let transport = localStorage.getItem("proxy-transport")

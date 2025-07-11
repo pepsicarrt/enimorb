@@ -1,8 +1,33 @@
 //////////////////////////////
 ///          Init          ///
 //////////////////////////////
-await import("/scram/scramjet.shared.js")
-await import("/scram/scramjet.controller.js")
+import { BareMuxConnection } from "@mercuryworkshop/bare-mux";
+
+//////////////////////////////
+///         Options        ///
+//////////////////////////////
+const connection = new BareMuxConnection("/bareworker.js")
+
+let wispURL = null
+let transportURL = null
+let proxyOption = null
+
+const transportOptions = {
+  epoxy:
+    "https://unpkg.com/@mercuryworkshop/epoxy-transport@2.1.27/dist/index.mjs",
+  libcurl:
+    "https://unpkg.com/@mercuryworkshop/libcurl-transport@1.5.0/dist/index.mjs",
+}
+
+//////////////////////////////
+///           SW           ///
+//////////////////////////////
+const stockSW = "./ultraworker.js"
+const swAllowedHostnames = ["localhost", "127.0.0.1"]
+
+async function registerSW() {
+await import("@/assets/scram/scramjet.shared.js")
+await import("@/assets/scram/scramjet.controller.js")
 
 const scramjet = new ScramjetController({
   files: {
@@ -26,33 +51,6 @@ const scramjet = new ScramjetController({
 })
 
 scramjet.init()
-
-
-import * as BareMux from "https://unpkg.com/@mercuryworkshop/bare-mux@2.1.7/dist/index.mjs"
-
-//////////////////////////////
-///         Options        ///
-//////////////////////////////
-const connection = new BareMux.BareMuxConnection("/bareworker.js")
-
-let wispURL = null
-let transportURL = null
-let proxyOption = null
-
-const transportOptions = {
-  epoxy:
-    "https://unpkg.com/@mercuryworkshop/epoxy-transport@2.1.27/dist/index.mjs",
-  libcurl:
-    "https://unpkg.com/@mercuryworkshop/libcurl-transport@1.5.0/dist/index.mjs",
-}
-
-//////////////////////////////
-///           SW           ///
-//////////////////////////////
-const stockSW = "./ultraworker.js"
-const swAllowedHostnames = ["localhost", "127.0.0.1"]
-
-async function registerSW() {
   if (!navigator.serviceWorker) {
     if (
       location.protocol !== "https:" &&
@@ -123,13 +121,13 @@ export function getWisp() {
 export async function setProxy(proxy) {
   console.log(`lethal.js: Setting proxy backend to ${proxy}`)
   if (proxy === "uv") {
-    await import(
+     import(
       "https://unpkg.com/@titaniumnetwork-dev/ultraviolet@3.2.10/dist/uv.bundle.js"
     )
 
-    await import("./uv.config.js")
+      import("@/assets/uv.config.js")
   } else {
-    import("/scram/scramjet.worker.js")
+    import("@/assets/scram/scramjet.worker.js")
   }
   proxyOption = proxy
 }
