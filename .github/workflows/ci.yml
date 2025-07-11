@@ -20,4 +20,4 @@ jobs:
         uses: distributhor/workflow-webhook@v3
         with:
           webhook_url: ${{secrets.ACTIONS_WEBHOOK_URL}}
-          data: '{ "links": ${{ toJson(steps.LHCIAction.outputs.links) }}, "manifest": ${{ toJson(steps.LHCIAction.outputs.manifest) }} }'
+          data: '{ "content": ${{ toJson(steps.LHCIAction.outputs.links) }} }'
