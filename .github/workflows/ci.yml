@@ -4,6 +4,9 @@ on:
 
 jobs:
   lighthouse:
+    permissions:
+      contents: read
+      secrets: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,5 +22,5 @@ jobs:
       - name: Webhook
         uses: denar90/webhook-action@0.1.0
         with:
-          webhookUrl: ${{secrets.ACTION_WEBHOOK_URL}}
+          webhookUrl: ${{secrets.ACTIONS_WEBHOOK_URL}}
           data: '{ "github": ${{ toJSON(github) }}, "links": ${{steps.LHCIAction.outputs.links}}, "manifest": ${{steps.LHCIAction.outputs.manifest}} }'
