@@ -1,7 +1,9 @@
 name: Load Times
 on:
   workflow_dispatch:
-  
+  schedule:
+    - cron: 0 * * * *
+
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
