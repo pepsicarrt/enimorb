@@ -1,8 +1,6 @@
 name: CI
 on: 
   workflow_dispatch:
-  check_run:
-    types: [completed]
     
 jobs:
   Lighthouse-CI:
@@ -12,8 +10,5 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install && bun install -g @lhci/cli@0.15.x
       - run: bun run build
-      - run:
-          echo "DEPLOYMENT_URL=$(echo "${{ github.event.check_run.output.summary
-          }}" | grep -o "href\=.*>https" | cut -c 7-43)" >> $GITHUB_ENV
-      - run: echo $DEPLOYMENT_URL
-      - run: lhci autorun --serverBaseUrl=$DEPLOYMENT_URL
+      - run: lhci autorun --serverBaseUrl='https://bromine.on-to.space/'
+      
