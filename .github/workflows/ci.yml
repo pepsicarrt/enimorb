@@ -1,5 +1,7 @@
 name: Lighthouse CI
-on: push
+on: 
+  workflow_dispatch:
+
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
