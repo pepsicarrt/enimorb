@@ -1,5 +1,6 @@
 name: Lighthouse CI - All in Embed (No HTML/Artifact)
 on: 
+  push:
   workflow_dispatch:
 
 jobs:
