@@ -1,4 +1,4 @@
-name: Lighthouse CI
+name: Lighthouse CI - Report & Links to Discord
 on: 
   workflow_dispatch:
 
@@ -7,17 +7,49 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Audit URLs using Lighthouse
+        id: lighthouse_audit # Add an ID to reference outputs
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
             https://breadmine.neealdon3-3f0.workers.dev/
             https://bromine.pages.dev/
             https://bromine.on-to.space
-          uploadArtifacts: true # save results as an action artifacts
-          temporaryPublicStorage: true # upload lighthouse report to the temporary storage
-      - name: Webhook
-        uses: distributhor/workflow-webhook@v3
+          uploadArtifacts: true # <--- Keep this true as requested
+          temporaryPublicStorage: true # <--- Keep this true as requested
+
+      - name: Download Lighthouse CI artifacts
+        uses: actions/download-artifact@v4
         with:
-          webhook_url: ${{secrets.ACTIONS_WEBHOOK_URL}}
-          data: '{ "content": ${{ toJson(steps.LHCIAction.outputs.links) }} }'
+          name: ${{ steps.lighthouse_audit.outputs.artifactName }} # Use the artifactName output from the lighthouse action
+          path: ./lighthouse-results # Directory where artifacts will be downloaded
+
+      - name: Send Lighthouse Report and Links to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.ACTIONS_WEBHOOK_URL }} # Store your webhook URL as a GitHub secret
+        run: |
+          REPORT_HTML_FILE=$(find ./lighthouse-results -name "*.html" | head -n 1)
+
+          if [ -z "$REPORT_HTML_FILE" ]; then
+            echo "No Lighthouse HTML report found to send to Discord."
+            exit 0
+          fi
+
+          TEMPORARY_STORAGE_URL="${{ steps.lighthouse_audit.outputs.temporaryPublicStorageUrl }}"
+          
+          MESSAGE_CONTENT="Lighthouse CI Audit Complete for ${{ github.event.repository.full_name }} (${{ github.sha }})\n\n"
+          
+          if [ -n "$TEMPORARY_STORAGE_URL" ]; then
+            MESSAGE_CONTENT+="Last/Main Report (temporary public storage): ${TEMPORARY_STORAGE_URL}\n\n"
+          fi
+
+          MESSAGE_CONTENT+="Individual temporary report links are also available in the GitHub Actions workflow logs (look for 'Open the report at' lines).\n\n"
+          MESSAGE_CONTENT+="See attached HTML report for full details."
+
+          ESCAPED_MESSAGE_CONTENT=$(echo "$MESSAGE_CONTENT" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+
+          curl -X POST -H "Content-Type: multipart/form-data" \
+               -F "file=@${REPORT_HTML_FILE}" \
+               -F "payload_json={\"content\": \"${ESCAPED_MESSAGE_CONTENT}\", \"username\": \"Lighthouse CI Bot\"}" \
+               "${{ env.DISCORD_WEBHOOK_URL }}"
