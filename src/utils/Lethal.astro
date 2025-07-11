@@ -81,6 +81,8 @@
     frame.setAttribute("class", "w-full h-full border-0 fixed")
     frame.setAttribute("title", "Proxy Frame")
     frame.setAttribute("src", "/newtab")
+    frame.setAttribute("loading", "lazy")
+
     frame.setAttribute("id", `frame-${tabCounter}`)
     document.getElementById("frames").appendChild(frame)
 
