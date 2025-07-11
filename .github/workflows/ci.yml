@@ -23,7 +23,7 @@ jobs:
         run: |
           RAW_LINKS_OUTPUT="${{ steps.LHCIAction.outputs.links }}"
           
-          FORMATTED_LINKS=$(echo "$RAW_LINKS_OUTPUT" | jq -r 'map(.) | .[]' | sed 's/$/\\n/')
+          FORMATTED_LINKS=$(echo "$RAW_LINKS_OUTPUT" | jq -r '.[]')
 
           DISCORD_PAYLOAD="{
             \"username\": \"Lighthouse CI Bot\",
