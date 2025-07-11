@@ -25,7 +25,7 @@ jobs:
           FORMATTED_DESCRIPTION=$(echo "$RAW_LINKS_OUTPUT" | jq -r '
             [
               to_entries | . as $items | range(length) as $i |
-              "\($i + 1). **($items[$i].key)**\n   ↳ [View Lighthouse Report](\($items[$i].value))"
+              "\($i + 1). **\($items[$i].key)**\n   ↳ [View Lighthouse Report](\($items[$i].value))"
             ] | join("\n\n")
           ')
 
