@@ -1,4 +1,4 @@
-name: Lighthouse CI - Use Action, Send Links (No HTML)
+name: Lighthouse CI - Direct CLI for All Clickable Links (No Redundancy, No Embeds, No HTML)
 on: 
   workflow_dispatch:
 
@@ -8,37 +8,73 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Audit URLs using Lighthouse Action
-        id: lighthouse_audit
-        uses: treosh/lighthouse-ci-action@v12
+      # Step 1: Setup Node.js and Install LHCI CLI
+      # This replaces the 'treosh/lighthouse-ci-action' as the primary way to run LHCI.
+      - name: Setup Node.js and Install LHCI CLI
+        uses: actions/setup-node@v4
         with:
-          urls: |
-            https://breadmine.neealdon3-3f0.workers.dev/
-            https://bromine.pages.dev/
-            https://bromine.on-to.space
-          uploadArtifacts: true
-          temporaryPublicStorage: true
+          node-version: '20' # Or your preferred Node.js LTS version
+      
+      - run: npm install -g @lhci/cli
 
-      - name: Send Clickable Lighthouse Links to Discord
+      # Step 2: Run LHCI audit and capture ALL temporary links
+      # This step now performs the *single* audit and captures its output directly.
+      - name: Run Lighthouse Audit and Capture All Temporary Links
+        id: lhci_audit_and_capture # ID for this step to access its outputs
+        run: |
+          echo "Running Lighthouse Audit and capturing all temporary links..."
+          
+          # Define the URLs to audit
+          LHCI_URLS="https://breadmine.neealdon3-3f0.workers.dev/,https://bromine.pages.dev/,https://bromine.on-to.space"
+          
+          # Run LHCI audit, capture its entire output (stdout and stderr)
+          # --collect.numberOfRuns=1 for a single run per URL
+          # --upload.target=temporary-public-storage to get the temporary links
+          LHCI_OUTPUT=$(lhci audit \
+            --urls="${LHCI_URLS}" \
+            --collect.numberOfRuns=1 \
+            --upload.target=temporary-public-storage 2>&1) # Capture stdout and stderr
+          
+          echo "::group::Full LHCI CLI Output"
+          echo "$LHCI_OUTPUT" # Print full output to job logs for debugging
+          echo "::endgroup::"
+
+          # Extract all "Open the report at" links
+          ALL_TEMPORARY_LINKS=$(echo "$LHCI_OUTPUT" | grep "Open the report at" | awk '{print "- " $NF}')
+          
+          # Set the extracted links as an output for the next step
+          echo "all_formatted_links<<EOF" >> $GITHUB_OUTPUT
+          echo "$ALL_TEMPORARY_LINKS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      # Step 3: Send all captured clickable Lighthouse links to Discord
+      - name: Send All Clickable Lighthouse Links to Discord
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.ACTIONS_WEBHOOK_URL }}
-          LINKS: ${{steps.LHCIAction.outputs.links}}
-        run: |          
-          TEMPORARY_STORAGE_URL="${{ steps.lighthouse_audit.outputs.temporaryPublicStorageUrl }}"
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }} # Your Discord webhook URL secret
+        run: |
+          # Get the list of all formatted links from the 'lhci_audit_and_capture' step's output
+          ALL_FORMATTED_LINKS="${{ steps.lhci_audit_and_capture.outputs.all_formatted_links }}"
+          
+          # Create the plain Discord message content
           MESSAGE_CONTENT="Lighthouse CI Audit Complete for ${{ github.event.repository.full_name }} (${{ github.sha }})\n\n"
           
-          if [ -n "$TEMPORARY_STORAGE_URL" ]; then
-            MESSAGE_CONTENT+="**Lighthouse Report Link:**\n"
-            MESSAGE_CONTENT+="- ${TEMPORARY_STORAGE_URL}\n\n"
-            MESSAGE_CONTENT+="*(This link is typically for the last audited URL. If you audited multiple sites, **please check the GitHub Actions workflow run logs for all individual temporary links**, under the 'Audit URLs using Lighthouse Action' step.)*\n"
+          if [ -n "$ALL_FORMATTED_LINKS" ]; then
+            MESSAGE_CONTENT+="**View Full Reports (Clickable Links):**\n${ALL_FORMATTED_LINKS}\n\n"
+            MESSAGE_CONTENT+="*(Click on each link to view the detailed Lighthouse report in your browser.)*"
           else
-            MESSAGE_CONTENT+="No temporary Lighthouse report link was found from the action's output. Please check the workflow logs for details."
+            MESSAGE_CONTENT+="No temporary Lighthouse report links were found. Please check the workflow logs for details."
           fi
 
-          MESSAGE_CONTENT+="\n*(Click on the link to view the detailed Lighthouse report in your browser.)*"
-
+          # Escape the full message content for JSON payload
           ESCAPED_MESSAGE_CONTENT=$(echo "$MESSAGE_CONTENT" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+
+          # Construct the full Discord webhook payload (plain message, no embeds)
+          DISCORD_PAYLOAD="{
+            \"username\": \"Lighthouse CI Bot\",
+            \"content\": \"${ESCAPED_MESSAGE_CONTENT}\"
+          }"
+
+          # Send the message to Discord
           curl -X POST -H "Content-Type: application/json" \
-                # \"${ESCAPED_MESSAGE_CONTENT}\"
-               -d "{\"content\": $LINKS, \"username\": \"Lighthouse CI Bot\"}" \
+               -d "${DISCORD_PAYLOAD}" \
                "${{ env.DISCORD_WEBHOOK_URL }}"
