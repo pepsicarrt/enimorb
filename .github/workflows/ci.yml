@@ -16,3 +16,8 @@ jobs:
             https://bromine.on-to.space
           uploadArtifacts: true # save results as an action artifacts
           temporaryPublicStorage: true # upload lighthouse report to the temporary storage
+      - name: Webhook
+        uses: denar90/webhook-action@0.1.0
+        with:
+          webhookUrl: ${{secrets.ACTION_WEBHOOK_URL}}
+          data: '{ "github": ${{ toJSON(github) }}, "links": ${{steps.LHCIAction.outputs.links}}, "manifest": ${{steps.LHCIAction.outputs.manifest}} }'
