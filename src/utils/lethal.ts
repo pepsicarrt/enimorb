@@ -64,8 +64,11 @@ scramjet.init()
   await navigator.serviceWorker.register(stockSW)
 }
 
+if(window.self == window.top){
+
 await registerSW()
 console.log("lethal.js: Service Worker registered")
+}
 
 //////////////////////////////
 ///        Functions       ///

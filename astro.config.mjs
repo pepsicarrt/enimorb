@@ -22,10 +22,10 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  output: "server",
-  adapter: cloudflare({
-    imageService: "compile",
-  }),
+  // output: "static",
+  // adapter: cloudflare({
+  //   imageService: "compile",
+  // }),
   experimental: {
     preserveScriptOrder: true,
   },
