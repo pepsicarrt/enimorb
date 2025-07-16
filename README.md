@@ -1,7 +1,7 @@
 # bromine the poopy proxy
 ok thats it
 
-## Credits
+## Tech stack
 - Scramjet
 - Epoxy
 - Ultraviolet
@@ -14,7 +14,9 @@ ok thats it
 - Bare-Mux
 - Libcurl
 - lethal-js
+- alu adblocker(doesnt really count) made by wearr
+- workerware
+
+## Acknowledgements
 - Shadow - inspiration
 - Nano - more inspiration
-- wearrrr - alu adblocker
-- mercuryworkshop - workerware
