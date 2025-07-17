@@ -1,7 +1,7 @@
 declare global {
   interface Window {
     __uv$config: any;
-    $scramjetLoadController: class;
+    $scramjetLoadController: () => { ScramjetController: any };
   }
 
 
