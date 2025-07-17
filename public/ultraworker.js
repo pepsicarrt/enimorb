@@ -3,9 +3,11 @@ importScripts(
 )
 importScripts("uv.config.js")
 importScripts(__uv$config.sw)
-importScripts("/scram/scramjet.shared.js", "/scram/scramjet.worker.js")
 importScripts("/workerware/workerware.js")
 importScripts("/alu-adblocker.js")
+importScripts("/scram/scramjet.all.js");
+
+
 
 if (navigator.userAgent.includes("Firefox")) {
   Object.defineProperty(globalThis, "crossOriginIsolated", {
@@ -15,8 +17,11 @@ if (navigator.userAgent.includes("Firefox")) {
 }
 
 const uv = new UVServiceWorker()
-const scramjet = new ScramjetServiceWorker()
+const { ScramjetServiceWorker } = $scramjetLoadWorker();
+const scramjet = new ScramjetServiceWorker();
+
 const ww = new WorkerWare({});
+
 
 ww.use({
   function: self.adblockExt.filterRequest,
@@ -49,3 +54,5 @@ async function handleRequest(event) {
 self.addEventListener("fetch", (event) => {
   event.respondWith(handleRequest(event))
 })
+
+

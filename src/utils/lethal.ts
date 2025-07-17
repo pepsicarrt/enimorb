@@ -8,11 +8,36 @@ import { BareMuxConnection } from "@mercuryworkshop/bare-mux";
 //////////////////////////////
 const connection = new BareMuxConnection("/bareworker.js")
 
-let wispURL = null
-let transportURL = null
-let proxyOption = null
+let wispURL: string | null = null
+let transportURL: string | null = null
+let proxyOption: string | null = null
+// @ts-ignore
+await import("@/assets/scram/scramjet.all.js")
 
-const transportOptions = {
+
+const { ScramjetController } = window.$scramjetLoadController();
+
+const scramjet = new ScramjetController({
+  files: {
+    wasm: "/scram/scramjet.wasm.wasm",
+    all: "/scram/scramjet.all.js",
+    sync: "/scram/scramjet.sync.js",
+  },
+  flags: {
+    rewriterLogs: false,
+    naiiveRewriter: false,
+    scramitize: false,
+  },
+  siteFlags: {
+    "https://www.google.com/(search|sorry).*": {
+      naiiveRewriter: true,
+    },
+  },
+});
+
+scramjet.init()
+
+const transportOptions: TransportOptions = {
   epoxy:
     "https://unpkg.com/@mercuryworkshop/epoxy-transport@2.1.27/dist/index.mjs",
   libcurl:
@@ -26,31 +51,8 @@ const stockSW = "./ultraworker.js"
 const swAllowedHostnames = ["localhost", "127.0.0.1"]
 
 async function registerSW() {
-await import("@/assets/scram/scramjet.shared.js")
-await import("@/assets/scram/scramjet.controller.js")
 
-const scramjet = new ScramjetController({
-  files: {
-    wasm: "/scram/scramjet.wasm.wasm",
-    worker: "/scram/scramjet.worker.js",
-    client: "/scram/scramjet.client.js",
-    shared: "/scram/scramjet.shared.js",
-    sync: "/scram/scramjet.sync.js",
-  },
-  flags: {
-    serviceworkers: false,
-    syncxhr: false,
-    naiiveRewriter: false,
-    strictRewrites: true,
-    rewriterLogs: false,
-    captureErrors: true,
-    cleanErrors: true,
-    scramitize: false,
-    sourcemaps: true,
-  }
-})
 
-scramjet.init()
   if (!navigator.serviceWorker) {
     if (
       location.protocol !== "https:" &&
@@ -64,22 +66,22 @@ scramjet.init()
   await navigator.serviceWorker.register(stockSW)
 }
 
-if(window.self == window.top){
-
-await registerSW()
-console.log("lethal.js: Service Worker registered")
+if (window.self == window.top) {
+  await registerSW()
+  console.log("lethal.js: Service Worker registered")
 }
+
 
 //////////////////////////////
 ///        Functions       ///
 //////////////////////////////
 export function makeURL(
-  input,
+  input: string,
   template = "https://search.brave.com/search?q=%s",
 ) {
   try {
     return new URL(input).toString()
-  } catch (err) {}
+  } catch (err) { }
 
   const url = new URL(`http://${input}`)
   if (url.hostname.includes(".")) return url.toString()
@@ -96,7 +98,7 @@ async function updateBareMux() {
   }
 }
 
-export async function setTransport(transport) {
+export async function setTransport(transport: Transport) {
   console.log(`lethal.js: Setting transport to ${transport}`)
   transportURL = transportOptions[transport]
   if (!transportURL) {
@@ -110,7 +112,7 @@ export function getTransport() {
   return transportURL
 }
 
-export async function setWisp(wisp) {
+export async function setWisp(wisp: string) {
   console.log(`lethal.js: Setting Wisp to ${wisp}`)
   wispURL = wisp
 
@@ -121,16 +123,14 @@ export function getWisp() {
   return wispURL
 }
 
-export async function setProxy(proxy) {
+export async function setProxy(proxy: string) {
   console.log(`lethal.js: Setting proxy backend to ${proxy}`)
   if (proxy === "uv") {
-     import(
-      "https://unpkg.com/@titaniumnetwork-dev/ultraviolet@3.2.10/dist/uv.bundle.js"
-    )
+    // @ts-ignore
+    import("https://unpkg.com/@titaniumnetwork-dev/ultraviolet@3.2.10/dist/uv.bundle.js")
 
-      import("@/assets/uv.config.js")
-  } else {
-    import("@/assets/scram/scramjet.worker.js")
+    // @ts-ignore
+    import("@/assets/uv.config.js")
   }
   proxyOption = proxy
 }
@@ -139,10 +139,10 @@ export function getProxy() {
   return proxyOption
 }
 
-export async function getProxied(input) {
+export async function getProxied(input: string) {
   const url = makeURL(input)
 
   if (proxyOption === "scram") return scramjet.encodeUrl(url)
 
-  return __uv$config.prefix + __uv$config.encodeUrl(url)
+  return window.__uv$config.prefix + window.__uv$config.encodeUrl(url)
 }
