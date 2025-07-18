@@ -1,4 +1,4 @@
-
+slim.report.jsonc
 node_modules
 # build output
 dist/
@@ -29,3 +29,4 @@ pnpm-debug.log*
 .vscode
 .netlify
 dist
+.wrangler

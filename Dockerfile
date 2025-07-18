@@ -11,9 +11,7 @@ COPY . .
 
 RUN bun run build
 
-FROM zydou/caddy:distroless
-#caddy:alpine
+FROM nginx:1-alpine3.22-slim
 
-COPY --from=build /app/dist /usr/share/caddy
-
+COPY --from=build /app/dist /usr/share/nginx/html 
 EXPOSE 80
