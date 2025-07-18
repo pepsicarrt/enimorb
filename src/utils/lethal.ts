@@ -128,7 +128,6 @@ export async function setProxy(proxy: string) {
   if (proxy === "uv") {
     // @ts-ignore
     import("https://unpkg.com/@titaniumnetwork-dev/ultraviolet@3.2.10/dist/uv.bundle.js")
-
     // @ts-ignore
     import("@/assets/uv.config.js")
   }
