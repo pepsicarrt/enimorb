@@ -16,6 +16,7 @@ import ProxyFrame from "@/utils/ProxyFrame.astro"
     try {
     const a = open()
       a.document.write(`<iframe src='${location.origin}'></iframe>`);
+      a.document.title = "New Tab"
       location.replace(localStorage.getItem("ab-site") || "https://classroom.google.com/h")
     }catch{alert("Try allow popup permissions for about blank to work.")}}
 </script>
