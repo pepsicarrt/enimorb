@@ -16,7 +16,7 @@
     "@mercuryworkshop/bare-mux": "^2.1.7",
     "@playform/compress": "^0.1.9",
     "@tailwindcss/vite": "^4.1.11",
-    "astro": "5.11.0",
+    "astro": "5.12.0",
     "astro-icon": "^1.1.5",
     "tailwindcss": "^4.1.11"
   },
