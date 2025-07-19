@@ -10,17 +10,22 @@
     setProxy,
     makeURL,
     getProxied,
+    newTab,
+    switchTab,
+    closeTab,
+    setFrames,
+    currentTab,
+    addressInput,
+    currentFrame,
+    Tab
   } from "./lethal.ts"
 
   // --- INIT ---
   const form = document.getElementById("form")
-  const addressInput = document.getElementById("address")
   let search =
     localStorage.getItem("search-engine") ||
     "https://search.brave.com/search?q=%s"
-  let tabCounter = null
-  let currentTab = null
-  let currentFrame = document.getElementById(`frame-${currentTab}`)
+
 
   let backend = localStorage.getItem("proxy-backend") || "uv"
   let wisp = localStorage.getItem("wisp-server") || "wss://anura.pro/"
@@ -67,122 +72,7 @@
     setTransport(localStorage.getItem("proxy-transport"))
   })
 
-  // --- UTILITIES ---
-  async function newTab() {
-    tabCounter++
-
-    let frames = document.querySelectorAll("iframe")
-    let framesArr = [...frames]
-    framesArr.forEach((frame) => {
-      frame.classList.add("hidden")
-    })
-
-    let frame = document.createElement("iframe")
-    frame.setAttribute("class", "w-full h-full border-0 fixed")
-    frame.setAttribute("title", "Proxy Frame")
-    frame.setAttribute("src", "/newtab")
-    frame.setAttribute("loading", "lazy")
-
-    frame.setAttribute("id", `frame-${tabCounter}`)
-    document.getElementById("frames").appendChild(frame)
-
-    currentTab = tabCounter
-    switchTab(tabCounter)
-
-    frame.addEventListener("load", () => {
-      const regex = new RegExp("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)") 
-      let url = decodeURIComponent(
-        currentFrame.contentWindow.location.href.split("/").pop(),
-      )
-      let title = currentFrame.contentWindow.document.title
-
-      let history = localStorage.getItem("history")
-        ? JSON.parse(localStorage.getItem("history"))
-        : []
-      history = [...history, { url: url, title: title }]
-      localStorage.setItem("history", JSON.stringify(history))
-
-      document.dispatchEvent(
-        new CustomEvent("url-changed", {
-          detail: {
-            tabId: currentTab,
-            title: title,
-            url: url,
-          },
-        }),
-      )
-
-      if(url === "newtab")
-        url = "bromine://newtab"
-  
-      addressInput.value = url
-    })
-
-    document.dispatchEvent(
-      new CustomEvent("new-tab", {
-        detail: {
-          tabNumber: tabCounter,
-        },
-      }),
-    )
-
-  }
-
-  function switchTab(tabNumber) {
-    let frames = document.querySelectorAll("iframe")
-    let framesArr = [...frames]
-    framesArr.forEach((frame) => {
-      if (frame.id != `frame-${tabNumber}`) frame.classList.add("hidden")
-      else frame.classList.remove("hidden")
-    })
-
-    currentTab = tabNumber
-    currentFrame = document.getElementById(`frame-${tabNumber}`)
-
-    addressInput.value = decodeURIComponent(
-      currentFrame.contentWindow.location.href.split("/").pop(),
-    )
-
-    document.dispatchEvent(
-      new CustomEvent("switch-tab", {
-        detail: {
-          tabNumber: tabNumber,
-        },
-      }),
-    )
-  }
-
-  function closeTab(tabNumber) {
-    let frames = document.querySelectorAll("iframe")
-    let framesArr = [...frames]
-    framesArr.forEach((frame) => {
-      if (frame.id === `frame-${tabNumber}`) {
-        frame.remove()
-      }
-    })
-
-    if (currentTab === tabNumber) {
-      const otherFrames = document.querySelectorAll('iframe[id^="frame-"]')
-      if (otherFrames.length > 0) {
-        switchTab(parseInt(otherFrames[0].id.replace("frame-", "")))
-      } else {
-        newTab()
-      }
-    }
-
-    document.dispatchEvent(
-      new CustomEvent("close-tab", {
-        detail: {
-          tabNumber: tabNumber,
-        },
-      }),
-    )
-  }
-
-  // --- Housekeeping lol ---
-  window.newTab = newTab
-  window.switchTab = switchTab
-  window.closeTab = closeTab
-
-  newTab()
+  setFrames(document.getElementById("frames"));
+  window.Tab = Tab;
+  new Tab();
 </script>

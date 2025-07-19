@@ -14,7 +14,8 @@ import { Icon } from "astro-icon/components"
   </button>
 </div>
 
-<script is:inline async defer>
+<script>
+  import { newTab, switchTab, closeTab } from "@/utils/lethal.ts"
   let tabs = []
   const tabsDiv = document.getElementById("tabs")
 
@@ -38,8 +39,8 @@ import { Icon } from "astro-icon/components"
     close.innerHTML = "&times;"
     close.onclick = async (e) => {
       e.stopPropagation()
-      if (window.closeTab) {
-        window.closeTab(id)
+      if (closeTab) {
+        closeTab(id)
       }
     }
 
@@ -48,8 +49,8 @@ import { Icon } from "astro-icon/components"
     tab.appendChild(close)
 
     tab.onclick = () => {
-      if (window.switchTab) {
-        window.switchTab(id)
+      if (switchTab) {
+        switchTab(id)
       }
     }
 
@@ -118,7 +119,7 @@ import { Icon } from "astro-icon/components"
 
   // --- EVENTS ----
   document.getElementById("new-tab-btn")?.addEventListener("click", () => {
-    if (window.newTab) window.newTab()
+    if (newTab) newTab()
   })
 
   document.addEventListener("new-tab", (e) => {
@@ -141,11 +142,7 @@ import { Icon } from "astro-icon/components"
     
     
 
-    document.addEventListener('switch-tab', (e) => {
-      const tabId = e.detail.tabNumber;
-      currentTabId = tabId;
-      syncUI(tabId);
-    });
+
     
     document.addEventListener('close-tab', (e) => {
       const tabId = e.detail.tabNumber;

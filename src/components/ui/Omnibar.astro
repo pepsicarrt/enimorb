@@ -6,12 +6,12 @@ import Suggestions from "@/utils/Suggestions.astro"
 import { Icon } from "astro-icon/components"
 ---
 
-<nav class="sticky top-0 bg-base/50 p-2 flex items-center space-x-2 z-[25]">
-  <h1 class="mr-auto">bromine</h1>
+<nav class="sticky top-0 content-between bg-base/50 p-2 flex items-center space-x-2 z-[25]">
+  <h1>bromine</h1>
   <div class="flex items-center justify-center flex-1 space-x-2">
     <button
       aria-label="Back"
-      id="omnibar-back-btn"
+      id="back-btn"
       class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
     >
       <Icon name="ph:arrow-left-bold" class="size-4.5" />
@@ -19,7 +19,7 @@ import { Icon } from "astro-icon/components"
 
     <button
       aria-label="Forward"
-      id="omnibar-forward-btn"
+      id="forward-btn"
       class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
     >
       <Icon name="ph:arrow-right-bold" class="size-4.5" />
@@ -27,7 +27,7 @@ import { Icon } from "astro-icon/components"
 
     <button
       aria-label="Reload"
-      id="omnibar-reload-btn"
+      id="reload-btn"
       class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
     >
       <Icon name="ph:arrow-clockwise-bold" class="size-4.5" />
@@ -58,7 +58,7 @@ import { Icon } from "astro-icon/components"
 
     <button
       aria-label="Dev Tools"
-      id="omnibar-dev-btn"
+      id="dev-btn"
       class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
     >
       <Icon name="ph:code-bold" class="size-4.5" />
@@ -66,32 +66,31 @@ import { Icon } from "astro-icon/components"
 
     <Settings />
   </div>
+    <button
+      aria-label="Context Menu"
+      id="three-dots-btn"
+      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
+    >
+      <Icon name="ph:dots-three-outline-vertical-bold" class="size-4.5" />
+    </button>
 </nav>
 
 <script is:inline defer>
   let devtoolsVisible = false;
 
-  const backButton = document.getElementById("omnibar-back-btn");
-  const forwardButton = document.getElementById("omnibar-forward-btn");
-  const reloadButton = document.getElementById("omnibar-reload-btn");
-  const devButton = document.getElementById("omnibar-dev-btn");
-
-  backButton.addEventListener("click", () => {
-    const iframe = document.getElementById("frame");
-    if (iframe && iframe.contentWindow) iframe.contentWindow.history.back();
+  document.getElementById("back-btn").addEventListener("click", () => {
+    if (currentFrame && currentFrame.contentWindow) currentFrame.contentWindow.history.back();
   });
 
-  forwardButton.addEventListener("click", () => {
-    const iframe = document.getElementById("frame");
-    if (iframe && iframe.contentWindow) iframe.contentWindow.history.forward();
+  document.getElementById("forward-btn").addEventListener("click", () => {
+    if (currentFrame && currentFrame.contentWindow) currentFrame.contentWindow.history.forward();
   });
 
-  reloadButton.addEventListener("click", () => {
-    const iframe = document.getElementById("frame");
-    if (iframe && iframe.contentWindow) iframe.contentWindow.location.reload();
+  document.getElementById("reload-btn").addEventListener("click", () => {
+    if (currentFrame && currentFrame.contentWindow) currentFrame.contentWindow.location.reload();
   });
 
-  devButton.addEventListener("click", () => {
+  document.getElementById("dev-btn").addEventListener("click", () => {
     const iframe = currentFrame?.contentWindow?.document;
     if (!iframe) return;
 
@@ -109,5 +108,6 @@ import { Icon } from "astro-icon/components"
       iframe.head.appendChild(script);
     }
   });
+
 
 </script>
