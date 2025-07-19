@@ -20,4 +20,4 @@ jobs:
       run: docker build . --file Dockerfile --tag bromine:$IMAGE_TAG
 
     - name: Run Docker container
-      run: docker run bromine:$IMAGE_TAG
+      run: docker push bromine:$IMAGE_TAG
