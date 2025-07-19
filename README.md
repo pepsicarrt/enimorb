@@ -9,6 +9,14 @@ ok thats it
 [![Deploy to Koyeb](https://binbashbanana.github.io/deploy-buttons/buttons/remade/koyeb.svg)](https://app.koyeb.com/deploy?type=git&repository=github.com/Bromine-labs/Bromine&branch=main&name=Bromine)
 [![Deploy to Render](https://binbashbanana.github.io/deploy-buttons/buttons/remade/render.svg)](https://render.com/deploy?repo=https://github.com/Bromine-labs/Bromine)
 
+### Docker
+
+```bash
+# asumming you have either docker or podman
+docker pull docker.io/coding3hours/bromine:latest
+docker run -d -p 8080:80 docker.io/coding3hours/bromine
+```
+Then go to [localhost:8080](http://localhost:8080)
 
 ## Tech stack
 - Scramjet
