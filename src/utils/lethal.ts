@@ -190,7 +190,7 @@ export class Tab {
 
   switch(): void {
     currentTab = this.tabNumber;
-    let frames = document.querySelectorAll("iframe")
+    let frames = framesElement.querySelectorAll("iframe")
     let framesArr = [...frames]
     framesArr.forEach((frame) => {
       frame.classList.add("hidden")
@@ -200,7 +200,7 @@ export class Tab {
     currentFrame = document.getElementById(`frame-${this.tabNumber}`) as HTMLIFrameElement
 
     addressInput.value = decodeURIComponent(
-      this.frame?.contentWindow?.location.href.split("/").pop() as string,
+      (currentFrame?.contentWindow?.location.href ?? "").split("/").pop() as string
     )
 
     document.dispatchEvent(
@@ -260,7 +260,7 @@ export  async function newTab() {
   }
 
 export  function switchTab(tabNumber: number): void {
-    let frames = document.querySelectorAll("iframe")
+    let frames = framesElement.querySelectorAll("iframe")
     let framesArr = [...frames]
     framesArr.forEach((frame) => {
       if (frame.id != `frame-${tabNumber}`) frame.classList.add("hidden")
@@ -271,7 +271,7 @@ export  function switchTab(tabNumber: number): void {
     currentFrame = document.getElementById(`frame-${tabNumber}`) as HTMLIFrameElement
 
     addressInput.value = decodeURIComponent(
-      currentFrame?.contentWindow?.location.href.split("/").pop() as string,
+      (currentFrame?.contentWindow?.location.href ?? "").split("/").pop() as string
     )
 
     document.dispatchEvent(
@@ -284,7 +284,7 @@ export  function switchTab(tabNumber: number): void {
   }
 
   export function closeTab(tabNumber: number): void {
-    let frames = document.querySelectorAll("iframe")
+    let frames = framesElement.querySelectorAll("iframe")
     let framesArr = [...frames]
     framesArr.forEach((frame) => {
       if (frame.id === `frame-${tabNumber}`) {
@@ -293,7 +293,7 @@ export  function switchTab(tabNumber: number): void {
     })
 
     if (currentTab === tabNumber) {
-      const otherFrames = document.querySelectorAll('iframe[id^="frame-"]')
+      const otherFrames = framesElement.querySelectorAll('iframe')
       if (otherFrames.length > 0) {
         switchTab(parseInt(otherFrames[0].id.replace("frame-", "")))
       } else {
