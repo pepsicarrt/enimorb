@@ -14,7 +14,6 @@ jobs:
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
-            https://breadmine.neealdon3-3f0.workers.dev/
             https://bromine.pages.dev/
             https://bromine.on-to.space
           uploadArtifacts: true # save results as an action artifacts
