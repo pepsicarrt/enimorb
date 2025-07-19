@@ -2,7 +2,6 @@
 ///          Init          ///
 //////////////////////////////
 import { BareMuxConnection } from "@mercuryworkshop/bare-mux";
-import { Tab } from "./Tab";
 
 //////////////////////////////
 ///         Options        ///
@@ -157,9 +156,108 @@ export function setFrames(frames: HTMLElement): void {
 	framesElement = frames;
 }
 
-export async function newTab() {
-  new Tab();
+
+export class Tab {
+  frame: HTMLIFrameElement;
+  tabNumber: number;
+
+  constructor() {
+    tabCounter++
+    this.tabNumber = tabCounter;
+
+
+    this.frame = document.createElement("iframe")
+    this.frame.setAttribute("class", "w-full h-full border-0 fixed")
+    this.frame.setAttribute("title", "Proxy Frame")
+    this.frame.setAttribute("src", "/newtab")
+    this.frame.setAttribute("loading", "lazy")
+
+    this.frame.setAttribute("id", `frame-${tabCounter}`)
+    framesElement.appendChild(this.frame)
+
+    this.switch()
+
+    this.frame.addEventListener("load", () => this.handleLoad)
+
+    document.dispatchEvent(
+      new CustomEvent("new-tab", {
+        detail: {
+          tabNumber: tabCounter,
+        },
+      }),
+    )
+  }
+
+  switch(): void {
+    currentTab = this.tabNumber;
+    let frames = document.querySelectorAll("iframe")
+    let framesArr = [...frames]
+    framesArr.forEach((frame) => {
+      frame.classList.add("hidden")
+    })
+    this.frame.classList.remove("hidden")
+
+    currentFrame = document.getElementById(`frame-${this.tabNumber}`) as HTMLIFrameElement
+
+    addressInput.value = decodeURIComponent(
+      this.frame?.contentWindow?.location.href.split("/").pop() as string,
+    )
+
+    document.dispatchEvent(
+      new CustomEvent("switch-tab", {
+        detail: {
+          tabNumber: this.tabNumber,
+        },
+      }),
+    )
+  }
+
+  close(): void {
+    this.frame.remove();
+
+    document.dispatchEvent(
+      new CustomEvent("close-tab", {
+        detail: {
+          tabNumber: this.tabNumber,
+        },
+      }),
+    )
+  }
+
+  handleLoad(): void {
+      let url = decodeURIComponent(
+        this.frame?.contentWindow?.location.href.split("/").pop() as string,
+      )
+      let title = this.frame?.contentWindow?.document.title
+
+      let history = localStorage.getItem("history")
+        ? JSON.parse(localStorage.getItem("history") as string)
+        : []
+      history = [...history, { url: url, title: title }]
+      localStorage.setItem("history", JSON.stringify(history))
+
+      document.dispatchEvent(
+        new CustomEvent("url-changed", {
+          detail: {
+            tabId: currentTab,
+            title: title,
+            url: url,
+          },
+        }),
+      )
+
+      if(url === "newtab")
+        url = "bromine://newtab"
+  
+      addressInput.value = url
+  }
+
 }
+
+
+export  async function newTab() {
+  new Tab();
+  }
 
 export  function switchTab(tabNumber: number): void {
     let frames = document.querySelectorAll("iframe")
@@ -172,9 +270,8 @@ export  function switchTab(tabNumber: number): void {
     currentTab = tabNumber
     currentFrame = document.getElementById(`frame-${tabNumber}`) as HTMLIFrameElement
 
-    const locaion = currentFrame?.contentWindow?.location.href ?? "";
     addressInput.value = decodeURIComponent(
-      locaion.split("/").pop() as string
+      currentFrame?.contentWindow?.location.href.split("/").pop() as string,
     )
 
     document.dispatchEvent(
@@ -186,7 +283,7 @@ export  function switchTab(tabNumber: number): void {
     )
   }
 
- export function closeTab(tabNumber: number): void {
+  export function closeTab(tabNumber: number): void {
     let frames = document.querySelectorAll("iframe")
     let framesArr = [...frames]
     framesArr.forEach((frame) => {
@@ -212,3 +309,4 @@ export  function switchTab(tabNumber: number): void {
       }),
     )
   }
+
