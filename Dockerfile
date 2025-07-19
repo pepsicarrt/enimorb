@@ -1,17 +1,19 @@
-FROM oven/bun:alpine AS build
+FROM docker.io/oven/bun:alpine AS build
 
 WORKDIR /app
 
-# Cache Bun dependencies in Docker BuildKit cache
 COPY package.json bun.lock tsconfig.json ./
-
 RUN bun install --production
 
 COPY . .
 
 RUN bun run build
 
-FROM nginx:1-alpine3.22-slim
+FROM docker.io/library/busybox:1.36
 
-COPY --from=build /app/dist /usr/share/nginx/html 
+WORKDIR /www
+COPY --from=build /app/dist .
+
 EXPOSE 80
+
+CMD ["httpd", "-f", "-p", "80", "-h", "/www"]
