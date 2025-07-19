@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set image tag
+      run: echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
+
+    - name: Build Docker image
+      run: docker build . --file Dockerfile --tag bromine:$IMAGE_TAG
+
+    - name: Run Docker container
+      run: docker run bromine:$IMAGE_TAG
