@@ -177,7 +177,7 @@ export class Tab {
 
     this.switch()
 
-    this.frame.addEventListener("load", () => this.handleLoad)
+    this.frame.addEventListener("load", this.handleLoad)
 
     document.dispatchEvent(
       new CustomEvent("new-tab", {
