@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "check": "bunx biome check --write * && astro check",
-    "build": "astro build",
+    "build": "astro build --experimental-static-build",
     "deploy": "wrangler deploy"
   },
   "dependencies": {
