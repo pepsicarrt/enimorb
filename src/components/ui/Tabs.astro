@@ -20,7 +20,6 @@ import { Icon } from "astro-icon/components"
   let tabs = []
   const tabsDiv = document.getElementById("tabs")
 
-  // Util: Get favicon from URL
   function getIcon(url) {
     const regex = /^https?:\/\/[\w.-]+\.[a-z]{2,}/i
     return regex.test(url)
@@ -28,7 +27,6 @@ import { Icon } from "astro-icon/components"
       : "https://placehold.co/24"
   }
 
-  // Create a new tab element
   function createTab(id, title = "New Tab", url = "") {
     const tab = document.createElement("div")
     tab.className = `
@@ -68,12 +66,10 @@ import { Icon } from "astro-icon/components"
     return tabData
   }
 
-  // Update the appearance of tabs based on the visible iframe
   function checkState() {
     const frames = Array.from(document.querySelectorAll('iframe[id^="frame-"]'))
     const frameIds = frames.map((frame) => parseInt(frame.id.replace("frame-", "")))
 
-    // Remove tabs that no longer exist
     tabs = tabs.filter((tab) => {
       if (!frameIds.includes(tab.id)) {
         tab.element.remove()
@@ -82,7 +78,6 @@ import { Icon } from "astro-icon/components"
       return true
     })
 
-    // Add tabs that are missing
     frameIds.forEach((id) => {
       if (!tabs.some((tab) => tab.id === id)) {
         createTab(id)
@@ -96,7 +91,6 @@ import { Icon } from "astro-icon/components"
     }
   }
 
-  // Highlight the active tab
   function syncUI(activeId) {
     document.querySelectorAll("[data-tab-id]").forEach((tab) => {
       const isActive = parseInt(tab.dataset.tabId) === activeId
@@ -108,7 +102,6 @@ import { Icon } from "astro-icon/components"
     })
   }
 
-  // Rename and update tab favicon
   function renameTab(tabId, title, url) {
     const tabData = tabs.find((t) => t.id === tabId)
     if (!tabData) return
@@ -152,7 +145,6 @@ import { Icon } from "astro-icon/components"
     checkState()
   })
 
-  // Initial render
   checkState()
 </script>
 

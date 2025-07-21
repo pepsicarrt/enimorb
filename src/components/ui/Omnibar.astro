@@ -7,8 +7,10 @@ import { Icon } from "astro-icon/components"
 ---
 
 <nav class="sticky top-0 content-between bg-base/50 p-2 flex items-center space-x-2 z-[25]">
-  <h1>bromine</h1>
+  <h1 class="text-base font-semibold">bromine</h1>
+
   <div class="flex items-center justify-center flex-1 space-x-2">
+    <!-- Nav Buttons -->
     <button
       aria-label="Back"
       id="back-btn"
@@ -33,10 +35,9 @@ import { Icon } from "astro-icon/components"
       <Icon name="ph:arrow-clockwise-bold" class="size-4.5" />
     </button>
 
+    <!-- Address/Search Bar -->
     <div class="relative flex-1 max-w-md">
-      <div
-        class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5"
-      >
+      <div class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5">
         <Icon name="ph:magnifying-glass-bold" class="size-4.5 mr-2" />
         <form id="form" class="flex-center w-full">
           <input
@@ -45,7 +46,7 @@ import { Icon } from "astro-icon/components"
             id="address"
             type="text"
             placeholder="Search the web freely"
-            class="bg-transparent w-full focus:outline-none"
+            class="bg-transparent w-full focus:outline-none text-sm"
           />
         </form>
       </div>
@@ -53,19 +54,12 @@ import { Icon } from "astro-icon/components"
     </div>
 
     <Bookmarks />
-
     <History />
-
-    <button
-      aria-label="Dev Tools"
-      id="dev-btn"
-      class="shadow-md bg-surface p-1.5 rounded-md hover:bg-highlight-med"
-    >
-      <Icon name="ph:code-bold" class="size-4.5" />
-    </button>
-
     <Settings />
   </div>
+
+  <!-- Context Menu Button + Dropdown -->
+  <div class="relative">
     <button
       aria-label="Context Menu"
       id="three-dots-btn"
@@ -73,41 +67,99 @@ import { Icon } from "astro-icon/components"
     >
       <Icon name="ph:dots-three-outline-vertical-bold" class="size-4.5" />
     </button>
+
+    <div
+      id="context-menu"
+      class="absolute right-0 mt-2 w-48 bg-surface shadow-lg rounded-md border border-overlay hidden z-50"
+    >
+      <button
+        id="dev-btn"
+        class="flex items-center w-full px-4 py-2 text-left text-sm hover:bg-highlight-med"
+      >
+        <Icon name="ph:code-bold" class="size-4.5 mr-2" />
+        Dev Tools
+      </button>
+
+      <!-- Add more items below if needed -->
+      <!-- <button class="flex items-center w-full px-4 py-2 text-left text-sm hover:bg-highlight-med">Other Option</button> -->
+    </div>
+  </div>
 </nav>
 
-<script is:inline defer>
-  let devtoolsVisible = false;
 
-  document.getElementById("back-btn").addEventListener("click", () => {
-    if (currentFrame && currentFrame.contentWindow) currentFrame.contentWindow.history.back();
-  });
 
-  document.getElementById("forward-btn").addEventListener("click", () => {
-    if (currentFrame && currentFrame.contentWindow) currentFrame.contentWindow.history.forward();
-  });
+<script>
+  import { currentFrame } from "@/utils/lethal.ts"
+  let devtoolsVisible = false
 
-  document.getElementById("reload-btn").addEventListener("click", () => {
-    if (currentFrame && currentFrame.contentWindow) currentFrame.contentWindow.location.reload();
-  });
+  const actions = [
+    {
+      id: "back-btn",
+      handler: () => {
+        if (currentFrame?.contentWindow) {
+          currentFrame.contentWindow.history.back()
+        }
+      }
+    },
+    {
+      id: "forward-btn",
+      handler: () => {
+        if (currentFrame?.contentWindow) {
+          currentFrame.contentWindow.history.forward()
+        }
+      }
+    },
+    {
+      id: "reload-btn",
+      handler: () => {
+        if (currentFrame?.contentWindow) {
+          currentFrame.contentWindow.location.reload()
+        }
+      }
+    },
+    {
+      id: "dev-btn",
+      handler: () => {
+        const iframe = currentFrame?.contentWindow
+        if (!iframe) return
 
-  document.getElementById("dev-btn").addEventListener("click", () => {
-    const iframe = currentFrame?.contentWindow?.document;
-    if (!iframe) return;
+        if (iframe.eruda) {
+          devtoolsVisible ? iframe.eruda.hide() : iframe.eruda.show()
+          devtoolsVisible = !devtoolsVisible
+        } else {
+          const script = iframe.document.createElement("script")
+          script.src = "https://unpkg.com/eruda@3.4.3/eruda.js"
+          script.onload = () => {
+            iframe.eruda.init({ tool: ["console", "elements", "sources"] })
+            iframe.eruda.show()
+            devtoolsVisible = true
+          }
+          iframe.document.head.appendChild(script)
+        }
 
-    if (iframe.eruda) {
-      devtoolsVisible ? iframe.eruda.hide() : iframe.eruda.show();
-      devtoolsVisible = !devtoolsVisible;
-    } else {
-      const script = iframe.createElement("script");
-      script.src = "https://unpkg.com/eruda@3.4.3/eruda.js";
-      script.onload = () => {
-        iframe.eruda.init({ tool: ["console", "elements", "sources"] });
-        iframe.eruda.show();
-        devtoolsVisible = true;
-      };
-      iframe.head.appendChild(script);
+        document.getElementById("context-menu")?.classList.add("hidden")
+      }
     }
-  });
+  ]
 
+  actions.forEach(({ id, handler }) => {
+    const el = document.getElementById(id)
+    if (el) el.addEventListener("click", handler)
+  })
 
+  const menuBtn = document.getElementById("three-dots-btn")
+  const contextMenu = document.getElementById("context-menu")
+
+  menuBtn?.addEventListener("click", () => {
+    contextMenu?.classList.toggle("hidden")
+  })
+
+  document.addEventListener("click", (e) => {
+    if (
+      !menuBtn?.contains(e.target as Node) &&
+      !contextMenu?.contains(e.target as Node)
+    ) {
+      contextMenu?.classList.add("hidden")
+    }
+  })
 </script>
