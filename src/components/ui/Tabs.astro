@@ -2,11 +2,11 @@
 import { Icon } from "astro-icon/components"
 ---
 
-<div class="flex items-center bg-surface border-b border-overlay">
-  <div id="tabs" class="flex-1 flex overflow-x-auto scrollbar-hide"></div>
+<div class="flex items-center bg-surface border-b border-overlay h-10">
+  <div id="tabs" class="flex-1 flex overflow-x-auto scrollbar-hide items-stretch"></div>
   <button
     id="new-tab-btn"
-    class="mr-2 p-2 text-text hover:bg-overlay rounded-md"
+    class="mr-2 p-2 hover:bg-overlay hover:text-iris transition-colors duration-150 rounded-md focus:outline-none focus:ring-2 focus:ring-iris"
     aria-label="New Tab"
     title="New Tab"
   >
@@ -16,43 +16,50 @@ import { Icon } from "astro-icon/components"
 
 <script>
   import { newTab, switchTab, closeTab } from "@/utils/lethal.ts"
+
   let tabs = []
   const tabsDiv = document.getElementById("tabs")
 
+  // Util: Get favicon from URL
+  function getIcon(url) {
+    const regex = /^https?:\/\/[\w.-]+\.[a-z]{2,}/i
+    return regex.test(url)
+      ? `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=64&url=${url}`
+      : "https://placehold.co/24"
+  }
+
+  // Create a new tab element
   function createTab(id, title = "New Tab", url = "") {
     const tab = document.createElement("div")
-    tab.className =
-      "flex items-center min-w-0 max-w-xs px-4 py-2 border-r border-overlay hover:bg-overlay cursor-pointer"
+    tab.className = `
+      flex items-center min-w-[8rem] max-w-xs px-4 py-1
+      border-r border-overlay hover:bg-overlay cursor-pointer
+      transition-all duration-150
+    `.trim()
     tab.dataset.tabId = id
 
     const favicon = document.createElement("img")
-    favicon.className = "mr-2 size-4"
+    favicon.className = "w-4 h-4 mr-2 rounded"
     favicon.alt = "Favicon"
     favicon.src = getIcon(url)
 
     const titleSpan = document.createElement("span")
-    titleSpan.className = "tab truncate flex-1"
+    titleSpan.className = "tab truncate flex-1 text-sm"
     titleSpan.textContent = title
 
-    const close = document.createElement("button")
-    close.className = "ml-2 text-text/50 hover:text-text"
-    close.innerHTML = "&times;"
-    close.onclick = async (e) => {
+    const closeBtn = document.createElement("button")
+    closeBtn.className = "ml-2 text-text/50 hover:text-text text-sm focus:outline-none"
+    closeBtn.innerHTML = "&times;"
+    closeBtn.onclick = (e) => {
       e.stopPropagation()
-      if (closeTab) {
-        closeTab(id)
-      }
+      closeTab?.(id)
     }
 
     tab.appendChild(favicon)
     tab.appendChild(titleSpan)
-    tab.appendChild(close)
+    tab.appendChild(closeBtn)
 
-    tab.onclick = () => {
-      if (switchTab) {
-        switchTab(id)
-      }
-    }
+    tab.onclick = () => switchTab?.(id)
 
     tabsDiv.appendChild(tab)
     const tabData = { id, element: tab, title, url }
@@ -61,19 +68,12 @@ import { Icon } from "astro-icon/components"
     return tabData
   }
 
-  function getIcon(url) {
-    const regex = new RegExp("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)") 
-    if(!regex.test(url))
-      return "https://placehold.co/24"
-    return `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=64&url=${url}`
-  }
-
+  // Update the appearance of tabs based on the visible iframe
   function checkState() {
     const frames = Array.from(document.querySelectorAll('iframe[id^="frame-"]'))
-    const frameIds = frames.map((frame) =>
-      parseInt(frame.id.replace("frame-", "")),
-    )
+    const frameIds = frames.map((frame) => parseInt(frame.id.replace("frame-", "")))
 
+    // Remove tabs that no longer exist
     tabs = tabs.filter((tab) => {
       if (!frameIds.includes(tab.id)) {
         tab.element.remove()
@@ -82,50 +82,53 @@ import { Icon } from "astro-icon/components"
       return true
     })
 
+    // Add tabs that are missing
     frameIds.forEach((id) => {
       if (!tabs.some((tab) => tab.id === id)) {
-        createTab(id, "New Tab", "")
+        createTab(id)
       }
     })
 
-    const visibleFrame = frames.find(
-      (frame) => !frame.classList.contains("hidden"),
-    )
+    const visibleFrame = frames.find((frame) => !frame.classList.contains("hidden"))
     if (visibleFrame) {
       const activeTabId = parseInt(visibleFrame.id.replace("frame-", ""))
       syncUI(activeTabId)
     }
   }
 
+  // Highlight the active tab
   function syncUI(activeId) {
     document.querySelectorAll("[data-tab-id]").forEach((tab) => {
       const isActive = parseInt(tab.dataset.tabId) === activeId
       tab.classList.toggle("bg-overlay", isActive)
       tab.classList.toggle("active", isActive)
+      tab.classList.toggle("font-medium", isActive)
+      tab.classList.toggle("border-b-2", isActive)
+      tab.classList.toggle("border-iris", isActive)
     })
   }
 
+  // Rename and update tab favicon
   function renameTab(tabId, title, url) {
     const tabData = tabs.find((t) => t.id === tabId)
     if (!tabData) return
 
     tabData.title = title || "New Tab"
     tabData.url = url || ""
-
     tabData.element.querySelector(".tab").textContent = tabData.title
-
     tabData.element.querySelector("img").src = getIcon(tabData.url)
   }
 
-  // --- EVENTS ----
+  // --- Event Listeners ---
+
   document.getElementById("new-tab-btn")?.addEventListener("click", () => {
-    if (newTab) newTab()
+    newTab?.()
   })
 
   document.addEventListener("new-tab", (e) => {
     const tabId = e.detail.tabNumber
     if (!tabs.some((tab) => tab.id === tabId)) {
-      createTab(tabId, "New Tab", "")
+      createTab(tabId)
     }
     checkState()
   })
@@ -135,29 +138,25 @@ import { Icon } from "astro-icon/components"
     syncUI(tabId)
   })
 
-
   document.addEventListener("url-changed", (e) => {
     renameTab(e.detail.tabId, e.detail.title, e.detail.url)
   })
-    
-    
 
+  document.addEventListener("close-tab", (e) => {
+    const tabId = e.detail.tabNumber
+    const index = tabs.findIndex((tab) => tab.id === tabId)
+    if (index !== -1) {
+      tabs[index].element.remove()
+      tabs.splice(index, 1)
+    }
+    checkState()
+  })
 
-    
-    document.addEventListener('close-tab', (e) => {
-      const tabId = e.detail.tabNumber;
-      const tabIndex = tabs.findIndex(tab => tab.id === tabId);
-      if (tabIndex !== -1) {
-        tabs[tabIndex].element.remove();
-        tabs.splice(tabIndex, 1);
-      }
-      checkState();
-    });
-    
-
-
+  // Initial render
   checkState()
 </script>
+
+
 
 <style>
   .scrollbar-hide::-webkit-scrollbar {
