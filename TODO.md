@@ -1,7 +1,7 @@
 # Todo
 
 - [ ] newtab wallpapers
-- [ ] perforamncec metrics
+- [x] ~~perforamncec metrics~~ canceled
 - [ ] panic key
 - [x] tab cloaking changable tab
 - [ ] micatheme

@@ -19,7 +19,9 @@ if (navigator.userAgent.includes("Firefox")) {
 const uv = new UVServiceWorker()
 const { ScramjetServiceWorker } = $scramjetLoadWorker();
 const scramjet = new ScramjetServiceWorker();
-
+(async function () {
+        await scramjet.loadConfig();
+})();
 const ww = new WorkerWare({});
 
 
@@ -40,7 +42,6 @@ async function handleRequest(event) {
     return;
   }
   
-  await scramjet.loadConfig()
   if (scramjet.route(event)) {
     return scramjet.fetch(event)
   }
