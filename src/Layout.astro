@@ -8,15 +8,11 @@ export interface Props {
   desc: string
 }
 
-const { title = "bromine", desc = "a really shitty web proxy" } = Astro.props
+const { title = "bromine", desc = "a really shitty site" } = Astro.props
 ---
 
 <html lang="en">
   <head>
-    <meta
-      name="keywords"
-      content="proxy, web proxy, uncensor, bypass firewall, free web proxy"
-    />
     <meta name="description" content={desc} />
     <meta charset="UTF-8" />
     <meta content="IE=edge" http-equiv="X-UA-Compatible" />

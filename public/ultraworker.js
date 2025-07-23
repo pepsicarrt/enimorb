@@ -25,6 +25,15 @@ const scramjet = new ScramjetServiceWorker();
 const ww = new WorkerWare({});
 
 
+
+if (navigator.userAgent.includes("Firefox")) {
+    Object.defineProperty(globalThis, "crossOriginIsolated", {
+        value: true,
+        writable: true
+    });
+}
+
+
 ww.use({
   function: self.adblockExt.filterRequest,
   events: ["fetch"],
