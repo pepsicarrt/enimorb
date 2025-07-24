@@ -24,7 +24,7 @@ jobs:
       with:
         registry: ghcr.io
         username: "coding4Hours"
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.TOKEN }}
     
     - name: Run Docker container
       run: docker push coding4hours/bromine:$IMAGE_TAG
