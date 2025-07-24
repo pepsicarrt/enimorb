@@ -24,7 +24,7 @@ import { Icon } from "astro-icon/components"
     const regex = /^https?:\/\/[\w.-]+\.[a-z]{2,}/i
     return regex.test(url)
       ? `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=64&url=${url}`
-      : "https://placehold.co/24"
+      : "https://images.placeholders.dev/24"
   }
 
   function createTab(id, title = "New Tab", url = "") {
