@@ -1,23 +1,20 @@
 {
   "sections": [
+{
+  "title": "Appearance",
+  "settings": [
     {
-      "title": "New Tab Page",
-      "settings": [
-        {
-          "id": "show-bookmarks",
-          "label": "Show Bookmarks",
-          "type": "toggle",
-          "defaultValue": "true",
-          "description": "Show your bookmarks on the new tab page."
-        },
-        {
-          "id": "show-history",
-          "label": "Show History",
-          "type": "toggle",
-          "defaultValue": "true",
-          "description": "Show your history on the new tab page."
-        }
-      ]
+      "id": "wallpaper-enabled",
+      "label": "Enable Wallpaper",
+      "type": "toggle",
+      "defaultValue": "false"
+    },
+    {
+      "id": "wallpaper-url",
+      "label": "Wallpaper URL",
+      "type": "text",
+          "placeholder": "put your wallpaper here"
     }
   ]
 }
+  ]}

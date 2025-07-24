@@ -75,27 +75,27 @@ const flatSettingsConfig = settingsData.sections.flatMap(
   } from "@/utils/lethal.ts"
   
 
- let backend = localStorage.getItem("proxy-backend") || "uv"
-  let wisp = localStorage.getItem("wisp-server") || "wss://anura.pro/"
-  let transport = localStorage.getItem("proxy-transport")
+  let backend = localStorage.getItem("proxy-backend") || "uv" as string
+  let wisp = localStorage.getItem("wisp-server") || "wss://anura.pro/" as string
+  let transport = localStorage.getItem("proxy-transport") as string
 
   setWisp(wisp)
   setProxy(backend)
 
-  if (transport) setTransport(transport)
+  if (transport) setTransport(transport as Transport)
   else if (navigator.userAgent.indexOf("Firefox") > 0) setTransport("libcurl")
   else setTransport("epoxy")
   let search =
     localStorage.getItem("search-engine") ||
-    "https://search.brave.com/search?q=%s"
+    "https://search.brave.com/search?q=%s" as string
 
-            const form = document.getElementById("form")
-            const input = document.getElementById("address")
+            const form = document.getElementById("form") as HTMLFormElement
+  const input = document.getElementById("address") as HTMLInputElement
 
-  form.addEventListener("submit", async (e) => {
+  form?.addEventListener("submit", async (e) => {
     e.preventDefault()
 
-    const proxiedUrl = await getProxied(makeURL(input.value, search))
+    const proxiedUrl = await getProxied(makeURL(input?.value, search))
 
     if (localStorage.getItem("stealth-mode")) 
       location.replace(proxiedUrl)
@@ -107,36 +107,39 @@ const flatSettingsConfig = settingsData.sections.flatMap(
 
 
   window.addEventListener("search-engine-changed", () => {
-    search = localStorage.getItem("search-engine")
+    search = localStorage.getItem("search-engine") as string
   })
 
   window.addEventListener("proxy-backend-changed", () => {
-    backend = localStorage.getItem("proxy-backend")
-    setProxy(localStorage.getItem("proxy-backend"))
+    backend = localStorage.getItem("proxy-backend") as string
+    setProxy(localStorage.getItem("proxy-backend") as string)
   })
 
   window.addEventListener("wisp-server-changed", () => {
-    wisp = localStorage.getItem("wisp-server")
-    setWisp(localStorage.getItem("wisp-server"))
+    wisp = localStorage.getItem("wisp-server") as string
+    setWisp(localStorage.getItem("wisp-server") as string)
   })
 
   window.addEventListener("proxy-transport-changed", () => {
-    transport = localStorage.getItem("proxy-transport")
-    setTransport(localStorage.getItem("proxy-transport"))
+    transport = localStorage.getItem("proxy-transport") as Transport
+    setTransport(localStorage.getItem("proxy-transport") as Transport)
   })
         </script>
     </main>
+  
+<aside class="fixed top-4 right-4 bg-base border border-overlay rounded-lg p-4 space-y-4">
+  {
+    settingsData.sections.map((section) => (
+      <section class="space-y-2">
+        <h2 class="text-lg font-medium text-text">{section.title}</h2>
+        {
+          section.settings.map((setting) => (
+            <div class="flex items-center justify-between gap-4">
+              <label class="text-text flex-1" for={setting.id}>
+                {setting.label}
+              </label>
 
-    <aside class="fixed top-4 right-4 bg-base border border-overlay rounded-lg p-4 space-y-4">
-      {
-        settingsData.sections.map((section) => (
-          <section class="space-y-2">
-            <h2 class="text-lg font-medium text-text">{section.title}</h2>
-            {section.settings.map((setting) => (
-              <div class="flex items-center justify-between gap-4">
-                <label class="text-text" for={setting.id}>
-                  {setting.label}
-                </label>
+              {setting.type === "toggle" ? (
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
@@ -145,13 +148,23 @@ const flatSettingsConfig = settingsData.sections.flatMap(
                   />
                   <div class="w-11 h-6 bg-overlay rounded-full peer peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-iris peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-iris" />
                 </label>
-              </div>
-            ))}
-          </section>
-        ))
-      }
-    </aside>
-</body>
+              ) : (
+              <input
+                  type={setting.type}
+                  id={setting.id}
+                  class="bg-overlay text-text rounded-md px-2 py-1 w-48 focus:outline-none focus:ring-2 focus:ring-iris"
+                  placeholder={setting.placeholder || ""}
+                />
+              )}
+            </div>
+          ))
+        }
+      </section>
+    ))
+  }
+</aside>
+
+  </body>
 </html>
 
 <script define:vars={{ settingsConfig: flatSettingsConfig }} defer is:inline>
@@ -171,13 +184,34 @@ const flatSettingsConfig = settingsData.sections.flatMap(
     });
   };
 
-  const save = (event) => {
-    const { target: element } = event;
-    const setting = settingsConfig.find((s) => s.id === element.id);
-    if (!setting) return;
+const save = (event) => {
+  const element = event.target;
+  if (!element || !element.id) return;
 
-    const valueToStore = setting.type === "toggle" ? element.checked : element.value;
-    localStorage.setItem(setting.id, valueToStore.toString());
+  const setting = settingsConfig.find((s) => s.id === element.id);
+  if (!setting) return;
+
+  let valueToStore;
+
+  switch (setting.type) {
+    case "toggle":
+      valueToStore = element.checked.toString();
+      break;
+
+    case "number":
+      valueToStore = Number(element.value).toString();
+      break;
+
+    case "text":
+    case "url":
+    default:
+      valueToStore = element.value?.toString().trim();
+      break;
+  }
+
+  if (valueToStore !== undefined) {
+    localStorage.setItem(setting.id, valueToStore);
+  }
   };
 
   const init = () => {
@@ -194,3 +228,33 @@ const flatSettingsConfig = settingsData.sections.flatMap(
   init();
 </script>
 
+<script is:inline defer>
+  const applyWallpaper = () => {
+    const enabled = localStorage.getItem("wallpaper-enabled") === "true";
+    const url = localStorage.getItem("wallpaper-url");
+
+    const body = document.querySelector("body");
+
+    if (enabled && url) {
+      body.style.backgroundImage = `url('${url}')`;
+      body.style.backgroundSize = "cover";
+      body.style.backgroundPosition = "center";
+      body.style.backgroundRepeat = "no-repeat";
+    } else {
+      body.style.backgroundImage = "none";
+    }
+  };
+
+  window.addEventListener("DOMContentLoaded", applyWallpaper);
+
+  window.addEventListener("storage", () => {
+    applyWallpaper();
+  });
+
+  ["wallpaper-enabled", "wallpaper-url"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("change", applyWallpaper);
+    }
+  });
+</script>
