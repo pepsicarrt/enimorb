@@ -15,6 +15,7 @@ ok thats it
 # asumming you have either docker or podman
 docker pull docker.io/coding3hours/bromine:latest
 docker run -d -p 8080:80 docker.io/coding3hours/bromine
+# you can also use ghcr.io/coding4hours/bromine
 ```
 Then go to [localhost:8080](http://localhost:8080)
 
