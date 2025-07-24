@@ -18,6 +18,13 @@ jobs:
 
     - name: Build Docker image
       run: docker build . --file Dockerfile --tag bromine:$IMAGE_TAG
-
+    
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: "coding4Hours"
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
     - name: Run Docker container
-      run: docker push bromine:$IMAGE_TAG
+      run: docker push coding4hours/bromine:$IMAGE_TAG
