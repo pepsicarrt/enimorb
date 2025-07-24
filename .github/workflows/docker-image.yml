@@ -27,4 +27,4 @@ jobs:
         password: ${{ secrets.TOKEN }}
     
     - name: Run Docker container
-      run: docker push coding4hours/bromine:$IMAGE_TAG
+      run: docker push ghcr.io/coding4hours/bromine:$IMAGE_TAG
