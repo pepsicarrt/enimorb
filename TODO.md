@@ -1,6 +1,6 @@
 # Todo
 
-- [ ] newtab wallpapers
+- [x] newtab wallpapers
 - [x] ~~perforamncec metrics~~ canceled
 - [ ] panic key
 - [x] tab cloaking changable tab
