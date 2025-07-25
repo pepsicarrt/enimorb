@@ -12,11 +12,16 @@ import ProxyFrame from "@/utils/ProxyFrame.astro"
   <ProxyFrame/>
 </Layout>
 <script>
-  if(localStorage.getItem("ab") === "true") {
-    try {
-    const a = open()
-      a.document.write(`<iframe src='${location.origin}'></iframe>`);
-      a.document.title = "New Tab"
-      location.replace(localStorage.getItem("ab-site") || "https://classroom.google.com/h")
-    }catch{alert("Try allow popup permissions for about blank to work.")}}
+if (localStorage.getItem("ab") === "true") {
+  try {
+    const a = open();
+    const iframe = a?.document.createElement("iframe");
+    iframe.src = location.origin;
+    a.document.body.appendChild(iframe);
+    a.document.title = "New Tab";
+    location.replace(localStorage.getItem("ab-site") || "https://classroom.google.com/h");
+  } catch {
+    alert("Try allowing popup permissions for about:blank to work.");
+  }
+}
 </script>
