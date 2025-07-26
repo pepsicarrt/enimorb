@@ -1,16 +1,15 @@
 ---
-import Bookmarks from "@/components/Bookmarks.astro"
-import History from "@/components/History.astro"
-import Settings from "@/components/Settings.astro"
-import Suggestions from "@/utils/Suggestions.astro"
-import { Icon } from "astro-icon/components"
+import Bookmarks from "@/components/Bookmarks.astro";
+import History from "@/components/History.astro";
+import Settings from "@/components/Settings.astro";
+import Suggestions from "@/utils/Suggestions.astro";
+import { Icon } from "astro-icon/components";
 ---
 
-<nav class="sticky top-0 content-between bg-base/50 p-2 flex items-center space-x-2 z-[25]">
-  <h1 class="text-base font-semibold">bromine</h1>
+<nav class="sticky top-0 bg-base/50 p-2 flex items-center justify-between space-x-2 z-[25]">
+  <h1 class="text-text font-semibold">bromine</h1>
 
-  <div class="flex items-center justify-center flex-1 space-x-2">
-    <!-- Nav Buttons -->
+  <div class="flex items-center flex-1 space-x-2 max-w-4xl mx-auto">
     <button
       aria-label="Back"
       id="back-btn"
@@ -18,7 +17,6 @@ import { Icon } from "astro-icon/components"
     >
       <Icon name="ph:arrow-left-bold" class="size-4.5" />
     </button>
-
     <button
       aria-label="Forward"
       id="forward-btn"
@@ -26,7 +24,6 @@ import { Icon } from "astro-icon/components"
     >
       <Icon name="ph:arrow-right-bold" class="size-4.5" />
     </button>
-
     <button
       aria-label="Reload"
       id="reload-btn"
@@ -35,11 +32,10 @@ import { Icon } from "astro-icon/components"
       <Icon name="ph:arrow-clockwise-bold" class="size-4.5" />
     </button>
 
-    <!-- Address/Search Bar -->
-    <div class="relative flex-1 max-w-md">
+    <div class="flex-1 min-w-0">
       <div class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5">
         <Icon name="ph:magnifying-glass-bold" class="size-4.5 mr-2" />
-        <form id="form" class="flex-center w-full">
+        <form id="form" class="flex w-full">
           <input
             spellcheck="false"
             autocomplete="off"
@@ -58,8 +54,7 @@ import { Icon } from "astro-icon/components"
     <Settings />
   </div>
 
-  <!-- Context Menu Button + Dropdown -->
-  <div class="relative">
+  <div class="relative flex-shrink-0">
     <button
       aria-label="Context Menu"
       id="three-dots-btn"
@@ -67,10 +62,9 @@ import { Icon } from "astro-icon/components"
     >
       <Icon name="ph:dots-three-outline-vertical-bold" class="size-4.5" />
     </button>
-
     <div
       id="context-menu"
-      class="absolute right-0 mt-2 w-48 bg-surface shadow-lg rounded-md border border-overlay hidden z-50"
+      class="origin-top-right absolute right-0 mt-2 w-48 bg-surface shadow-lg rounded-md border border-overlay hidden z-50"
     >
       <button
         id="dev-btn"
@@ -79,13 +73,16 @@ import { Icon } from "astro-icon/components"
         <Icon name="ph:code-bold" class="size-4.5 mr-2" />
         Dev Tools
       </button>
-
-      <!-- Add more items below if needed -->
-      <!-- <button class="flex items-center w-full px-4 py-2 text-left text-sm hover:bg-highlight-med">Other Option</button> -->
+      <button
+        id="full-btn"
+        class="flex items-center w-full px-4 py-2 text-left text-sm hover:bg-highlight-med"
+      >
+        <Icon name="ph:arrows-out-bold" class="size-4.5 mr-2" />
+        Fullscreen
+      </button>
     </div>
   </div>
 </nav>
-
 
 
 <script>
@@ -138,6 +135,12 @@ import { Icon } from "astro-icon/components"
         }
 
         document.getElementById("context-menu")?.classList.add("hidden")
+      }
+    },
+    {
+      id: "full-btn",
+      handler: () => {
+        currentFrame.requestFullscreen();
       }
     }
   ]
