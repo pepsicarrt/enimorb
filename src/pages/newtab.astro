@@ -1,10 +1,10 @@
 ---
-import "@/styles.css"
-import settingsData from "@/data/newtabsettings.json"
+import "@/styles.css";
+import settingsData from "@/data/newtabsettings.json";
 
 const flatSettingsConfig = settingsData.sections.flatMap(
-  (section) => section.settings,
-)
+	(section) => section.settings,
+);
 ---
 
 <html lang="en">
@@ -18,7 +18,8 @@ const flatSettingsConfig = settingsData.sections.flatMap(
 
     <link rel="icon" href="favicon.svg" sizes="any" type="image/svg+xml">
 
-      
+ <script is:inline defer async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3510278623917680"
+     crossorigin="anonymous"></script>     
     <script is:inline defer>
       window.addEventListener("theme-changed", () => {
         document.body.dataset.theme = localStorage.getItem("theme");

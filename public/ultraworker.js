@@ -5,7 +5,7 @@ importScripts("uv.config.js")
 importScripts(__uv$config.sw)
 importScripts("/workerware/workerware.js")
 importScripts("/alu-adblocker.js")
-importScripts("/scram/scramjet.all.js");
+importScripts("/getout/scramjet.all.js");
 
 
 

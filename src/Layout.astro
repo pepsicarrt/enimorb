@@ -1,14 +1,14 @@
 ---
-import "@/styles.css"
-import Footer from "@/components/ui/Footer.astro"
+import "@/styles.css";
+import Footer from "@/components/ui/Footer.astro";
 
-import Lethal from "@/utils/Lethal.astro"
+import Lethal from "@/utils/Lethal.astro";
 export interface Props {
-  title: string
-  desc: string
+	title: string;
+	desc: string;
 }
 
-const { title = "bromine", desc = "a really shitty site" } = Astro.props
+const { title = "bromine", desc = "a really shitty site" } = Astro.props;
 ---
 
 <html lang="en">
@@ -29,15 +29,16 @@ const { title = "bromine", desc = "a really shitty site" } = Astro.props
     <meta property="og:type" content="website" />
     <meta property="og:description" content={desc} />
     
-    <script type="text/partytown" async defer src="https://cloud.umami.is/script.js" data-website-id="2258facf-d129-4374-9160-d24eb3a3740a"></script>
-    <script type="text/partytown" async defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e61e964fbec94d7a930bc79a7775d076"}'></script>
-
+    <script is:inline type="text/partytown" async defer src="https://cloud.umami.is/script.js" data-website-id="2258facf-d129-4374-9160-d24eb3a3740a"></script>
+    <script is:inline type="text/partytown" async defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e61e964fbec94d7a930bc79a7775d076"}'></script>
+<script is:inline defer async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3510278623917680"
+     crossorigin="anonymous"></script>
     <meta name="googlebot" content="index, follow, snippet" />
     <Lethal />
 
     <script is:inline defer>
       const originalSetItem = localStorage.setItem;
-      localStorage.setItem = function (key, value) {
+      localStorage.setItem = function (key) {
         originalSetItem.apply(this, arguments);
         window.dispatchEvent(new Event(`${key}-changed`));
       };
