@@ -33,7 +33,7 @@ import { Icon } from "astro-icon/components";
     </button>
 
     <div class="flex-1 min-w-0">
-      <div class="shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5">
+      <div class="relative shadow-md dark:bg-surface flex items-center rounded-md px-3 py-1.5">
         <Icon name="ph:magnifying-glass-bold" class="size-4.5 mr-2" />
         <form id="form" class="flex w-full">
           <input
@@ -45,8 +45,8 @@ import { Icon } from "astro-icon/components";
             class="bg-transparent w-full focus:outline-none text-sm"
           />
         </form>
+        <Suggestions />
       </div>
-      <Suggestions />
     </div>
 
     <Bookmarks />
