@@ -1,22 +1,22 @@
 ---
-import "@/styles.css"
-import { Icon } from "astro-icon/components"
+import "@/styles.css";
+import { Icon } from "astro-icon/components";
 
 export interface Props {
-  // --- Element IDs ---
-  triggerId: string
-  popupId: string
-  contentId: string
-  closeBtnId: string
+	// --- Element IDs ---
+	triggerId: string;
+	popupId: string;
+	contentId: string;
+	closeBtnId: string;
 
-  // --- Content ---
-  title: string
-  label: string
-  triggerIcon: string
+	// --- Content ---
+	title: string;
+	label: string;
+	triggerIcon: string;
 }
 
 const { triggerId, popupId, contentId, closeBtnId, title, label, triggerIcon } =
-  Astro.props
+	Astro.props;
 ---
 
 <!-- 1. Nice Button -->
