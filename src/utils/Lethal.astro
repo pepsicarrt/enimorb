@@ -10,11 +10,7 @@
     setProxy,
     makeURL,
     getProxied,
-    newTab,
-    switchTab,
-    closeTab,
     setFrames,
-    currentTab,
     addressInput,
     currentFrame,
     Tab
@@ -34,7 +30,7 @@
   setWisp(wisp)
   setProxy(backend)
 
-  if (transport) setTransport(transport)
+  if (transport) setTransport(transport as Transport)
   else if (navigator.userAgent.indexOf("Firefox") > 0) setTransport("libcurl")
   else setTransport("epoxy")
 
@@ -51,6 +47,7 @@
       currentFrame.src = proxiedUrl
     }
     addressInput.value = urlToLoad
+    currentFrame.contentWindow.focus()
   })
 
   window.addEventListener("search-engine-changed", () => {

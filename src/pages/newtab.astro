@@ -72,6 +72,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(
     setWisp,
     setProxy,
     makeURL,
+    currentFrame,
     getProxied,
   } from "@/utils/lethal.ts"
   
@@ -103,7 +104,7 @@ const flatSettingsConfig = settingsData.sections.flatMap(
      else 
       location.href = proxiedUrl
     
-
+    currentFrame.contentWindow.focus()
   })
 
 
