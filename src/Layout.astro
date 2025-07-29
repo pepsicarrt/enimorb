@@ -33,7 +33,9 @@ const { title = "bromine", desc = "a really shitty site" } = Astro.props;
     <meta name="googlebot" content="index, follow, snippet" />
     <Lethal />
 
-    <script is:inline defer>
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="preconnect" href="https://fundingchoicesmessages.google.com">
+    <!--    <script is:inline defer>
       const originalSetItem = localStorage.setItem;
       localStorage.setItem = function (key) {
         originalSetItem.apply(this, arguments);
@@ -60,7 +62,7 @@ const { title = "bromine", desc = "a really shitty site" } = Astro.props;
         document.body.dataset.theme = localStorage.getItem("theme");
         cloak();
       });
-    </script>
+    </script>-->
 
     <title>{title}</title>
   </head>
@@ -79,5 +81,34 @@ const { title = "bromine", desc = "a really shitty site" } = Astro.props;
     </main>
 
     <Footer />
+
+<script is:inline>
+  requestIdleCallback(() => {
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function (key) {
+      originalSetItem.apply(this, arguments);
+      window.dispatchEvent(new Event(`${key}-changed`));
+    };
+
+    window.addEventListener("theme-changed", () => {
+      document.body.dataset.theme = localStorage.getItem("theme");
+    });
+
+    const cloak = () => {
+      const cloakValue = localStorage.getItem("cloak");
+      if (!cloakValue || cloakValue === 'none') return;
+      const cloakk = cloakValue.split("|");
+      document.title = cloakk[0];
+      const icon = document.querySelector("link[rel=icon]");
+      if (icon) icon.href = cloakk[1];
+    };
+
+    window.addEventListener("cloak-changed", cloak);
+    document.addEventListener("DOMContentLoaded", () => {
+      document.body.dataset.theme = localStorage.getItem("theme");
+      cloak();
+    });
+  });
+</script>
   </body>
 </html>
