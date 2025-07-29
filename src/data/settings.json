@@ -49,6 +49,19 @@
           ]
         },
         {
+          "id": "wallpaper-enabled",
+          "label": "Enable Wallpaper",
+          "type": "toggle",
+          "defaultValue": "false"
+        },
+        {
+          "id": "wallpaper-url",
+          "label": "Wallpaper URL",
+          "defaultValue": "",
+          "type": "text",
+          "placeholder": "wallpaper url..."
+        },
+        {
           "id": "search-engine",
           "label": "Default Search Engine",
           "type": "select",

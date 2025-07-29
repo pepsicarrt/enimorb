@@ -53,12 +53,18 @@ const { title = "bromine", desc = "a really shitty site" } = Astro.props;
 
     <Footer />
 
-<script is:inline>
+<script>
+import { currentFrame } from "./utils/lethal";
+
   requestIdleCallback(() => {
     const originalSetItem = localStorage.setItem;
     localStorage.setItem = function (key) {
       originalSetItem.apply(this, arguments);
       window.dispatchEvent(new Event(`${key}-changed`));
+
+
+    
+currentFrame.contentWindow.postMessage({ type: `${key}-changed` }, "*");
     };
 
     window.addEventListener("theme-changed", () => {

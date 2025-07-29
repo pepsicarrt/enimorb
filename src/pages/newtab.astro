@@ -1,10 +1,5 @@
 ---
 import "@/styles.css";
-import settingsData from "@/data/newtabsettings.json";
-
-const flatSettingsConfig = settingsData.sections.flatMap(
-	(section) => section.settings,
-);
 ---
 
 <html lang="en">
@@ -105,125 +100,8 @@ const flatSettingsConfig = settingsData.sections.flatMap(
   })
         </script>
     </main>
-  
-<aside class="fixed top-4 right-4 border border-overlay rounded-lg p-4 space-y-4 mica max-h-[50vh] overflow-y-auto">
-  {
-    settingsData.sections.map((section) => (
-      <section class="space-y-2">
-        <h2 class="text-lg font-medium text-text">{section.title}</h2>
-        {
-          section.settings.map((setting) => (
-            <div class="flex items-center justify-between gap-4">
-              <label class="text-text flex-1" for={setting.id}>
-                {setting.label}
-              </label>
 
-              {setting.type === "toggle" ? (
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    id={setting.id}
-                    class="sr-only peer"
-                  />
-                  <div class="w-11 h-6 bg-overlay rounded-full peer peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-iris peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-iris" />
-                </label>
-              ) : (
-              <input
-                  type={setting.type}
-                  id={setting.id}
-                  class="bg-overlay text-text rounded-md px-2 py-1 w-48 focus:outline-none focus:ring-2 focus:ring-iris"
-                  placeholder={setting.placeholder || ""}
-                />
-              )}
-            </div>
-          ))
-        }
-      </section>
-    ))
-  }
-</aside>
-<script is:inline>
-  requestIdleCallback(() => {
-    const originalSetItem = localStorage.setItem;
-    localStorage.setItem = function (key) {
-      originalSetItem.apply(this, arguments);
-      window.dispatchEvent(new Event(`${key}-changed`));
-    };
-
-    window.addEventListener("theme-changed", () => {
-      document.body.dataset.theme = localStorage.getItem("theme");
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-      document.body.dataset.theme = localStorage.getItem("theme");
-    });
-  });
-</script>
-  </body>
-</html>
-
-<script define:vars={{ settingsConfig: flatSettingsConfig }} defer is:inline>
-  const load = () => {
-    settingsConfig.forEach((setting) => {
-      const element = document.getElementById(setting.id);
-      if (!element) return;
-
-      const storedValue = localStorage.getItem(setting.id);
-      const valueToApply = storedValue ?? setting.defaultValue;
-
-      if (setting.type === "toggle") {
-        element.checked = valueToApply === "true";
-      } else {
-        element.value = valueToApply;
-      }
-    });
-  };
-
-const save = (event) => {
-  const element = event.target;
-  if (!element || !element.id) return;
-
-  const setting = settingsConfig.find((s) => s.id === element.id);
-  if (!setting) return;
-
-  let valueToStore;
-
-  switch (setting.type) {
-    case "toggle":
-      valueToStore = element.checked.toString();
-      break;
-
-    case "number":
-      valueToStore = Number(element.value).toString();
-      break;
-
-    case "text":
-    case "url":
-    default:
-      valueToStore = element.value?.toString().trim();
-      break;
-  }
-
-  if (valueToStore !== undefined) {
-    localStorage.setItem(setting.id, valueToStore);
-  }
-  };
-
-  const init = () => {
-    load();
-
-    settingsConfig.forEach((setting) => {
-      const element = document.getElementById(setting.id);
-      if (element) {
-        element.addEventListener("change", save);
-      }
-    });
-  };
-
-  init();
-</script>
-
-<script is:inline defer>
+<script>
   const applyWallpaper = () => {
     const enabled = localStorage.getItem("wallpaper-enabled") === "true";
     const url = localStorage.getItem("wallpaper-url");
@@ -240,16 +118,32 @@ const save = (event) => {
     }
   };
 
-  window.addEventListener("DOMContentLoaded", applyWallpaper);
+  document.body.dataset.theme = localStorage.getItem("theme");
+  applyWallpaper();
 
-  window.addEventListener("storage", () => {
-    applyWallpaper();
-  });
+  window.addEventListener('message', function(event) {
+    const msg = event.data;
+    if (!msg || !msg.type) return;
 
-  ["wallpaper-enabled", "wallpaper-url"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener("change", applyWallpaper);
+    switch(msg.type) {
+      case "theme-changed":
+        document.body.dataset.theme = localStorage.getItem("theme");
+        break;
+
+      case "wallpaper-enabled-changed":
+        applyWallpaper();
+        break;
+
+      case "wallpaper-url-changed":
+        applyWallpaper();
+        break;
+
+      default:
+        console.log("Unknown message type:", msg.type);
     }
   });
 </script>
+  </body>
+</html>
+
+

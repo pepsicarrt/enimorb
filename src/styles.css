@@ -91,4 +91,6 @@ button:active {
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   z-index: -1;
+  border-radius: 16px;
+  /* Match parent border-radius */
 }
