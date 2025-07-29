@@ -14,169 +14,142 @@ import { Icon } from "astro-icon/components";
   </button>
 </div>
 
-
 <script>
-  import { newTab, switchTab, closeTab } from "@/utils/lethal.ts"
- 
-  let tabs = []
-  const tabsDiv = document.getElementById("tabs")
+  import { newTab, switchTab, closeTab } from "@/utils/lethal.ts";
+  import { Sortable } from "@shopify/draggable";
 
-  function getIcon(url) {
-    const regex = /^https?:\/\/[\w.-]+\.[a-z]{2,}/i
-    return regex.test(url)
-      ? `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=64&url=${url}`
-      : "https://images.placeholders.dev/24"
-  }
+  let tabs = [];
+  const tabsDiv = document.getElementById("tabs");
+  let draggable;
+
+  const getIcon = (url) =>
+    /^https?:\/\/[\w.-]+\.[a-z]{2,}/i.test(url)
+      ? `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,URL&size=64&url=${url}`
+      : "https://images.placeholders.dev/24";
 
   function createTab(id, title = "New Tab", url = "") {
-    const tab = document.createElement("div")
-    tab.className = `
-      flex items-center min-w-[8rem] max-w-xs px-4 py-1
-      border-r border-overlay hover:bg-overlay cursor-pointer
-      transition-all duration-150
-    `.trim()
-    tab.dataset.tabId = id
+    const tab = document.createElement("div");
+    tab.className =
+      "flex items-center min-w-[8rem] max-w-xs px-4 py-1 border-r border-overlay hover:bg-overlay cursor-pointer transition-all duration-150 draggable-tab";
+    tab.dataset.tabId = id;
 
-    const favicon = document.createElement("img")
-    favicon.className = "w-4 h-4 mr-2 rounded"
-    favicon.alt = "Favicon"
-    favicon.src = getIcon(url)
+    tab.innerHTML = `
+      <img class="w-4 h-4 mr-2 rounded" alt="Favicon" src="${getIcon(url)}" />
+      <span class="tab truncate flex-1 text-sm">${title}</span>
+      <button class="ml-2 text-text/50 hover:text-text text-sm focus:outline-none">&times;</button>
+    `;
 
-    const titleSpan = document.createElement("span")
-    titleSpan.className = "tab truncate flex-1 text-sm"
-    titleSpan.textContent = title
+    tab.querySelector("button").onclick = (e) => {
+      e.stopPropagation();
+      closeTab?.(id);
+    };
+    tab.onclick = () => switchTab?.(id);
 
-    const closeBtn = document.createElement("button")
-    closeBtn.className = "ml-2 text-text/50 hover:text-text text-sm focus:outline-none"
-    closeBtn.innerHTML = "&times;"
-    closeBtn.onclick = (e) => {
-      e.stopPropagation()
-      closeTab?.(id)
+    tabsDiv.appendChild(tab);
+    tabs.push({ id, element: tab, title, url });
+
+    if (!draggable) {
+      draggable = new Sortable(tabsDiv, {
+        draggable: ".draggable-tab",
+        mirror: { constrainDimensions: true },
+      });
+      draggable.on("sortable:stop", () => {
+        const order = [...tabsDiv.children].map((el) =>
+          tabs.find((t) => t.element === el)
+        );
+        tabs = order.filter(Boolean);
+      });
     }
 
-    tab.appendChild(favicon)
-    tab.appendChild(titleSpan)
-    tab.appendChild(closeBtn)
-
-    tab.onclick = () => switchTab?.(id)
-
-
-    tabsDiv.appendChild(tab)
-    const tabData = { id, element: tab, title, url }
-    tabs.push(tabData)
-
-    return tabData
+    return tab;
   }
 
   function checkState() {
-    const frames = Array.from(document.querySelectorAll('iframe[id^="frame-"]'))
-    const frameIds = frames.map((frame) => parseInt(frame.id.replace("frame-", "")))
+    const frames = [...document.querySelectorAll('iframe[id^="frame-"]')];
+    const frameIds = frames.map((f) => parseInt(f.id.replace("frame-", ""), 10));
 
-    tabs = tabs.filter((tab) => {
-      if (!frameIds.includes(tab.id)) {
-        tab.element.remove()
-        return false
+    tabs = tabs.filter(({ id, element }) => {
+      if (!frameIds.includes(id)) {
+        element.remove();
+        return false;
       }
-      return true
-    })
+      return true;
+    });
 
     frameIds.forEach((id) => {
-      if (!tabs.some((tab) => tab.id === id)) {
-        createTab(id)
-      }
-    })
+      if (!tabs.some((t) => t.id === id)) createTab(id);
+    });
 
-    const visibleFrame = frames.find((frame) => !frame.classList.contains("hidden"))
-    if (visibleFrame) {
-      const activeTabId = parseInt(visibleFrame.id.replace("frame-", ""))
-      syncUI(activeTabId)
+    const visible = frames.find((f) => !f.classList.contains("hidden"));
+    if (visible) {
+      const activeId = parseInt(visible.id.replace("frame-", ""), 10);
+      tabs.forEach(({ id, element }) => {
+        const isActive = id === activeId;
+        element.classList.toggle("bg-overlay", isActive);
+        element.classList.toggle("active", isActive);
+        element.classList.toggle("font-medium", isActive);
+        element.classList.toggle("border-b-2", isActive);
+        element.classList.toggle("border-iris", isActive);
+      });
     }
   }
 
-  function syncUI(activeId) {
-    document.querySelectorAll("[data-tab-id]").forEach((tab) => {
-      const isActive = parseInt(tab.dataset.tabId) === activeId
-      tab.classList.toggle("bg-overlay", isActive)
-      tab.classList.toggle("active", isActive)
-      tab.classList.toggle("font-medium", isActive)
-      tab.classList.toggle("border-b-2", isActive)
-      tab.classList.toggle("border-iris", isActive)
-    })
-  }
-
-  function renameTab(tabId, title, url) {
-    const tabData = tabs.find((t) => t.id === tabId)
-    if (!tabData) return
-
-    tabData.title = title || "New Tab"
-    tabData.url = url || ""
-    tabData.element.querySelector(".tab").textContent = tabData.title
-    tabData.element.querySelector("img").src = getIcon(tabData.url)
-  }
-
-  // --- Event Listeners ---
-
-  document.getElementById("new-tab-btn")?.addEventListener("click", () => {
-    newTab?.()
-  })
+  document.getElementById("new-tab-btn")?.addEventListener("click", () => newTab?.());
 
   document.addEventListener("new-tab", (e) => {
-    const tabId = e.detail.tabNumber
-    if (!tabs.some((tab) => tab.id === tabId)) {
-      createTab(tabId)
-    }
-    checkState()
-  })
+    if (!tabs.some((t) => t.id === e.detail.tabNumber)) createTab(e.detail.tabNumber);
+    checkState();
+  });
 
   document.addEventListener("switch-tab", (e) => {
-    const tabId = e.detail.tabNumber
-    syncUI(tabId)
-  })
+    const activeId = e.detail.tabNumber;
+    tabs.forEach(({ id, element }) => {
+      const isActive = id === activeId;
+      element.classList.toggle("bg-overlay", isActive);
+      element.classList.toggle("active", isActive);
+      element.classList.toggle("font-medium", isActive);
+      element.classList.toggle("border-b-2", isActive);
+      element.classList.toggle("border-iris", isActive);
+    });
+  });
 
   document.addEventListener("url-changed", (e) => {
-    renameTab(e.detail.tabId, e.detail.title, e.detail.url)
-  })
+    const tab = tabs.find((t) => t.id === e.detail.tabId);
+    if (!tab) return;
+    tab.title = e.detail.title || "New Tab";
+    tab.url = e.detail.url || "";
+    tab.element.querySelector(".tab").textContent = tab.title;
+    tab.element.querySelector("img").src = getIcon(tab.url);
+  });
 
   document.addEventListener("close-tab", (e) => {
-    const tabId = e.detail.tabNumber
-    const index = tabs.findIndex((tab) => tab.id === tabId)
-    if (index !== -1) {
-      tabs[index].element.remove()
-      tabs.splice(index, 1)
-    }
-    checkState()
-  })
+    const idx = tabs.findIndex((t) => t.id === e.detail.tabNumber);
+    if (idx === -1) return;
+    tabs[idx].element.remove();
+    tabs.splice(idx, 1);
+    checkState();
+  });
 
-  checkState()
+  checkState();
 </script>
-
-
 
 <style>
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-  
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
   [data-tab-id] {
     border-bottom: 2px solid transparent;
     transition: all 0.2s ease;
   }
-  
-  [data-tab-id]:hover, [data-tab-id].active {
+  [data-tab-id]:hover,
+  [data-tab-id].active {
     background-color: var(--color-overlay);
   }
-  
   [data-tab-id].active {
     border-bottom-color: var(--color-iris);
-  }
-
-  .sortable-ghost {
-    opacity: 0.5;
-    background: var(--color-highlight-med);
   }
 </style>
