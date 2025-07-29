@@ -70,14 +70,21 @@ async function registerSW(): Promise<void> {
 	}
 
 	await navigator.serviceWorker.register(stockSW);
+
+
+
 }
 
+
 if (window.self === window.top) {
+
+	requestIdleCallback(() => {
 			registerSW()
 				.then(() => console.log("lethal.js: Service Worker registered"))
 				.catch((err) =>
 					console.error("lethal.js: Failed to register Service Worker", err),
 				);
+        });
 }
 
 
