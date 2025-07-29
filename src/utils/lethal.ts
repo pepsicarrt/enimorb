@@ -72,15 +72,14 @@ async function registerSW(): Promise<void> {
 	await navigator.serviceWorker.register(stockSW);
 }
 
-// if (window.self == window.top) {
-// 	await registerSW();
-// 	console.log("lethal.js: Service Worker registered");
-// }
-
-if (window.self == window.top && await navigator.serviceWorker.getRegistrations() !== null) {
-	await registerSW();
-	console.log("lethal.js: Service Worker registered");
+if (window.self === window.top) {
+			registerSW()
+				.then(() => console.log("lethal.js: Service Worker registered"))
+				.catch((err) =>
+					console.error("lethal.js: Failed to register Service Worker", err),
+				);
 }
+
 
 //////////////////////////////
 ///        Functions       ///
@@ -174,7 +173,7 @@ export class Tab {
 		this.frame = document.createElement("iframe");
 		this.frame.setAttribute("class", "w-full h-full border-0 fixed");
 		this.frame.setAttribute("title", "Proxy Frame");
-		this.frame.setAttribute("src", "/newtab");
+		this.frame.setAttribute("src", "/newtab.html");
 		this.frame.setAttribute("loading", "lazy");
 
 		this.frame.setAttribute("id", `frame-${tabCounter}`);
@@ -257,7 +256,7 @@ export class Tab {
 			}),
 		);
 
-		if (url === "newtab") url = "bromine://newtab";
+		if (url === "newtab.html") url = "bromine://newtab";
 
 		addressInput.value = url;
 	}
