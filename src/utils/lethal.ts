@@ -72,7 +72,12 @@ async function registerSW(): Promise<void> {
 	await navigator.serviceWorker.register(stockSW);
 }
 
-if (window.self == window.top) {
+// if (window.self == window.top) {
+// 	await registerSW();
+// 	console.log("lethal.js: Service Worker registered");
+// }
+
+if (window.self == window.top && await navigator.serviceWorker.getRegistrations() !== null) {
 	await registerSW();
 	console.log("lethal.js: Service Worker registered");
 }
