@@ -3,7 +3,7 @@ FROM docker.io/oven/bun:alpine AS build
 WORKDIR /app
 
 COPY package.json bun.lock tsconfig.json ./
-RUN bun install
+RUN bun install --production
 
 COPY . .
 
