@@ -32,11 +32,11 @@ const { triggerId, popupId, contentId, closeBtnId, title, label, triggerIcon } =
 <div
   id={popupId}
   style="content-visibility: auto"
-  class="popup backdrop-blur-[1px] fixed inset-0 flex items-center z-[50] justify-center bg-base/80 hidden pointer-events-none opacity-0 transition-opacity duration-300 ease-in-out"
+  class="mica popup backdrop-blur-[1px] fixed inset-0 flex items-center z-[50] justify-center bg-base/80 hidden pointer-events-none opacity-0 transition-opacity duration-300 ease-in-out"
 >
   <div
     id={contentId}
-    class="mica relative bg-overlay w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform -translate-y-full transition-transform duration-300 ease-in-out"
+    class="relative bg-overlay w-[90vw] max-w-[500px] rounded-lg shadow-xl p-6 m-4 max-h-[80vh] overflow-y-auto transform -translate-y-full transition-transform duration-300 ease-in-out"
   >
     <div class="flex justify-between items-center mb-3">
       <h1 class="text-2xl font-semibold text-text">{title}</h1>
