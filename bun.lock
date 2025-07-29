@@ -9,6 +9,7 @@
         "@iconify-json/ph": "^1.2.2",
         "@iconify-json/simple-icons": "^1.2.43",
         "@mercuryworkshop/bare-mux": "^2.1.7",
+        "@neodrag/vanilla": "^2.3.1",
         "@playform/compress": "^0.1.9",
         "@tailwindcss/vite": "^4.1.11",
         "astro": "5.12.0",
@@ -170,6 +171,8 @@
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.25", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ=="],
 
     "@mercuryworkshop/bare-mux": ["@mercuryworkshop/bare-mux@2.1.7", "", {}, "sha512-BUamyc7jsIFbWQVVWjVjaD+Wot77EPwolkrbP3UuIs6QeHR1RY52+IR2fq3GkRAbOOrAZNT7EgZSsupkh1NowQ=="],
+
+    "@neodrag/vanilla": ["@neodrag/vanilla@2.3.1", "", {}, "sha512-VwFqjXrjNJXCYfUfbbxJgeyiQF3QCOovR21TH/mSy6muUx1mhfM3fMDWchaXNNKhP2nhs4gouzVE0RBJtIqd9Q=="],
 
     "@netlify/blobs": ["@netlify/blobs@8.2.0", "", {}, "sha512-9djLZHBKsoKk8XCgwWSEPK9QnT8qqxEQGuYh48gFIcNLvpBKkLnHbDZuyUxmNemCfDz7h0HnMXgSPnnUVgARhg=="],
 

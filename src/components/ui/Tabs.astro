@@ -1,5 +1,5 @@
 ---
-import { Icon } from "astro-icon/components"
+import { Icon } from "astro-icon/components";
 ---
 
 <div class="flex items-center bg-surface border-b border-overlay h-10">
@@ -14,9 +14,10 @@ import { Icon } from "astro-icon/components"
   </button>
 </div>
 
+
 <script>
   import { newTab, switchTab, closeTab } from "@/utils/lethal.ts"
-
+ 
   let tabs = []
   const tabsDiv = document.getElementById("tabs")
 
@@ -58,6 +59,7 @@ import { Icon } from "astro-icon/components"
     tab.appendChild(closeBtn)
 
     tab.onclick = () => switchTab?.(id)
+
 
     tabsDiv.appendChild(tab)
     const tabData = { id, element: tab, title, url }
