@@ -32,37 +32,8 @@ const { title = "bromine", desc = "a really shitty site" } = Astro.props;
     <script is:inline type="text/partytown" async defer src="https://cloud.umami.is/script.js" data-website-id="2258facf-d129-4374-9160-d24eb3a3740a"></script>
     <meta name="googlebot" content="index, follow, snippet" />
     <Lethal />
+    <link rel="preconnect" href="https://images.placeholders.dev">
 
-<link rel="preconnect" href="https://pagead2.googlesyndication.com">
-<link rel="preconnect" href="https://fundingchoicesmessages.google.com">
-    <!--    <script is:inline defer>
-      const originalSetItem = localStorage.setItem;
-      localStorage.setItem = function (key) {
-        originalSetItem.apply(this, arguments);
-        window.dispatchEvent(new Event(`${key}-changed`));
-      };
-      window.addEventListener("theme-changed", () => {
-        document.body.dataset.theme = localStorage.getItem("theme");
-      });
-
-      const cloak = () => {
-        const cloakValue = localStorage.getItem("cloak");
-        if (!cloakValue || cloakValue === 'none') return;
-
-        const cloakk = cloakValue.split("|");
-        document.title = cloakk[0];
-        const icon = document.querySelector("link[rel=icon]");
-        if (icon)
-          icon.href = cloakk[1];
-      };
-
-      window.addEventListener("cloak-changed", cloak);
-
-      document.addEventListener("DOMContentLoaded", () => {
-        document.body.dataset.theme = localStorage.getItem("theme");
-        cloak();
-      });
-    </script>-->
 
     <title>{title}</title>
   </head>
@@ -71,7 +42,7 @@ const { title = "bromine", desc = "a really shitty site" } = Astro.props;
       href="#main"
       class="absolute left-4 top-4 z-50 bg-surface px-4 py-2 rounded-md shadow-lg
               transform -translate-y-16 opacity-0 transition-all duration-300 ease-in-out
-              focus:translate-y-0 focus:opacity-100 hover:bg-overlay z-[10000]"
+              focus:translate-y-0 focus:opacity-100 hover:bg-overlay z-50"
     >
       Skip to main content
     </a>

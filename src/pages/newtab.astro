@@ -15,35 +15,12 @@ const flatSettingsConfig = settingsData.sections.flatMap(
       name="viewport"
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
     />
-
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
+<link rel="preconnect" href="https://fundingchoicesmessages.google.com">
     <link rel="icon" href="favicon.svg" sizes="any" type="image/svg+xml">
     <script is:inline defer async src="https://fundingchoicesmessages.google.com/i/pub-3510278623917680?ers=1"></script><script>(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
     <script is:inline defer async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3510278623917680"
      crossorigin="anonymous"></script>     
-    <script is:inline defer>
-      window.addEventListener("theme-changed", () => {
-        document.body.dataset.theme = localStorage.getItem("theme");
-      });
-
-      const cloak = () => {
-        const cloakValue = localStorage.getItem("cloak");
-        if (!cloakValue || cloakValue === 'none') return;
-
-        const cloakk = cloakValue.split("|");
-        document.title = cloakk[0];
-        const icon = document.querySelector("link[rel=icon]");
-        if (icon)
-          icon.href = cloakk[1];
-      };
-
-      window.addEventListener("cloak-changed", cloak);
-
-      document.addEventListener("DOMContentLoaded", () => {
-        document.body.dataset.theme = localStorage.getItem("theme");
-        cloak();
-      });
-
-    </script>
 </head>
 <body class="text-text bg-base flex">
 
@@ -165,7 +142,23 @@ const flatSettingsConfig = settingsData.sections.flatMap(
     ))
   }
 </aside>
+<script is:inline>
+  requestIdleCallback(() => {
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function (key) {
+      originalSetItem.apply(this, arguments);
+      window.dispatchEvent(new Event(`${key}-changed`));
+    };
 
+    window.addEventListener("theme-changed", () => {
+      document.body.dataset.theme = localStorage.getItem("theme");
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.body.dataset.theme = localStorage.getItem("theme");
+    });
+  });
+</script>
   </body>
 </html>
 
