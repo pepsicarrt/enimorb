@@ -14,15 +14,34 @@ env:
   BUILD_PATH: "."
 
 jobs:
-  build:
-    name: Build
+  lint:
+    name: Check
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install deps
+        run: bun install
+        working-directory: ${{ env.BUILD_PATH }}
+
+      - name: Check
+        run: bun run check
+        working-directory: ${{ env.BUILD_PATH }}
+
+
+  build:
+    name: Build
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
 
@@ -30,7 +49,7 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
-      - name: Install dependencies with Bun
+      - name: Install dependencies
         run: bun install
         working-directory: ${{ env.BUILD_PATH }}
 
@@ -45,8 +64,9 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ env.BUILD_PATH }}/dist
-      
+
   dockerci:
+    name: Docker CI
     needs: [build]
     runs-on: ubuntu-latest
     steps:
@@ -69,16 +89,16 @@ jobs:
         run: docker push ghcr.io/coding4hours/bromine:$IMAGE_TAG
 
   deploy:
+    name: Deploy to GitHub Pages
+    needs: [build]
+    runs-on: ubuntu-latest
     concurrency:
       group: "pages"
       cancel-in-progress: false
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
