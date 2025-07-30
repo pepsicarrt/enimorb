@@ -32,42 +32,15 @@ jobs:
       - name: Check
         run: bun run check
         working-directory: ${{ env.BUILD_PATH }}
-
-
-  build:
-    name: Build
-    needs: lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: oven-sh/setup-bun@v1
+        
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
         with:
-          bun-version: latest
-
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
-
-      - name: Install dependencies
-        run: bun install
-        working-directory: ${{ env.BUILD_PATH }}
-
-      - name: Build with Astro
-        run: |
-          bunx astro build \
-            --site "${{ steps.pages.outputs.origin }}" \
-            --base "${{ steps.pages.outputs.base_path }}"
-        working-directory: ${{ env.BUILD_PATH }}
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ${{ env.BUILD_PATH }}/dist
+          dockerfile: Dockerfile
 
   dockerci:
     name: Docker CI
-    needs: [build]
+    needs: [lint]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -90,7 +63,7 @@ jobs:
 
   deploy:
     name: Deploy to GitHub Pages
-    needs: [build]
+    needs: [lint]
     runs-on: ubuntu-latest
     concurrency:
       group: "pages"
@@ -102,3 +75,37 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
+  release:
+    name: Release on Tag
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    needs: [deploy, dockerci]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+        working-directory: ${{ env.BUILD_PATH }}
+
+      - name: Build with Astro
+        run: bun run build
+        working-directory: ${{ env.BUILD_PATH }}
+
+      - name: Archive Build Output
+        run: |
+          cd ${{ env.BUILD_PATH }}/dist
+          zip -r ../../build.zip ./
+          cd -
+
+      - name: Create GitHub Release and Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build.zip
