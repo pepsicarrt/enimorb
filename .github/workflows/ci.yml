@@ -9,9 +9,6 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 env:
   BUILD_PATH: "."
@@ -73,6 +70,9 @@ jobs:
       run: docker push ghcr.io/coding4hours/bromine:$IMAGE_TAG
       
   deploy:
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
