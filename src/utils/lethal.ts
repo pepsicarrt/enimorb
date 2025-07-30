@@ -180,7 +180,7 @@ export class Tab {
 		this.frame = document.createElement("iframe");
 		this.frame.setAttribute("class", "w-full h-full border-0 fixed");
 		this.frame.setAttribute("title", "Proxy Frame");
-		this.frame.setAttribute("src", "/newtab.html");
+		this.frame.setAttribute("src", "/newtab");
 		this.frame.setAttribute("loading", "lazy");
 
 		this.frame.setAttribute("id", `frame-${tabCounter}`);
@@ -242,6 +242,7 @@ export class Tab {
 	}
 
 	handleLoad(): void {
+		if (this.tabNumber !== currentTab) return;
 		let url = decodeURIComponent(
 			this.frame?.contentWindow?.location.href.split("/").pop() as string,
 		);
@@ -263,7 +264,7 @@ export class Tab {
 			}),
 		);
 
-		if (url === "newtab.html") url = "bromine://newtab";
+		if (url === "newtab") url = "bromine://newtab";
 
 		addressInput.value = url;
 	}

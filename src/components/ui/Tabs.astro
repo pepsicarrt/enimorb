@@ -15,12 +15,10 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <script>
-  import { newTab, switchTab, closeTab } from "@/utils/lethal.ts";
-  import { Sortable } from "@shopify/draggable";
+import { currentTab, newTab, switchTab, closeTab } from "@/utils/lethal.ts";
 
   let tabs = [];
   const tabsDiv = document.getElementById("tabs");
-  let draggable;
 
   const getIcon = (url) =>
     /^https?:\/\/[\w.-]+\.[a-z]{2,}/i.test(url)
@@ -47,19 +45,6 @@ import { Icon } from "astro-icon/components";
 
     tabsDiv.appendChild(tab);
     tabs.push({ id, element: tab, title, url });
-
-    if (!draggable) {
-      draggable = new Sortable(tabsDiv, {
-        draggable: ".draggable-tab",
-        mirror: { constrainDimensions: true },
-      });
-      draggable.on("sortable:stop", () => {
-        const order = [...tabsDiv.children].map((el) =>
-          tabs.find((t) => t.element === el)
-        );
-        tabs = order.filter(Boolean);
-      });
-    }
 
     return tab;
   }

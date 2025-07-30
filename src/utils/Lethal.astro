@@ -12,7 +12,7 @@
     getProxied,
     setFrames,
     addressInput,
-    currentFrame,
+    currentTab,
     Tab
   } from "./lethal"
 
@@ -35,41 +35,41 @@
   else setTransport("epoxy")
 
   // --- EVENTS ---
-  form.addEventListener("submit", async (event) => {
+  form?.addEventListener("submit", async (event) => {
     event.preventDefault()
 
     const urlToLoad = makeURL(addressInput.value, search)
     const proxiedUrl = await getProxied(urlToLoad)
 
+    let currentFrame = document.getElementById(`frame-${currentTab}`) as HTMLIFrameElement;
+
     if (localStorage.getItem("stealth-mode")) {
-      currentFrame.contentWindow.location.replace(proxiedUrl)
+      currentFrame?.contentWindow?.location.replace(proxiedUrl)
     } else {
       currentFrame.src = proxiedUrl
     }
     addressInput.value = urlToLoad
-    currentFrame.contentWindow.focus()
   })
 
   window.addEventListener("search-engine-changed", () => {
-    search = localStorage.getItem("search-engine")
+    search = localStorage.getItem("search-engine") as string
   })
 
   window.addEventListener("proxy-backend-changed", () => {
-    backend = localStorage.getItem("proxy-backend")
-    setProxy(localStorage.getItem("proxy-backend"))
+    backend = localStorage.getItem("proxy-backend") as string
+    setProxy(localStorage.getItem("proxy-backend") as string)
   })
 
   window.addEventListener("wisp-server-changed", () => {
-    wisp = localStorage.getItem("wisp-server")
-    setWisp(localStorage.getItem("wisp-server"))
+    wisp = localStorage.getItem("wisp-server") as string
+    setWisp(localStorage.getItem("wisp-server") as string)
   })
 
   window.addEventListener("proxy-transport-changed", () => {
-    transport = localStorage.getItem("proxy-transport")
-    setTransport(localStorage.getItem("proxy-transport"))
+    transport = localStorage.getItem("proxy-transport") as Transport
+    setTransport(localStorage.getItem("proxy-transport") as Transport)
   })
 
-  setFrames(document.getElementById("frames"));
-  window.Tab = Tab;
+  setFrames(document.getElementById("frames") as HTMLElement);
   new Tab();
 </script>
