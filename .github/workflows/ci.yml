@@ -19,7 +19,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
+      
+      - name: Cache Bun modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.bun/deps # or the actual bun cache directory, verify below
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+            
       - name: Install Bun
         uses: oven-sh/setup-bun@v1
         with:
@@ -38,9 +46,42 @@ jobs:
         with:
           dockerfile: Dockerfile
 
+  build:
+    name: Build
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Install dependencies with Bun
+        run: bun install
+        working-directory: ${{ env.BUILD_PATH }}
+
+      - name: Build with Astro
+        run: |
+          bunx astro build \
+            --site "${{ steps.pages.outputs.origin }}" \
+            --base "${{ steps.pages.outputs.base_path }}"
+        working-directory: ${{ env.BUILD_PATH }}
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ env.BUILD_PATH }}/dist
+
   dockerci:
     name: Docker CI
-    needs: [lint]
+    needs: [lint, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,7 +104,7 @@ jobs:
 
   deploy:
     name: Deploy to GitHub Pages
-    needs: [lint]
+    needs: [lint, build]
     runs-on: ubuntu-latest
     concurrency:
       group: "pages"
