@@ -1,7 +1,8 @@
 name: CI
 on:
   workflow_dispatch:
-  push:
+  check_run:
+    types: [completed]
     
 permissions:
   contents: read
