@@ -121,7 +121,7 @@ jobs:
     name: Release on Tag
     runs-on: ubuntu-latest
     if: github.ref_type == 'tag'
-    needs: [deploy, dockerci]
+    needs: [lint, build]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
