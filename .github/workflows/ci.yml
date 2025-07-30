@@ -1,7 +1,9 @@
 name: CI
 on:
   workflow_dispatch:
-
+  check_run:
+    types: [completed]
+    
 permissions:
   contents: read
   pages: write
@@ -83,9 +85,6 @@ jobs:
         uses: actions/deploy-pages@v4
 
   lighthouse:
-    if: |
-      github.event.check_run.name == 'Cloudflare Pages' &&
-      github.event.check_run.conclusion == 'success'
     needs: [ build, deploy ]
     runs-on: ubuntu-latest
     steps:
