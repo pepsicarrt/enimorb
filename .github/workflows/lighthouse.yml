@@ -19,7 +19,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
-            https://bromine-labs.github.io/bromine/
+            https://bromine-labs.github.io/Bromine/
             https://bromine.pages.dev/
             https://bromine.on-to.space
           runs: 10
