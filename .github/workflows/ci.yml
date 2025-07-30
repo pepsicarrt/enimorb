@@ -120,6 +120,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies with Bun
+        run: bun install
+        working-directory: ${{ env.BUILD_PATH }}
+
+      - name: Build with Astro
+        run: |
+          bun run build
+        working-directory: ${{ env.BUILD_PATH }}
+
       - name: Archive Build Output
         run: |
           cd ${{ env.BUILD_PATH }}/dist
