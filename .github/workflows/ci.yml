@@ -83,7 +83,9 @@ jobs:
         uses: actions/deploy-pages@v4
 
   lighthouse:
-    if: github.event.check_run.status == 'completed'
+    if: |
+      github.event.check_run.name == 'Cloudflare Pages' &&
+      github.event.check_run.conclusion == 'success'
     needs: [ build, deploy ]
     runs-on: ubuntu-latest
     steps:
@@ -93,6 +95,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
+            https://bromine-labs.github.io/bromine/
             https://bromine.pages.dev/
             https://bromine.on-to.space
           runs: 10
