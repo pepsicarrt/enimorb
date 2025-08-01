@@ -1,15 +1,22 @@
 # Todo
 
+## Finished
+
 - [x] newtab wallpapers
 - [x] ~~perforamncec metrics~~ canceled
-- [ ] panic key
 - [x] tab cloaking changable tab
-- [ ] micatheme
+- [x] fullscreen
+
+## In Progress
+
+- [ ] panic key
+
+## Not Started
+
 - [ ] ai
 - [ ] games
-- [ ] custom scrcipt injection
+- [ ] custom script injection
 - [ ] category
-- [ ] fullscreen
 - [ ] vertical tabs
 - [ ] pinable tabs
 - [ ] custom theme
