@@ -48,7 +48,8 @@
     } else {
       currentFrame.src = proxiedUrl
     }
-    addressInput.value = urlToLoad
+    if(currentFrame === document.getElementById(`frame-${currentTab}`))
+      addressInput.value = urlToLoad
   })
 
   window.addEventListener("search-engine-changed", () => {

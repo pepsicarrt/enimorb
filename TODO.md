@@ -16,7 +16,6 @@
 - [ ] ai
 - [ ] games
 - [ ] custom script injection
-- [ ] category
 - [ ] vertical tabs
 - [ ] pinable tabs
 - [ ] custom theme

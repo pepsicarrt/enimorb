@@ -1,6 +1,7 @@
 
 
 # bromine the poopy proxy
+
 ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/Bromine-Labs/Bromine?utm_source=oss&utm_medium=github&utm_campaign=Bromine-Labs%2FBromine&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/Bromine-Labs/Bromine)
@@ -23,9 +24,11 @@ docker pull docker.io/coding3hours/bromine:latest
 docker run -d -p 8080:80 docker.io/coding3hours/bromine
 # you can also use ghcr.io/coding4hours/bromine
 ```
+
 Then go to [localhost:8080](http://localhost:8080)
 
 ## Tech stack
+
 - Scramjet
 - Epoxy
 - Ultraviolet
@@ -41,7 +44,7 @@ Then go to [localhost:8080](http://localhost:8080)
 - alu adblocker(doesnt really count) made by wearr
 - workerware
 
-
 ## Acknowledgements
+
 - Shadow - inspiration
 - Nano - more inspiration
