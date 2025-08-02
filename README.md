@@ -4,8 +4,6 @@
 ![MIT License](https://img.shields.io/badge/license-MIT-blue)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/Bromine-Labs/Bromine) +![Discord](https://img.shields.io/discord/1379249910502916177)
 
-> > > > > > > Conflict 1 of 1 ends
-
 ## Deploy
 
 [![Deploy to Heroku](https://binbashbanana.github.io/deploy-buttons/buttons/remade/heroku.svg)](https://heroku.com/deploy/?template=https://github.com/Bromine-labs/Bromine)
