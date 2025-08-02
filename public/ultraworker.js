@@ -40,53 +40,7 @@ ww.use({
 });
 
 
-self.vencordjs = "";
-self.vencordcss = "";
-(async function () {
-  try {
-    const js = await fetch("https://github.com/Equicord/Equicord/releases/download/latest/browser.js");
-    const css = await fetch("https://github.com/Equicord/Equicord/releases/download/latest/browser.css");
-    self.vencordjs = await js.text();
-    self.vencordcss = await css.text();
-    self.vencord = {
-      injectDiscord: async function (e) {
-        alert("a");
-        const url = e.request.url;
-        if (
-          e.request.method !== "GET" ||
-          !url.includes("discord.com") ||
-          e.request.destination !== "document"
-        )
-          return;
 
-        const originalRes = await fetch(e.request);
-        const html = (await originalRes.text()).replace(
-          /<head[^>]*>/i,
-          `$&<script>${self.vencordjs}<\/script><style>${self.vencordcss}</style>`
-        );
-
-        const headers = new Headers(originalRes.headers);
-        headers.set("content-type", "text/html");
-
-        e.respondWith(
-          new Response(html, {
-            status: originalRes.status,
-            statusText: originalRes.statusText,
-            headers,
-          })
-        );
-      },
-    };
-
-    ww.use({
-      function: self.vencord.injectDiscord,
-      events: ["fetch"],
-      name: "EquicordInjection",
-    });
-  } catch (e) {
-    console.warn("equicord injection failed", e);
-  }
-})();
 
 
 self.addEventListener("install", () => {
