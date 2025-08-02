@@ -48,6 +48,7 @@
     } else {
       currentFrame.src = proxiedUrl
     }
+    if(currentFrame != document.getElementById(`frame-${currentTab}`))
     addressInput.value = urlToLoad
   })
 
