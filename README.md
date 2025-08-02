@@ -2,17 +2,9 @@
 
 # bromine the poopy proxy
 ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/Bromine-Labs/Bromine?utm_source=oss&utm_medium=github&utm_campaign=Bromine-Labs%2FBromine&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
-[![CC BY 4.0][cc-by-shield]][cc-by]
 
 This work is licensed under a
-[Creative Commons Attribution 4.0 International License][cc-by].
-
-[![CC BY 4.0][cc-by-image]][cc-by]
-
-[cc-by]: http://creativecommons.org/licenses/by/4.0/
-[cc-by-image]: https://i.creativecommons.org/l/by/4.0/88x31.png
-[cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
-
+[Creative Commons Attribution 4.0 International License][https://codecreditlicense.com/].
 
 
 ## Deploy
