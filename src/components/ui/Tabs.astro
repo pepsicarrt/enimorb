@@ -15,21 +15,22 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <script>
-import { currentTab, newTab, switchTab, closeTab } from "@/utils/lethal.ts";
+import { newTab, switchTab, closeTab } from "@/utils/lethal.ts";
 
   let tabs = [];
   const tabsDiv = document.getElementById("tabs");
 
-  const getIcon = (url) =>
+  const getIcon = (url: string) =>
     /^https?:\/\/[\w.-]+\.[a-z]{2,}/i.test(url)
       ? `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,URL&size=64&url=${url}`
       : "https://images.placeholders.dev/24";
 
-  function createTab(id, title = "New Tab", url = "") {
+function createTab(id: string, title = "New Tab", url = "") {
     const tab = document.createElement("div");
     tab.className =
       "flex items-center min-w-[8rem] max-w-xs px-4 py-1 border-r border-overlay hover:bg-overlay cursor-pointer transition-all duration-150 draggable-tab";
     tab.dataset.tabId = id;
+    tab.draggable = true;
 
     tab.innerHTML = `
       <img class="w-4 h-4 mr-2 rounded" alt="Favicon" src="${getIcon(url)}" />
@@ -43,14 +44,14 @@ import { currentTab, newTab, switchTab, closeTab } from "@/utils/lethal.ts";
     };
     tab.onclick = () => switchTab?.(id);
 
-    tabsDiv.appendChild(tab);
+  tabsDiv?.appendChild(tab);
     tabs.push({ id, element: tab, title, url });
 
     return tab;
   }
 
   function checkState() {
-    const frames = [...document.querySelectorAll('iframe[id^="frame-"]')];
+    const frames = [...document.querySelectorAll('iframe[id^="frame-"]')]
     const frameIds = frames.map((f) => parseInt(f.id.replace("frame-", ""), 10));
 
     tabs = tabs.filter(({ id, element }) => {
@@ -116,6 +117,47 @@ import { currentTab, newTab, switchTab, closeTab } from "@/utils/lethal.ts";
   });
 
   checkState();
+</script>
+
+<script>
+  const tabsDiv = document.getElementById("tabs");
+  let dragged;
+
+  tabsDiv.addEventListener("dragstart", (e) => {
+    dragged = e.target;
+    e.target.style.opacity = "0.5";
+  });
+
+  tabsDiv.addEventListener("dragend", (e) => {
+    e.target.style.opacity = "";
+  });
+
+  tabsDiv.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    const afterElement = getDragAfterElement(tabsDiv, e.clientX);
+    if (afterElement == null) {
+      tabsDiv.appendChild(dragged);
+    } else {
+      tabsDiv.insertBefore(dragged, afterElement);
+    }
+  });
+
+  function getDragAfterElement(container, x) {
+    const draggableElements = [...container.querySelectorAll(".draggable-tab:not(.dragging)")];
+
+    return draggableElements.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = x - box.left - box.width / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      },
+      { offset: Number.NEGATIVE_INFINITY },
+    ).element;
+  }
 </script>
 
 <style>

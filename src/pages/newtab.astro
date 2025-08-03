@@ -138,6 +138,7 @@ import "@/styles.css";
         break;
 
       default:
+document.dispatchEvent(new CustomEvent(msg.type));
         console.log("Unknown message type:", msg.type);
     }
   });
