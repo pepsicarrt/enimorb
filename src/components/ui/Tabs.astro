@@ -2,7 +2,7 @@
 import { Icon } from "astro-icon/components";
 ---
 
-<div class="flex items-center bg-surface border-b border-overlay h-10">
+<nav class="flex items-center bg-surface border-b border-overlay h-10">
   <div id="tabs" class="flex-1 flex overflow-x-auto scrollbar-hide items-stretch"></div>
   <button
     id="new-tab-btn"
@@ -12,7 +12,7 @@ import { Icon } from "astro-icon/components";
   >
     <Icon name="ph:plus-bold" class="size-5" />
   </button>
-</div>
+</nav>
 
 <script>
 import { newTab, switchTab, closeTab } from "@/utils/lethal.ts";

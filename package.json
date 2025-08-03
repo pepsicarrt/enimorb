@@ -17,7 +17,7 @@
     "@playform/compress": "^0.1.9",
     "@shopify/draggable": "^1.1.4",
     "@tailwindcss/vite": "^4.1.11",
-    "astro": "5.12.0",
+    "astro": "5.12.8",
     "astro-icon": "^1.1.5",
     "tailwindcss": "^4.1.11"
   },
