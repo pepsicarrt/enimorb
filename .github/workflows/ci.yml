@@ -112,36 +112,3 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  release:
-    name: Release on Tag
-    runs-on: ubuntu-latest
-    needs: [lint, build]
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-
-      - name: Install dependencies with Bun
-        run: bun install
-        working-directory: ${{ env.BUILD_PATH }}
-
-      - name: Build with Astro
-        run: |
-          bun run build
-        working-directory: ${{ env.BUILD_PATH }}
-
-      - name: Archive Build Output
-        run: |
-          cd ${{ env.BUILD_PATH }}/dist
-          zip -r ../../build.zip ./
-          cd -
-
-      - name: Create GitHub Release and Upload Assets
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            build.zip
