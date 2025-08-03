@@ -48,3 +48,4 @@ Then go to [localhost:8080](http://localhost:8080)
 
 - Shadow - inspiration
 - Nano - more inspiration
+- Ai - hepled a bit
