@@ -30,7 +30,7 @@ const transportOptions: TransportOptions = {
 //////////////////////////////
 ///           SW           ///
 //////////////////////////////
-const stockSW = "./ultraworker.js";
+const stockSW = "/ultraworker.js";
 const swAllowedHostnames = ["localhost", "127.0.0.1"];
 
 async function registerSW(): Promise<void> {
