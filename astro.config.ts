@@ -6,11 +6,8 @@ import icon from "astro-icon"
 import partytown from "@astrojs/partytown";
 
 
-import sitemap from "@astrojs/sitemap";
-
-
 export default defineConfig({
-  integrations: [icon(), (await import("@playform/compress")).default(), partytown(), sitemap()],
+  integrations: [icon(), (await import("@playform/compress")).default(), partytown()]
 
   vite: {
     build: {
