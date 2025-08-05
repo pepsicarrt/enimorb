@@ -7,7 +7,7 @@ import partytown from "@astrojs/partytown";
 
 
 export default defineConfig({
-  integrations: [icon(), (await import("@playform/compress")).default(), partytown()]
+  integrations: [icon(), (await import("@playform/compress")).default(), partytown()],
 
   vite: {
     build: {
