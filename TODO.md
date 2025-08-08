@@ -23,3 +23,4 @@
 - [ ] apps
 - [ ] extensions
 - [ ] mica theme
+- [ ] mrigate to qwik
