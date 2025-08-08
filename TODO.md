@@ -9,12 +9,12 @@
 
 ## In Progress
 
-- [ ] panic key
+- [ ] games
 
 ## Not Started
 
+- [ ] panic key
 - [ ] ai
-- [ ] games
 - [ ] custom script injection
 - [ ] vertical tabs
 - [ ] pinable tabs

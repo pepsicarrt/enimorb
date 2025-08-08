@@ -158,6 +158,12 @@ export function getProxy(): string {
 }
 
 export async function getProxied(input: string): Promise<any> {
+
+  if(input.startsWith("bromine://")) {
+    return input.replace("bromine://", "/")
+  }
+
+
 	const url = makeURL(input);
 
 	if (proxyOption === "scram") return scramjet.encodeUrl(url);
