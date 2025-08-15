@@ -31,7 +31,6 @@ const { title = "bromine", desc = "a really shitty site" } = Astro.props;
 
 <meta name="description" content="Bromine is a minimal and clean secure web pr0xy service with support for many sites. byp@ss filters and enjoy a safer pr1vate browsing experience or unbl0ck websites on devices such as Chromebooks and at places like school or work without any setup process."/>
 
-
     <link rel="icon" href="favicon.svg" sizes="any" type="image/svg+xml">
 
     <meta property="og:site_name" content="Bromine" />
@@ -66,7 +65,7 @@ const { title = "bromine", desc = "a really shitty site" } = Astro.props;
                     "@type": "Answer",
                     "text": "Bromine is a minimal and clean secure web pr0xy service with support for many sites. byp@ss filters and enjoy a safer pr1vate browsing experience or unbl0ck websites on devices such as Chromebooks and at places like school or work without any setup process."
                 }
-          },  
+          },
 {
                 "@type": "Question",
                 "name": "Can i play games on it?",
@@ -105,7 +104,7 @@ import { currentFrame } from "./utils/lethal";
       window.dispatchEvent(new Event(`${key}-changed`));
 
 
-    
+
 currentFrame.contentWindow.postMessage({ type: `${key}-changed` }, "*");
     };
 
