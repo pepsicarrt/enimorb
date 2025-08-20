@@ -60,10 +60,6 @@
               "label": "Brave"
             },
             {
-              "value": "https://google.com/search?q=%s",
-              "label": "Google"
-            },
-            {
               "value": "https://www.bing.com/search?q=%s",
               "label": "Bing"
             },
