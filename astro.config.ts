@@ -14,7 +14,7 @@ export default defineConfig({
       sourcemap: true,
     },
     css: {
-      devSourcemap: true, 
+      devSourcemap: true,
     },
     plugins: [tailwindcss()],
   },

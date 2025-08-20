@@ -3,13 +3,14 @@
 ## Finished
 
 - [x] newtab wallpapers
-- [x] ~~perforamncec metrics~~ canceled
+- [x] perforamncec metrics
 - [x] tab cloaking changable tab
 - [x] fullscreen
+- [x] games
+
 
 ## In Progress
 
-- [ ] games
 
 ## Not Started
 
@@ -18,9 +19,9 @@
 - [ ] custom script injection
 - [ ] vertical tabs
 - [ ] pinable tabs
+- [ ] tab groups
 - [ ] custom theme
 - [ ] glassmorphism
-- [ ] apps
 - [ ] extensions
 - [ ] mica theme
 - [ ] mrigate to qwik
