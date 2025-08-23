@@ -25,5 +25,20 @@ import Layout from "@/Layout.astro";
     <h3 class="text-lg font-semibold text-text truncate">Game Name</h3>
   </div>
 </div>
+
   </section>
+    <div id="gamePageContainer" class="hidden fixed inset-0 z-[999] flex flex-col items-center justify-start p-5 md:p-10 box-border">
+        <div class="flex justify-between items-center w-full max-w-5xl mb-4">
+            <button onclick="closegame()" class="p-3 bg-surface rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-muted items-center space-x-2">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span>Back to Games</span>
+            </button>
+            <button id="fullscreenBtn" class="p-3 bg-surface rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-muted flex items-center space-x-2" title="Fullscreen">
+                <i data-lucide="maximize" class="w-5 h-5"></i>
+                <span>Fullscreen</span>
+            </button>
+        </div>
+        <h2 id="gamePageTitle" class="text-3xl font-bold mt-4 mb-4 text-center"></h2>
+        <iframe id="gamePageFrame" class="bg-surface/95 w-full flex-grow border-none rounded-xl shadow-lg outline outline-2 outline-offset-2 outline-muted" allowfullscreen></iframe>
+    </div>
 </Layout>

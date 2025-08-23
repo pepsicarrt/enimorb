@@ -1,5 +1,4 @@
-// document.addEventListener("DOMContentLoaded",
-(async () => {
+(() => {
     const { api, api2, target: selectortarget } = document.currentScript.dataset;
 
     const target = document.querySelector(selectortarget);
@@ -11,16 +10,18 @@
 
     target.innerHTML = "<p style='text-align: center; font-family: sans-serif; color: #555;'>Loading games...</p>";
 
-    try {
-        const response1 = await fetch(`${api}/g.json`);
-        const games1 = await response1.json();
-        const response2 = await fetch(`${api2}/g.json`);
-        const games2 = await response2.json();
+    const worker = new Worker('workers/games.js');
 
-        const allGames = [
-            ...games1.map(g => ({ ...g, apiUrl: api })),
-            ...games2.map(g => ({ ...g, apiUrl: api2 }))
-        ];
+    worker.postMessage({ api, api2 });
+
+    worker.onmessage = (event) => {
+        const { status, data: allGames, error } = event.data;
+
+        if (status === 'error') {
+            target.innerHTML = "<p style='color:red; text-align: center; font-family: sans-serif;'>Error loading games. Please try again later.</p>";
+            console.error("Error from worker:", error);
+            return;
+        }
 
         let currentPage = 1;
         const gamesPerPage = 20;
@@ -88,11 +89,13 @@
             ">
         `;
         document.body.insertAdjacentHTML('beforeend', gamePageContainerHtml);
+    };
 
-    } catch (err) {
+    worker.onerror = (error) => {
         target.innerHTML = "<p style='color:red; text-align: center; font-family: sans-serif;'>Error loading games. Please try again later.</p>";
-        console.error("Error loading games:", err);
-    }
+        console.error("Worker error:", error);
+    };
+
 
     window.opengame = (apiUrl, alt, title) => {
         const gamePageContainer = document.getElementById("gamePageContainer");
@@ -109,7 +112,7 @@
         const gamePageContainer = document.getElementById("gamePageContainer");
         const gamePageFrame = document.getElementById("gamePageFrame");
 
-        gamePageFrame.src = ""; 
+        gamePageFrame.src = "";
         gamePageContainer.style.display = "none";
         document.body.style.overflow = '';
     };
