@@ -14,7 +14,6 @@ import ProxyFrame from "@/components/utils/ProxyFrame.astro";
 <script>
   if (localStorage.getItem("ab") === "true") {
       const popup = open("about:blank", "_blank");
-  setTimeout(() => {
     if (!popup || popup.closed) {
       alert(
         "Please allow popups for about bnalk to work.",
@@ -41,7 +40,7 @@ import ProxyFrame from "@/components/utils/ProxyFrame.astro";
       doc.head.appendChild(link);
       doc.body.appendChild(iframe);
 
-      const pLink = localStorage.getItem(encodeURI("pLink")) || getRandomUrl();
+      const pLink = "https://classroom.google.com/h"
       location.replace(pLink);
 
       const script = doc.createElement("script");
@@ -54,7 +53,6 @@ import ProxyFrame from "@/components/utils/ProxyFrame.astro";
     `;
       doc.head.appendChild(script);
     }
-  }, 2000);
 
 }
 </script>
