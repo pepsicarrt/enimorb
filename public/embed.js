@@ -12,6 +12,8 @@
 
     const worker = new Worker('workers/games.js');
 
+  alert(api)
+
     worker.postMessage({ api, api2 });
 
     worker.onmessage = (event) => {

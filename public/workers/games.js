@@ -17,6 +17,6 @@ self.onmessage = async (event) => {
 
         self.postMessage({ status: 'success', data: allGames });
     } catch (err) {
-        self.postMessage({ status: 'error', error: err.message });
+        self.postMessage({ status: `${err.message}`, error: err.message });
     }
 };
