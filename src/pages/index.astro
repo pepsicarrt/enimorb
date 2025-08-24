@@ -12,19 +12,21 @@ import ProxyFrame from "@/components/utils/ProxyFrame.astro";
   <ProxyFrame/>
 </Layout>
 <script>
-if (localStorage.getItem("ab") === "true") {
-  try {
-
-  const popup = open("about:blank", "_blank");
+  if (localStorage.getItem("ab") === "true") {
+      const popup = open("about:blank", "_blank");
+  setTimeout(() => {
+    if (!popup || popup.closed) {
+      alert(
+        "Please allow popups for about bnalk to work.",
+      );
+    } else {
       const doc = popup.document;
       const iframe = doc.createElement("iframe");
       const style = iframe.style;
       const link = doc.createElement("link");
 
-      const name = localStorage.getItem("name") || "My Drive - Google Drive";
-      const icon =
-        localStorage.getItem("icon") ||
-        "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png";
+      const name = "My Drive - Google Drive";
+      const icon = "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png";
 
       doc.title = name;
       link.rel = "icon";
@@ -51,9 +53,8 @@ if (localStorage.getItem("ab") === "true") {
       };
     `;
       doc.head.appendChild(script);
-    location.replace(localStorage.getItem("ab-site") || "https://classroom.google.com/h");
-  } catch {
-    alert("Try allowing popup permissions for about:blank to work.");
-  }
+    }
+  }, 2000);
+
 }
 </script>
