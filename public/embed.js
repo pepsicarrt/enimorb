@@ -10,18 +10,73 @@
 
     target.innerHTML = "<p style='text-align: center; font-family: sans-serif; color: #555;'>Loading games...</p>";
 
-    const worker = new Worker('workers/games.js');
+    const fetchGames = async () => {
+        try {
+            const response1 = await fetch(`${api}/g.json`);
+            const games1 = await response1.json();
 
-  alert(api)
+            const response2 = await fetch(`${api2}/g.json`);
+            const games2 = await response2.json();
 
-    worker.postMessage({ api, api2 });
+            const allGames = [
+                ...games1.map(g => ({ ...g, apiUrl: api })),
+                ...games2.map(g => ({ ...g, apiUrl: api2 }))
+            ];
+            return { status: 'success', data: allGames };
+        } catch (err) {
+            console.error("Error fetching games directly:", err);
+            return { status: 'error', error: err.message };
+        }
+    };
 
-    worker.onmessage = (event) => {
-        const { status, data: allGames, error } = event.data;
+    const gamePageContainerHtml = `
+        <div id="gamePageContainer" style="
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            z-index: 999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: auto; /* Allow scrolling within game page */
+        ">
+            <button onclick="closegame()" style="
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                font-size: 16px;
+                cursor: pointer;
+                background-color: #dc3545;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                z-index: 1000;
+            ">Close Game</button>
+            <h2 id="gamePageTitle" style="margin-top: 20px; color: #333;"></h2>
+            <iframe id="gamePageFrame" src="" frameborder="0" style="
+                width: 100%;
+                height: calc(100% - 70px); /* Adjust height for title and close button */
+                border: none;
+                margin-top: 10px;
+            "></iframe>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', gamePageContainerHtml);
+
+
+    fetchGames().then(result => {
+        const { status, data: allGames, error } = result;
 
         if (status === 'error') {
             target.innerHTML = "<p style='color:red; text-align: center; font-family: sans-serif;'>Error loading games. Please try again later.</p>";
-            console.error("Error from worker:", error);
+            console.error("Error fetching games:", error);
             return;
         }
 
@@ -72,31 +127,7 @@
         });
 
         renderGames();
-
-        const gamePageContainerHtml = `
-            <div id="gamePageContainer" style="
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: #fff;
-                z-index: 999;
-                flex-direction: column;
-                align-items: center;
-                justify-content: flex-start;
-                padding: 20px;
-                box-sizing: border-box;
-            ">
-        `;
-        document.body.insertAdjacentHTML('beforeend', gamePageContainerHtml);
-    };
-
-    worker.onerror = (error) => {
-        target.innerHTML = "<p style='color:red; text-align: center; font-family: sans-serif;'>Error loading games. Please try again later.</p>";
-        console.error("Worker error:", error);
-    };
+    });
 
 
     window.opengame = (apiUrl, alt, title) => {
